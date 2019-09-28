@@ -1,0 +1,6 @@
+[book]
+authors = ["Jonathan 'theJPster' Pallant"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Neotron - The Embedded Rust Home Computer Platform"
