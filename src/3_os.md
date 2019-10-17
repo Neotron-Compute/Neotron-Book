@@ -45,4 +45,52 @@ Selected non-goals (i.e. things we aren't going to support) include:
 
 Our ultimate goal is that one day we could offer a version of the Rust Standard Library (`std`) which uses the Neotron OS API - albeit without the sub-process support.
 
-Programming the Neotron usually involves first loading the specific interpreter for that language - unless you've swapped out the standard shell for something like a BASIC interpreter.
+Programming on the Neotron usually involves first loading the specific interpreter for that language - unless you've swapped out the standard shell for something like a BASIC interpreter.
+
+## Filename Convention
+
+Files live in volumes. Volumes on fixed or removable disks must be formatted with the FAT12, FAT16 or FAT32 filesystem and live either live in a disk partition identified by a PC Master Boot Record (with a suitable Filesystem Type), or live at the start of the drive. Volumes are allocated a volume number, starting with `0:`, then `1:` etc. File paths are relative to a volume number. Paths are separated with a `/` character. The root directory is called `/`.
+
+When a volume has a name, you can refer to it as `<name>:` instead of `<id>:`. For example `work:/Documents/hello.txt` refers to a file called `hello.txt` inside a folder called `Documents` which lives on a volume called `work`.
+
+It is an error to try and create a file containing a `:` character. Any files or directories which do contain invalid characters are as if the character was replaced with `_`. When a directory contains multiple files with the same name, any attempt to read the file will only be able to access the one that is found first. Any attempt to create a new file will cause any existing files of the same name in the same folder to be deleted.
+
+For example:
+
+```console
+0:/> dir 1:
+Listing files in 1:/
+FOO.TXT      1234  2019-10-17 23:20:01 A--
+COMMANDS.SH    34  2019-10-17 23:20:11 AR-
+FOLDER       <DIR> 2019-09-13 20:20:11
+
+0:/> dir 1:/FOLDER
+Listing files in 1:/FOLDER
+BAR.TXT      1234  2019-10-18 10:11:13 ---
+
+0:/> cd 1:/FOLDER
+
+1:/FOLDER> dir
+Listing files in 1:/FOLDER
+BAR.TXT      1234  2019-10-18 10:11:13 ---
+
+1:/>
+```
+
+## Special Devices
+
+There are special devices which look like files, but are not. They have names which are like volumes, but contain a '$' character. It is an error to try and use a regular volume with `$` in the name.
+
+* `PRN$:` - The printer. You can copy files here to print them.
+* `CON$:` - The console. You can read from here to get text input and write here to put text on the screen.
+* `KBD$:` - The raw keyboard. You can read from here to get raw keyboard events that you can't get through the `CON$:` device (such as Up Arrow key, or Page Down).
+* `SER0$:` - The first RS-232 serial device.
+* `SER1$:` - The second RS-232 serial device.
+* `TONE0$:` - The first tone generator device.
+* `PCM0$:` - The first PCM device (write for playback, read for record).
+
+Additional parameters may be specified after the `$`, separated by `;`.
+
+* `SER0$bps=9600;parity=N:` - The first RS-232 serial device, at 9600 bps.
+
+Special devices do not support filenames or paths. To access a network volume, the volume must be mounted and given a normal volume ID.
