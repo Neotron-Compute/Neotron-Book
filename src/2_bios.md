@@ -377,6 +377,39 @@ fn KeyboardSetLed(num_lock: bool, caps_lock: bool, scroll_lock: bool);
 
 Sets the keyboard status LEDs. Handling Num Lock, Caps Lock and Scroll Lock is up to the Operating System.
 
+### MouseGetPosition
+
+Gets the Mouse's relative movement since the last call. The mouse is only polled when the `MousePoll` function is called. You can go away and do other work while the mouse is being polled in the background (assuming an interrupt driven serial interface to the mouse or the mouse controller). It is suggested that `MousePoll` is called once per video frame. The system only supports a single mouse - it may be a Serial mouse, a PS/2 mouse or a USB HID mouse, depending on the hardware and the BIOS implementation.
+
+```rust
+struct MouseData {
+	/// From -255 to +255
+	x_movement: i16,
+	/// From -255 to +255
+	y_movement: i16,
+	/// From -7 to +8
+	scroll_movement: u8,
+	/// true if clicked
+	left_button: bool,
+	/// true if clicked
+	right_button: bool,
+	/// true if clicked
+	middle_button: bool,
+}
+
+enum MouseBlocking {
+	Block,
+	NonBlocking
+}
+
+/// Ask the BIOS to read the relative movement data from the mouse.
+fn MousePoll();
+
+/// Get the most recent relative movement data. Can block if desired. Returns `None`
+/// if no data is available.
+fn MouseGetPosition(mode: MouseBlocking) -> Option<MouseData>;
+```
+
 ### DelayMs
 
 ```rust
@@ -516,12 +549,101 @@ Supply a function to be called just before the given scan-line is rendered. The 
 
 ### AudioGetInfo
 
-Gets information about the audio system - number of tone channels, PCM sample rate, etc.
+Gets information about the audio system - number of tone channels, PCM sample rate, etc. Most Neotron systems will use the 800x600 @ 60 Hz video mode with a 37.878 kHz vertical frequency. The PCM sample rates will therefore likely be some integer fraction of that vertical frequency, as the audio playback needs to be interleaved with the video generation.
+
+```rust
+/// Bit-depth for a PCM mode
+enum AudioBitsPerSample {
+	Eight = 8,
+	Sixteen = 16,
+}
+
+/// A supported set of settings for the PCM playback engine
+struct AudioPcmMode {
+	// 1 for mono, 2 for stereo, etc
+	num_channels: u8,
+	// e.g. 44100 for CD Quality Audio
+	samples_per_second: u16,
+	// e.g. AudioBitsPerSample::Sixteen for 16-bit PCM audio
+	bits_per_sample: AudioBitsPerSample,
+}
+
+/// Tones we can get from the synthesiser
+enum Waveform {
+	Square,
+	Sawtooth,
+	Sine,
+	Noise,
+	Custom(&[u8])
+}
+
+struct AudioInfo {
+	/// How many simultaneous tones can the hardware play?
+	num_tone_channels: u8,
+	/// The set of supported waveforms on each tone channel
+	waveforms: &[Waveform],
+	/// Does tone generator support envelope control?
+	envelope: bool,
+	/// Does tone generator support stereo panning?
+	stereo_tones: bool,
+	/// Various PCM audio output (playback) modes supported. May be an empty list.
+	pcm_output_modes: &[AudioPcmMode],
+	/// Various PCM audio input (record) modes supported. May be an empty list.
+	pcm_input_modes: &[AudioPcmMode],
+}
+
+fn AudioGetInfo() -> Option<AudioInfo>;
+```
 
 ### AudioPlayTone
 
 Plays an audio tone on a given channel.
 
+```rust
+/// Controls the 'shape' of the volume of a tone as it plays
+struct Envelope {
+	/// Rise time for the signal. 0 => 2ms. 15 => 8s.
+	attack: u8,
+	/// Volume level of the sustained signal. 0 => silence, 15 => maximum volume
+	sustain: u8,
+	/// Decay time for the signal. 0 => 6ms. 15 => 24s.
+	decay: u8,
+	/// Release time for the signal. 0 => 6ms. 15 => 24s.
+	release: u8,
+}
+
+/// A tone is a combination of a Waveform and a Frequency to play that waveform at.
+struct Tone {
+	/// The waveform to play
+	waveform: Waveform,
+	/// The frequency to play it at, in Hertz.
+	frequency_hz: u32
+}
+
+fn AudioPlayTone(tone_channel: u8, tone: Tone, lfo: Option<Tone>, envelope: Option<Envelope>, volume: u8, pan: i8) -> Result<(), Error>;
+```
+
 ### AudioBufferSamples
 
-If supported, buffers PCM audio samples to be played. You should use DelayVblank to synchronise playback with the video.
+If supported, queues PCM audio samples to be played. You should use DelayVblank to synchronise playback with the video. The samples are not copied - only the pointer and length is stored. It is therefore important to ensure the samples are allocated in a static buffer, or at least a buffer that lives long enough for them to be played.
+
+In a stereo mode, the left and right samples are interleaved. In a 16-bit mode, each sample is two bytes, in little-endian format. Thus, in a 16-bit stereo mode, there are four bytes per sample:
+
+```
++----------+----------+-----------+-----------+------------+...
+|N Left MSB|N Left LSB|N Right MSB|N Right LSB|N+1 Left MSB|
++----------+----------+-----------+-----------+------------+...
+```
+
+```rust
+/// Configures the PCM playback system
+fn AudioConfigureOutput(mode_index: Option<u8>) -> Result<(), Error>;
+
+/// Returns the tag of the most recent queued sample buffer to have been entirely played.
+fn AudioSamplesTagReleased() -> Option<u8>;
+
+/// Queues samples for playback. Supplying a unique tag allows the
+/// `AudioSamplesTagReleased` function to inform the caller when these samples
+/// have been played.
+fn AudioQueueSamples(tag: u8, data: *const u8, data_len: usize);
+```
