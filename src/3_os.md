@@ -25,14 +25,17 @@ The Neotron OS is the hardware-agnosting implementation of the Neotron API. It u
 It should implement:
 
 * File/Device handling (open, read, write, seek, etc)
-* A FAT16/32 compatible filesystem
+* A FAT16/32 compatible filesystem with MS-DOS MBR partitions (max 2 TiB disk size - 2<sup>32</sup> sectors of 512 bytes)
 * A text-mode console, with cursor
+* Basic line-based input and character based raw input
 * Simple bitmap graphics primitives (lines, rectangles, fill, etc)
 * An audio synthesiser
 * Input/output stream handling
 * Digital (Atari) joystick support
 * A TCP/IP networking stack
 * MIDI support
+* Jumping to applications located in RAM or ROM, giving them access to the OS
+* Supporting special 'shell' applications which can chain-load small programs (e.g. command-line utilities) without being unloaded
 * Memory allocation/deallocation routines
 * Co-operative multi-tasking through an event-loop / task-scheduler
 
@@ -81,7 +84,7 @@ BAR.TXT      1234  2019-10-18 10:11:13 ---
 
 There are special devices which look like files, but are not. They have names which are like volumes, but contain a '$' character. It is an error to try and use a regular volume with `$` in the name.
 
-* `PRN$:` - The printer. You can copy files here to print them.
+* `PRN0$:` - The printer. You can copy files here to print them.
 * `CON$:` - The console. You can read from here to get text input and write here to put text on the screen.
 * `KBD$:` - The raw keyboard. You can read from here to get raw keyboard events that you can't get through the `CON$:` device (such as Up Arrow key, or Page Down).
 * `SER0$:` - The first RS-232 serial device.
@@ -89,8 +92,13 @@ There are special devices which look like files, but are not. They have names wh
 * `TONE0$:` - The first tone generator device.
 * `PCM0$:` - The first PCM device (write for playback, read for record).
 
-Additional parameters may be specified after the `$`, separated by `;`.
+Additional parameters may be specified after the `$`, separated by `;`. For example:
 
 * `SER0$bps=9600;parity=N:` - The first RS-232 serial device, at 9600 bps.
+* `PCM0$channels=2;bit=8;samplerate=8000:` - A PCM interface configured for stereo 8kHz 8-bit.
 
-Special devices do not support filenames or paths. To access a network volume, the volume must be mounted and given a normal volume ID.
+Special devices do not support filenames or paths. To access something like a network volume, the volume must be mounted and given a normal volume ID. The API for this is TBD.
+
+## File Permissions
+
+Files can be opened as read-only (write-none), write-truncate or write-append. Because Neotron is single-tasking and non-re-entrant, there is no support for lock files or exclusive file creation, but files are locked when they are opened so they can only be opened once. Files on disk support the standard FAT16/FAT32 attributes - Archive, Read-Only, Hidden and System. Seeking uses 32-bit byte offsets, giving a maximum file size of 4 GiB.

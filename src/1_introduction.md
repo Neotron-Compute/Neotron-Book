@@ -5,10 +5,11 @@
 Neotron is an attempt to make computers simple again, whilst also taking advantage of the very latest in programming language development. It is based around three simple concepts:
 
 * The ARM Thumb-v7M instruction set (as supported by the ARM Cortex-M3, -M4, -M7 and -M33 processor cores).
-* A standardised OS interface, which uses a standardised BIOS interface (like both CP/M and the IBM PC)
+* A standardised OS interface, for portable Applications to call. This provides APIs for reading/writing files, accessing devices, writing to the screen, playing audio, etc.
+* A standardised BIOS interface, for the Operating System to call. The BIOS abstracts the specific hardware implementation of the Video, Audio, UART, SPI, I2C, GPIO, Disk Drive, Parallel Printer, Keyboard and Mouse interfaces.
 * Use of the Rust Programming Language to write as much of the software as possible (we avoid raw assembler as much as possible, but we're happy to port existing applications that are written in C even if we avoid that language in the system software).
 
-Neotron systems don't aim to be super cheap, although we tend to target commodity microcontrollers that only cost circa $10 or less so they shouldn't be outrageously expensive. They do, however, aim to be usable computers that can do interesting things, while being simple enough to understand in their entirety and open enough to allow you to gain that understanding. Looking back at classic home computers of the 1980s and early 1990s though, we see systems that were (and still are) simple enough to understand, or even - with time - learn to master. Systems such as the ZX Spectrum, Commodore 64 or Acorn Archimedes. That is where we take our inspiration.
+Neotron systems don't aim to be super cheap, although we tend to target commodity microcontrollers that only cost circa $10 or less so they shouldn't be outrageously expensive. They do, however, aim to be usable computers that can do interesting things, while being simple enough to understand in their entirety and open enough to allow you to gain that understanding. Looking back at classic home computers of the 1980s and early 1990s though, we see systems that were (and still are) simple enough to understand, or even - with time - learn to master. Systems such as the ZX Spectrum, Commodore 64 or Acorn Archimedes - that is where we take our inspiration.
 
 ## But what about ${EXISTING_PRODUCT}?
 
