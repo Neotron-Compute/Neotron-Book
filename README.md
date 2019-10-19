@@ -1,6 +1,6 @@
 # The Neotron Book
 
-This book is written in [mbook](https://crates.io/crates/mdbook). Start with the [summary](./src/SUMMARY.md) page if viewing through Github.
+This book is written in [mdbook](https://crates.io/crates/mdbook). Start with the [summary](./src/SUMMARY.md) page if viewing through Github.
 
 ## Licensing
 
