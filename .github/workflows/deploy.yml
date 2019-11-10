@@ -7,7 +7,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
     - name: Install mdbook
-      run: cargo install mdbook
+      run: curl "https://github.com/rust-lang/mdBook/releases/download/v0.3.4/mdbook-v0.3.4-x86_64-unknown-linux-gnu.tar.gz" | tar xv
     - name: Build and Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v2
       env:
@@ -15,4 +15,4 @@ jobs:
         BASE_BRANCH: master # The branch the action should deploy from.
         BRANCH: gh-pages # The branch the action should deploy to.
         FOLDER: ./book # The folder the action should deploy.
-        BUILD_SCRIPT: mdbook build
+        BUILD_SCRIPT: ./mdbook build
