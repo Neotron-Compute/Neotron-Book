@@ -47,7 +47,7 @@ On ARM systems, calling a kernel API is usually done through a `SWI` or `SVC` ma
 
 Monotron instead used a simple alternative - when the application was started by the OS, the OS passed it a pointer to a structure of function pointers. You can think of this as being like an old-fashioned jump table. When the application wanted to get the OS to do something, the application just called the appropriate function through the given pointer.
 
-We're going to take the same approach for the Neotron BIOS.
+We're going to take the same approach for the Neotron BIOS. The BIOS is responsible for starting the system and performing hardware initialisation. It will also search for the OS, either in Flash ROM, on disk, or perhaps even loaded over a UART. The OS then has its initialisation function called, to which the structure of BIOS function calls is passed. The initialisation function is specified as a function pointer stored at a specific offset (most likely the first four bytes of the OS image).
 
 ## Timeouts
 
@@ -86,6 +86,9 @@ Returns a pointer to a static string slice. This string contains the version num
 ```rust
 struct DriveInfo {
 	name: &'static str,
+	vendor: String8,
+	product: String16,
+	revision: String4,
 	sector_size: u16,
 	num_sectors: u32,
 	removable: bool,
@@ -97,35 +100,63 @@ struct DriveSectorAddress(u32);
 fn DriveGetInfo(drive: u8) -> Option<DriveInfo>;
 ```
 
-Returns information about any fixed disks in the system. The OS will call with incrementing values of `drive` until this function returns `None`. The BIOS knows nothing of MBR or GPT partition tables - it only knows how to read and write sectors.
+Returns information about any fixed disks in the system. The OS will call with incrementing values of `drive` until this function returns `None`. The BIOS knows nothing of MBR or GPT partition tables - it only knows how to read, write and verify sectors.
 
-Note that if you have 512 byte sectors, the largest supported block device is `2**32 * 512 bytes = 2 TiB`. Large hard disks solve this by using 4 KiB sectors.
+Note that if you have 512 byte sectors, the largest supported block device is `2**32 * 512 bytes = 2 TiB`. Also note that the FAT16/FAT32 file system used by the Neotron OS requires 512 byte sectors, so support for other sector sizes is TBD; the only likely candidate is a CD-ROM where the ISO9660 format uses 2048 byte sectors.
 
 Disks might include:
 
 * SD cards connected to high-speed 4-bit SD Card interfaces
 * SD cards connected to SPI peripherals
-* IDE or SCSI hard disks connected to appropriate controllers
-* USB flash keys connected to a USB Host port
-* PC-style Floppy drives connected to an appropriate controller
+* An IDE hard disk connected to appropriate controllers
+* A LUN on a SCSI device connected to an appropriate controller
+* USB flash keys connected to a USB Host port (where the BIOS is operating the USB stack and not the OS)
+* A PC-style floppy drive connected to an appropriate controller
 
 Floppy drives with built-in DOS, such as those used with the Commodore 64, are not listed as drives, but instead a CBM Serial interface would appear as a serial port you can send commands down.
 
-### DriveReadSector
+### DriveSectorRead
 
 ```rust
-fn DriveReadSector(drive: u8, sector: DriveSectorAddress, buffer: &mut [u8]) -> Result<(), Error>;
+fn DriveSectorRead(drive: u8, sector: DriveSectorAddress, buffer: &mut [u8]) -> Result<(), Error>;
 ```
 
 Reads a sector or sectors from a block device. Blocks operation until the read is complete, or an error occurs. The number of sectors to be read is the same as the largest number of whole sectors that fit into `buffer`. For example, if `buffer.len() == 1025` and the sector size is 512 bytes, two sectors will be read, leaving the final 1 byte untouched.
 
-### DriveWriteSector
+### DriveSectorWrite
 
 ```rust
-fn DriveWriteSector(drive: u8, sector: DriveSectorAddress, buffer: &[u8]) -> Result<(), Error>;
+fn DriveSectorWrite(drive: u8, sector: DriveSectorAddress, buffer: &[u8]) -> Result<(), Error>;
 ```
 
 Writes a sector or sectors to a block device. Blocks operation until the write is complete, or an error occurs. The number of sectors to be written is the same as the largest number of whole sectors that fit into `buffer`. For example, if `buffer.len() == 1025` and the sector size is 512 bytes, two sectors will be written, leaving the final 1 byte untouched.
+
+### DriveSectorVerify
+
+```rust
+fn DriveSectorVerify(drive: u8, sector: DriveSectorAddress, buffer: &[u8]) -> Result<(), Error>;
+```
+
+Verifies that a block device contains the given sector or sectors at the specified address. Blocks operation until the write is complete, or an error occurs. The number of sectors to be verified is the same as the largest number of whole sectors that fit into `buffer`. For example, if `buffer.len() == 1025` and the sector size is 512 bytes, two sectors will be verified, leaving the final 1 byte untouched.
+
+### DriveCommandSend
+
+```rust
+enum DriveCommand {
+	Reset,
+	TestUnitReady,
+	Start,
+	Stop,
+	Eject,
+	Load,
+	MediumRemovalAllow,
+	MediumRemovalPrevent,
+}
+
+fn DriveCommandSend(drive: u8, command: DriveCommand) -> Result<(), Error>;
+```
+
+Sends a command to the device. The implementation of these commands is controller-specific, but they have an obvious analogy in the SCSI-2 command set and so should be generally applicable.
 
 ### SerialGetInfo
 
@@ -160,21 +191,31 @@ Get information about the Serial ports in the system. Serial ports are ordered o
 ### SerialConfigure
 
 ```rust
-struct SerialParity {
+enum SerialParity {
 	Odd,
 	Even,
 	None
 }
 
-struct SerialHandshaking {
+enum SerialHandshaking {
 	None,
 	RtsCts,
 }
 
+enum SerialStopBits {
+	One,
+	Two
+}
+
+enum SerialDataBits {
+	Seven,
+	Eight,
+}
+
 struct SerialConfig {
 	data_rate_bps: u32,
-	data_bits: u8,
-	stop_bits: u8,
+	data_bits: SerialDataBits,
+	stop_bits: SerialStopBits,
 	parity: SerialParity,
 	handshaking: SerialHandshaking,
 }
