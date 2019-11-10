@@ -7,7 +7,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
     - name: Install mdbook
-      run: curl "https://github.com/rust-lang/mdBook/releases/download/v0.3.4/mdbook-v0.3.4-x86_64-unknown-linux-gnu.tar.gz" | tar xv
+      run: curl -L "https://github.com/rust-lang/mdBook/releases/download/v0.3.4/mdbook-v0.3.4-x86_64-unknown-linux-gnu.tar.gz" | tar xvz
     - name: Build and Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v2
       env:
