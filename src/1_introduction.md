@@ -15,40 +15,51 @@ Neotron is based around four fundamental components.
 * Use of the Rust Programming Language to write as much of the software as possible (we avoid raw assembler as much as possible, but we're happy to port existing applications that are written in C even if we avoid that language in the system software).
 * The ARM Thumb-v7M instruction set (as supported by ARM Cortex-M based microcontrollers from the M3 and up). This is what allow us to run the same programs on microcontrollers from different vendors.
 
-Here's a rough comparison with a few other systems we've taken as inspiration:
+Looking back at classic home computers of the 1980s and early 1990s though, we see systems that were (and still are) simple enough to understand, or even - with time - to learn to master. Here's a rough comparison with just a few of the classic systems we have taken as inspiration:
 
-| Feature | Neotron | IBM PC | Commodore Amiga | Apple Macintosh | Amstrad CPC664 | Commodore 64 | Acorn Archimedes |
-|---------|---------|--------|-----------------|-----------------|-----------------|-------------|------------------|
-| Instruction Set | ARMv7-M | Intel x86 | Motorola 68k | Motorola 68k | Zilog Z80 | MOS 6502 | ARM v2 |
-| Hardware Abstraction / Bootloader | Neotron BIOS | IBM BIOS | Kickstart | Old World ROM | CPC OS | KERNAL | N/A (OS is in ROM) |
-| Operating System | Neotron OS | PC-DOS 1.0 | Amiga OS | System | CPC OS or CP/M 2.2 | N/A* | RISC OS |
-| Shell | Neotron Shell | COMMAND.COM | Workbench | Finder | Locomotive BASIC or CP/M CCP | Commodore BASIC | RISC OS Desktop |
-| System Language | Rust | MASM / Microsoft C | Lattice C | Object Pascal | CP/M ASM | PET RESIDENT ASSEMBLER | ARM Assembler / BBC BASIC |
-| ROM (KiB) | 256 to 2048** | 8 | 256 | 64 | 16 + 16 + 8 = 40 | 16 | 512 |
-| RAM (KiB) | 32 to 512** | 16 to 256 | 256 | 128 | 64 | 64 | 512 |
-| Self-hosting | No | Yes | Yes | Yes | Yes | No | Yes |
+| Feature          | Neotron 32    | Neotron 320ST | IBM PC 5150        | Amiga 1000   | Macintosh 128 | Amstrad PCW8256 | Commodore 64 | Acorn Archimedes A305 |
+|------------------|---------------|---------------|--------------------|--------------|---------------|-----------------|--------------|-----------------------|
+| Instruction Set  | ARMv7E-M      | ARMv7E-M      | Intel x86          | Motorola 68k | Motorola 68k  | Zilog Z80       | MOS 6502     | ARM v2                |
+| CPU              | Cortex-M4     | Cortex-M7     | 8088               | 68000        | 68000         | Z80A            | 6510         | ARM2                  |
+| Clock Speed      | 80 MHz        | 216 MHz       | 4.77 MHz           | 8 MHz        | 8 MHz         | 4 MHz           | 1 MHz        | 8 MHz                 |
+| Low Level OS     | Neotron BIOS  | Neotron BIOS  | IBM BIOS           | Kickstart    | Old World ROM | XBIOS           | KERNAL       | RISC OS               |
+| High Level OS    | Neotron OS    | Neotron OS    | PC-DOS 1.0         | AmigaDOS     | System        | CP/M Plus       | N/A          | RISC OS               |
+| Shell            | Neotron Shell | Neotron Shell | COMMAND.COM        | Workbench    | Finder        | CP/M CCP        | BASIC v2     | RISC OS Desktop       |
+| System Language  | Rust          | Rust          | MASM / Microsoft C | Lattice C    | Object Pascal | CP/M ASM        | 6502 ASM     | ARM ASM / BBC BASIC   |
+| ROM (KiB)        | 256           | 1024          | 8                  | 256          | 64            | 256 bytes       | 16           | 512                   |
+| RAM (KiB)        | 32            | 320           | 16 to 256          | 256          | 128           | 64              | 64           | 512                   |
+| Self-hosting     | No            | No            | Yes                | Yes          | Yes           | Yes             | No           | Yes                   |
 
-\* *There isn't an OS per-se, as Commodore's KERNAL is infamously low-level. For eaxmple, Commdore DOS actually came with - and ran on the processor in - the disk drive rather than the Commodore 64 itself*
+The IBM PC BIOS was stored in a ROM chip on the motherboard. It provided a certain level of hardware abstraction, with APIs for writing to the screen, setting the video mode and reading/writing from block devices such as floppy drives. The BIOS initialised the hardware, loaded the first sector of a chosen block device into RAM and then executed the code contained within. This was the Boot Sector and contained enough code to load the rest of the Operating System. PC-DOS made use of BIOS APIs, but often games would bypass both MS-DOS and the BIOS and access hardware directly. Famously, Microsoft was able to sell copies of PC-DOS (relabelled as MS-DOS) to manufacturers of 'PC compatibles', provided they had a BIOS ROM which offered the same (reverse-engineered) API as the IBM BIOS.
 
-\*\* *The Neotron 32 is currently the lowest end Neotron sytem and gives the lower bound here, and the Neotron 1000 is currently our top-end system and provides the upper bound.*
+The Amiga 1000 hardware didn't include much in the way of a ROM at all. A basic bootstrap program stored in ROM was able to load most of the low-level OS (known as *Kickstart*) into a special write-only area of RAM. Kickstart could then load either the particular game being played, or AmigaDOS and the graphical shell known as Workbench. On later machines, the Kickstart was stored in ROM.
 
-The main feature for all these systems (apart from the Commodore 64), was portability. The PC, the Amiga, the Macintosh and CP/M all provided a *platform*, and if you respected certain limits when writing your software, that software was then portable across all the systems which provided that platform. For Neotron, this is a key concept:
+The original Apple Macintosh had a ROM on the motherboard which initialised the hardware and drew a graphical image on the screen indicating that the user should insert the System disk. The ROM then loaded the OS (known as *System* up to version 7, and *Mac OS* for versions 8 and 9) into RAM, along with a graphical desktop called Finder.
 
-__You can take a Rust application for the Neotron 32 and run it on a Neotron 1000, even though one has a Texas Instruments Tiva-C microcontroller, and the other has an STM32H7__
+The Amstrad PCW8256 was similar to the Amiga 1000 in that the main BIOS was loaded from floppy disk. Going further than the Amiga though, the PCW didn't include a ROM chip at all. Instead the 256 bytes of bootstrap code were loaded from the microcontroller responsible for managing the printer. The bootstrap loaded *XBIOS* from floppy disk into RAM. XBIOS then initialise the hardware and loaded CP/M Plus (also known as CP/M 3.0). The shell was the familiar CP/M Command Console Processor (CCP), and both the OS and the CCP were the same across a wide range of CP/M machines from many different vendors - the BIOS provided the hardware abstraction layer.
 
-As with the CP/M and MS-DOS machines, we hope that in the future there will be a wide range of machines in the Neotron family. These Neotron systems don't geneally aim to be super cheap, although we tend to target commodity microcontrollers that only cost circa $10 or less so they shouldn't be outrageously expensive. They do, however, aim to be usable computers that can do interesting things, while being simple enough to understand in their entirety and open enough to allow you to gain that understanding. Looking back at classic home computers of the 1980s and early 1990s though, we see systems that were (and still are) simple enough to understand, or even - with time - learn to master.
+The Commodore 64 contained two 8 KiB ROM chips - one contained the OS (called the KERNAL) and one contained a rebadged Microsoft 6502 BASIC. The KERNAL was very low level and Microsoft BASIC didn't include any commands to produce graphics or sound - developers were expected to interact with memory mapped hardware directly.
 
-## What does it do?
+The Acorn Archimedes was first shipped with an OS in ROM called Arthur, but this was soon replaced with the more familiar RISC OS 2. The entire OS - bootstrap, HAL, filesystem and GUI - was one on ROM chip, meaning it booted up very quickly, without needing to read from any sort of disc.
 
-It does what most 1980s home computers could do:
+The main feature for all these systems (apart from the Commodore 64), was portability. The PC, the Amiga, the Macintosh and CP/M all provided a *platform*, and if you respected certain limits when writing your software, that software was then portable across all the systems which provided that platform. For Neotron, this is a key concept - because microcontrollers vary so wildly, we have a BIOS that implements hardware abstraction, just like with the PC or CP/M machines. We then run a standard OS (indeed, the same OS image should work on every Neotron machine), either from ROM or loaded into RAM by the BIOS. On top of the OS is the text-mode Neotron Shell (like CP/M's CCP, or MS-DOS's COMMAND.COM). Booting to a graphical desktop would be nice, but given the Neotron 32 only has 32 KiB of RAM (barely enough for a low resolution frame-buffer), text mode is the default. Ultimately, a Neotron 32 should be able to 'compete' on a functional level with an un-expanded IBM PC 5150 or a BBC Microcomputer Model-B. The Neotron 320ST meanwhile, should be more like a Macintosh, Archimedes or Amiga in terms of functionality and in time we do hope to develop a GUI for this system.
+
+As with the CP/M and MS-DOS machines, we hope that in the future there will be a wide range of machines in the Neotron family. These Neotron systems won't generally aim to be super cheap, although we will tend to target commodity microcontrollers that only cost circa $10 or less, so they shouldn't be outrageously expensive. They will, however, aim to be usable computers that can do interesting things, while being simple enough to understand in their entirety and open enough to allow you to gain that understanding.
+
+## What can I do with it?
+
+You can do what you can do with most 1980s home computers:
 
 * Type things on the keyboard
 * Use a joystick or a mouse
 * Manage files on disk
 * Type in your own programs
+* Load programs from external media (although we have SD Cards rather than Floppy Discs)
 * Put text and graphics on the screen
 * Make various beepy noises
-* Connect to external hardware
+* Connect to external hardware, such as Printers, Ethernet interfaces, or WiFi modules.
+
+But most importantly, you can learn the fundamentals of what it takes for a computer to be a *computer*. And you can study the source code and hardware schematics required to make that happen.
 
 ## Is this a good idea?
 
@@ -58,15 +69,23 @@ It's certainly not a profitable idea. It's not even likely to be an efficient us
 
 ### Raspberry Pi
 
-Yes, you can buy a Raspberry Pi for a little as $5 - and it's a wonderful product that has done arguably more than anything since the BBC Microcomputer in terms of putting hardware you can actually program into the hands of young people. But, the downside is that you get a big, complicated piece of silicon, a proprietary GPU subsystem, 25 million lines of kernel source code, and even more in a user-land which has parts dating back over 30 years. No one person could hope to understand all of that!
+Yes, you can buy a Raspberry Pi for a little as $5 - and it's a wonderful product that has done arguably more than anything since the BBC Microcomputer in terms of putting hardware you can actually program into the hands of young people. But, the downside is that you get a big, complicated piece of silicon, a proprietary GPU subsystem, 25 million lines of kernel source code, and even more in a user-land which has parts dating back over 30 years. No one person could hope to understand all of that! While we could probably port the Neotron OS to the Raspberry Pi, we'd have to treat the video sub-system as a black-box (like RISC OS does) and the complexity and lack of documentation of that subsystem presents a big barrier to fully understanding the system.
 
 ### x86 based systems, like the original IBM PC
 
-You could build yourself a clone of the original IBM PC ([kits do exist](https://monotech.fwscart.com/)), but it involves a lot of components that are very difficult to obtain nearly 40 years since that design first came out. Rust is also designed around a flat memory model (rather than the segmentation:offset model used since the 8086), and that means using at least an [80386](https://hackaday.com/2015/11/17/a-modern-386-development-board/). And, of course, these are plain CPUs rather than microcontrollers, so you'll need to find a 'chipset' containing interrupt controller, DRAM memory controller and timers; as well as separate video, sound and IO sub-systems.
+You could build yourself a clone of the original IBM PC ([kits do exist](https://monotech.fwscart.com/)), but it involves a lot of components that are very difficult to obtain nearly 40 years since that design first came out. Rust is also designed around a flat memory model (rather than the segmentation:offset model used since the 8086), and that means using at least an [80386](https://hackaday.com/2015/11/17/a-modern-386-development-board/). And, of course, these are plain CPUs rather than microcontrollers, so you'll need to find a 'chipset' containing interrupt controller, DRAM memory controller and timers; as well as separate video, sound and IO sub-systems. Our System-on-Chip based design simplifies the motherboard design and reduces cost, and unlike with modern x86 SoCs, we don't have to deal with complicated subsystems such as UEFI, ACPI or PCI.
 
 ### 6502 based systems (like the PE6502 and Commander X16)
 
 You could build a 6502 based system, and many people do, but the Rust programming language doesn't (and probably never will) support an 8-bit CPU with only 256 bytes of stack.
+
+### 68000 based systems
+
+At the present time, there is no 68k backend in LLVM. If there was, a 68000 system would certainly make an interesting alternative to Neotron.
+
+### PowerPC based systems
+
+LLVM does have a PowerPC backend, but unfortunately the only PowerPC CPU or SoC available in a hand-solderable package (i.e. not a BGA) is an obsolete 200 MHz 603e from Microchip.
 
 ### Atmel AVR based systems
 
@@ -82,7 +101,7 @@ Each component has a semantic version number - `major.minor.patch`. The assocati
 
 * The BIOS will require a specific hardware version.
 * The OS will require a specific BIOS version.
-* The Shell and Application will require a specific OS version.
+* The Shell and Applications will require a specific OS version.
 
 ## Open Source and Commercial Sales
 
