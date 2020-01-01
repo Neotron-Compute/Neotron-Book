@@ -37,6 +37,7 @@ It should implement:
 * Jumping to applications located in RAM or ROM, giving them access to the OS
 * Supporting special 'shell' applications which can chain-load small programs (e.g. command-line utilities) without being unloaded
 * Memory allocation/deallocation routines
+* Run-time volume mounting/unmounting
 
 Selected non-goals (i.e. things we aren't going to support) include:
 
@@ -44,9 +45,8 @@ Selected non-goals (i.e. things we aren't going to support) include:
 * Pre-emptive multi-threading
 * Virtual Memory (although we might support a special API for paging to and from disk)
 * Processes / process isolation
-* Run-time filesystem mounting/unmounting (although by time-limiting any cached data, we can support the changing of media at run-time)
 
-Our ultimate goal is that one day we could offer a version of the Rust Standard Library (`std`) which uses the Neotron OS API - albeit without the sub-process support.
+Our ultimate goal is that one day we could offer a version of the Rust Standard Library (`std`) which uses the Neotron OS API - albeit without the sub-process and thread support.
 
 Programming on the Neotron usually involves first loading the specific interpreter for that language - unless you've swapped out the standard shell for something like a BASIC interpreter.
 
@@ -98,19 +98,18 @@ A file handle, whether pointing to a file on a volume, or to a [Special Device](
 
 ## Special Devices
 
-There are special devices which look like files, but are not. They have names which are like volumes, but contain a '$' character. It is an error to try and use a regular volume with `$` in the name.
+There are special devices which look like files, but are not. They have names which are like volumes, but contain a '$' character. It is an error to try and use a regular volume with `$` in the name. Where the device name contains an `x`, the `x` should be replaced with a single digit (e.g. 0 or 1) to identify a specific device.
 
-* `PRN0$:` - The printer. Write here to send data to the printer, read to get print status.
 * `CON$:` - The console. You can read from here to get line-buffered text input and write here to put UTF-8 text on the screen (with ANSI code sequence support).
 * `KBD$:` - The raw keyboard. You can read from here to get raw keyboard events (such as Up Arrow key, or Page Down).
-* `SER0$:` - The first RS-232 serial device (read/write).
-* `SER1$:` - The second RS-232 serial device (read/write).
-* `TONE0$:` - The first tone generator device (write-only).
-* `PCM0$:` - The first PCM device (write for playback, read for record).
-* `JS0$:` - The first Joystick (read-only).
-* `JS1$:` - The second Joystick (read-only).
 * `TIME$:` - Gets/sets the system time (read/write).
 * `GFX$:` - A bitmap framebuffer device.
+* `PRNx$:` - A printer. Write here to send data to the printer, read to get print status.
+* `DISCx$:` - An SD card or other block device (can read/write raw 512 byte blocks).
+* `SERx$:` - An RS-232 serial device (read/write).
+* `TONEx$:` - A tone generator device (write-only).
+* `PCMx$:` - A PCM device (write for playback, read for record).
+* `JSx$:` - A Joystick (read-only).
 
 Additional parameters may be specified after the `$`, separated by `;`. For example:
 
@@ -284,13 +283,57 @@ match kb.read(&mut buffer) {
 
 The least significant (1) bit of any byte written to KBD$ sets the *Num Lock* light. The next (2) bit of any byte written to KBD$ sets the *Caps Lock* light. The next (4) bit of any byte sets the *Scroll Lock* light. This is useful if you are using raw keyboard mode to handle key events and want to perform your own Num Lock, Caps Lock and Scroll Lock handling.
 
+### Writing to `TIME$:`
+
+Write an ASCII string in ISO-8601 format (e.g. `2020-01-01T15:44:21.031Z`) to set the time.
+
+### Reading from `TIME$:`
+
+Reading from this device will return an ASCII/UTF-8 string in ISO-8601 format (e.g. `2020-01-01T15:44:21.031Z`).
+
+```console
+# Reading the time in the Neotron Shell with the cat command
+$ cat TIME$:
+2020-01-01T15:44:21.031Z
+$
+```
+
+### Writing to `GFX$:`
+
+Opening the `GFX$mode=X:` device puts the system into specified video mode *X* and gives access to the underlying video RAM. Optional *x*, *y*, *width* and *height* parameters allow a window to be created into video RAM, which is useful if you want to update a small region. Setting pixels on the screen is simply a case of seeking to the correct position and writing out as many bytes as required. The specific format of the bytes written to this device will depend on the current video mode. There is some other (TBD) mechanism obtain the list of supported video modes and their formats, but they will include Chunky modes (where multiple consecutive bits/bytes map to Red, Green and Blue components for each pixel) and Planar modes (where Red, Green and Blue each have their own distinct regions). This device is useful to blitting bitmaps to the screen, but drawing lines and circles is more efficiently performed through other OS APIs.
+
+```console
+# Using the copy command in the Neotron Shell to put a picture at the top of the screen in Mode 7
+$ copy 0:/EXAMPLE.GFX GFX$mode=7;height=150:
+30000 bytes copied
+$
+```
+
+### Reading from `GFX$:`
+
+Reading from this device allows an application to determine what is currently on the screen. The data is in the same format as when [writing to the device](#writing-to-gfx).
+
 ### Writing to `PRNx$:`
 
-Every byte written to this device is sent to the Parallel Port, followed by high pulse on the `!STROBE` pin, and a busy-wait for the `!BUSY` pin to go low. If any error signals are activated by the printer, the write is ended early.
+Ordinarily, every byte written to this device is sent to the Parallel Port, followed by high pulse on the `STROBE` pin and a busy-wait for the `BUSY` pin to return low. If any error signals are activated by the printer, the write is ended early.
+
+Opening this device with the option `raw`, enables raw mode. In this mode, each write must be a two byte value:
+
+* Byte 0 is 0x00 to write to the data pins or 0x01 to write to the control pins
+* Byte 1 is the value to write to all eight data pins, or to the control pins as per the following table.
+
+| Bit Number | Description                             |
+|------------|-----------------------------------------|
+|          0 | 1 to enable STROBE (active high)        |
+|          1 | 1 to enable LINE_FEED (active low)      |
+|          2 | 1 to enable RESET (active high)         |
+|          3 | 1 to enable SELECT_PRINTER (active low) |
+
+In `raw` mode you can use the Parallel Port as a generic GPIO port with 12 output pins, and 5 [input pins](#reading-from-gfx).
 
 ### Reading from `PRNx$:`
 
-A read will return one byte which is a bitmask of the status bits.
+A read will return one byte which is a bitmask of the status bits, regardless of whether it was opened in raw mode or normal mode.
 
 | Bit Number | Description                       |
 |------------|-----------------------------------|
@@ -300,6 +343,26 @@ A read will return one byte which is a bitmask of the status bits.
 |          3 | 1 when ACK is active (low)        |
 |          4 | 1 when BUSY is active (low)       |
 
+### Writing to `DISCx$:`
+
+Allows access to the raw blocks on a disk. Useful for writing out disk images. Support for creating partition tables is TBD, and may have to be done at the application level by writing to the first sector on disk.
+
+### Reading from `DISCx$:`
+
+Allows access to the raw blocks on a disk. Useful for taking disk images, or inspecting raw disk structures. The option `partition=X` allows a specific partition to be selected, where `1` to `4` are the first four Primary partitions, and `5` or greater selects a Logical Partition located within the Extended Partition. Inspecting the partition metadata (start, end, filesystem type, etc) must be done at the application level by reading the first sector.
+
+### Opening 'SERx$:'
+
+| Option             | Description                        |
+|--------------------|------------------------------------|
+| handshaking=rtscts | Enable RTS/CTS handshaking         |
+| handshaking=xonoff | Enable XON/XOFF handshaking        |
+| handshaking=none   | Disable handshaking (default)      |
+| bps=X              | Set bitrate to X bits per second   |
+| timeout=X          | Set read/write timeout to X frames |
+| timeout=none       | Block forever on read/write        |
+| timeout=0          | Never block on read/write          |
+
 ### Writing to `SERx$:`
 
 A write will block until all of the octets have been transmitted to the remote device at the specified bit rate, or a timeout occurs (if specified).
@@ -307,6 +370,10 @@ A write will block until all of the octets have been transmitted to the remote d
 ### Reading from `SERx$:`
 
 A read will block until the given number of octets have been received from the remote device at the specified bit rate, or a timeout occurs (if specified).
+
+### Opening 'TONEx$:'
+
+No options when opening TONE devices.
 
 ### Writing to `TONEx$:`
 
@@ -330,6 +397,17 @@ The buffer written must be a multiple of four octets in length.
 ### Reading from `TONEx$:`
 
 Not supported.
+
+### Opening 'PCMx$:'
+
+| Option             | Description                        |
+|--------------------|------------------------------------|
+| channels=N         | Enable *N* channels (default is 1) |
+| bits=U8            | Set 8-bit linear unsigned samples  |
+| bits=S8            | Set 8-bit linear signed samples    |
+| bits=U16           | Set 16-bit linear unsigned samples |
+| bits=S16           | Set 16-bit linear signed samples   |
+| rate=X             | Configure for X samples per second |
 
 ### Writing to `PCMx$:`
 
@@ -373,3 +451,7 @@ The Neotron BIOS initialise all of the RAM, configures a stack, reserves a furth
 The Neotron OS has a built-in heap memory allocation routine (like `malloc`) and matching deallocation routine (like `free`) and it offers these to the currently running application. This saves the application having to include its own memory allocation routines. When an application is loaded, the heap is automatically set to use all of the remaining un-used RAM (which varies depending on the size of the application). Applications are usually (but not always) given the same stack as the OS and the BIOS, and so it is very possible for a badly behaved application to corrupt and/or crash the entire system.
 
 An application can always assume its own RAM for code and global variables starts at address `0x2000_0000`. The memory allocation routines may return an address from some other range (e.g. the AXI SRAM on an STM32H7 is at 0x2400_0000).
+
+## Networking
+
+The TCP/IP stack offers a Berkley Sockets style API. Supported devices will include an SPI based Ethernet MAC/PHY devices (such as the Microchip ENC28J60) using [smoltcp](https://github.com/m-labs/smoltcp), and UART based Ethernet/WiFi/Cellular devices with on-board TCP/IP stack (such as the ESP-01).
