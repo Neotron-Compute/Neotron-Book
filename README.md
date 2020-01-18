@@ -1,5 +1,7 @@
 # The Neotron Book
 
+![Neotron - ARM Cortex-m based Home Computer](./neotron.png)
+
 This book is written in [mdbook](https://crates.io/crates/mdbook). Start with the [summary](./src/SUMMARY.md) page if viewing through Github.
 
 ## Licensing
