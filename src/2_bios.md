@@ -241,6 +241,14 @@ fn SerialRead(device: u8, data: &mut [u8], timeout: Option<Timeout>) -> Result<u
 
 Read bytes from a serial port. There is no sense of 'opening' or 'closing' the device - serial devices are always open. If the return value is `Ok(n)`, the value `n` may be less than the size of the given buffer. If so, that means not all of the buffer could be filled with received data - only the first `n` bytes were.
 
+### SerialFlush
+
+```rust
+fn SerialRead(device: u8, timeout: Option<Timeout>) -> Result<(), Error>;
+```
+
+Wait until any bytes previously accepted by `SerialRead` have actually left the UART device (as opposed to just sitting in a hardware buffer).
+
 ### PrinterPortGetInfo
 
 ```rust
