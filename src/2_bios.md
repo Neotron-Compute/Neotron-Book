@@ -76,7 +76,7 @@ Gets the version number of the BIOS API. You need this value to determine which 
 ### BiosVersionGet
 
 ```rust
-fn BiosVersionGet() -> &'static str;
+fn BiosVersionGet() -> ApiStrRef;
 ```
 
 Returns a pointer to a static string slice. This string contains the version number and build string of the BIOS.
@@ -85,7 +85,7 @@ Returns a pointer to a static string slice. This string contains the version num
 
 ```rust
 struct DriveInfo {
-	name: &'static str,
+	name: ApiStrRef,
 	vendor: String8,
 	product: String16,
 	revision: String4,
@@ -179,7 +179,7 @@ enum SerialType {
 }
 
 struct SerialInfo {
-	name: &'static str,
+	name: ApiStrRef,
 	type: SerialType,
 }
 
@@ -256,7 +256,7 @@ enum PrinterPortMode {
 }
 
 struct PrinterPortInfo {
-	name: &'static str,
+	name: ApiStrRef,
 	mode: PrinterPortMode
 }
 
@@ -365,7 +365,7 @@ enum I2CBusSpeed {
 }
 
 struct I2CBusInfo {
-	name: &'static str,
+	name: ApiStrRef,
 	supported_speeds: &[I2CBusSpeed],
 }
 
@@ -417,7 +417,7 @@ The given address must in the range `1..127`. The BIOS does not handle device de
 
 ```rust
 struct SpiBusInfo {
-	name: &'static str,
+	name: ApiStrRef,
 	num_chip_selects: u8,
 	max_speed_bps: u32,
 }
@@ -473,16 +473,16 @@ This is where the Neotron system is a USB Host and the OS wants to access any at
 
 ### GpioPortGetInfo
 
-Gets information about the GPIO ports on this system.
-
 ```rust
 struct GpioPortInfo {
-	name: &'static str,
+	name: ApiStrRef,
 	num_pins: u8,
 }
 
 fn GpioPortGetInfo(port: u8) -> Option<GpioPortInfo>;
 ```
+
+Gets information about the GPIO ports on this system. Note that each GPIO port can only have up to 32 pins.
 
 ### GpioPinGetInfo
 
@@ -498,7 +498,7 @@ enum GpioPinMode {
 }
 
 struct GpioPinInfo {
-	name: &'static str,
+	name: ApiStrRef,
 	state: GpioPinMode
 }
 
