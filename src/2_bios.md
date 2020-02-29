@@ -331,6 +331,22 @@ fn PrinterPortSendBytes(device: u8, data: &[u8], timeout: Option<Timeout>) -> Re
 
 Sends bytes to the printer. In basic 'SPP' mode the 'strobe' line is raised after each byte is written, and the system waits until the remote device lowers the `busy` pin. The operation in other modes is TBD. This function blocks until all the bytes have been sent, an error occurs or the optional timeout is reached. If the result is `Ok(n)` then `n` indicates how many bytes were successfully sent.
 
+### TimestampGet
+
+```
+fn TimestampGet() -> u64
+```
+
+Returns a value indicating how long the system has been running. This is typically the number of video lines generated since the system was powered on. This value is guaranteed to always be greater than (or equal to) the last time this function was called - unless the system is rebooted.
+
+### TimestampRate
+
+```
+fn TimestampRate() -> u32
+```
+
+Returns the number of timestamp ticks in a second. You can use this to convert the difference between two `TimestampGet` values into a duration in seconds.
+
 ### TimeGet
 
 ```rust
@@ -342,7 +358,7 @@ struct Time {
 fn TimeGet() -> Time;
 ```
 
-Get the current wall time. The Neotron BIOS does not understand time zones, leap-seconds or the Gregorian calendar. It simply stores time as an incrementing number of seconds since some epoch, and the number of video frames (at 60 Hz) since that second began. A day is assumed to be exactly 86,400 seconds long. This is a lot like POSIX time, except we have a different epoch. The Neotron epoch is 2000-01-01T00:00:00Z. It is highly recommend that you store UTC in the BIOS and use the OS to handle time-zones.
+Get the current wall time. The Neotron BIOS does not understand time zones, leap-seconds or the Gregorian calendar. Nor does it promise that time is monotonic - users can (and will) move the clock backwards and forwards in time. It simply stores time as an incrementing number of seconds since some epoch, and the number of video frames (at 60 Hz) since that second began. A day is assumed to be exactly 86,400 seconds long. This is a lot like POSIX time, except we have a different epoch. The Neotron epoch is 2000-01-01T00:00:00Z. It is highly recommend that you store UTC in the BIOS and use the OS to handle time-zones.
 
 ### TimeSet
 
