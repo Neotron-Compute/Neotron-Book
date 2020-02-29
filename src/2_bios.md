@@ -81,6 +81,35 @@ fn BiosVersionGet() -> ApiStrRef;
 
 Returns a pointer to a static string slice. This string contains the version number and build string of the BIOS.
 
+### MemoryInfoGet
+
+```rust
+enum MemoryType {
+	ReadOnly,
+	Flash,
+	InternalSRAM,
+	ExternalSRAM,
+	MemoryMappedRegisters,
+	ExternalROM,
+	ExternalFlash,
+	ExternalDRAM,
+}
+
+struct MemoryInfo {
+	name: ApiStrRef,
+	/// The first address in the region (e.g. 0x0000)
+	start_addr: usize,
+	/// The length of the region
+	length: usize,
+	/// The memory type
+	memory_type: MemoryType,
+}
+
+fn MemoryInfoGet(index: u8) -> Option<MemoryInfo>
+```
+
+Gets information about the regions of memory in the system. An OS can use this to work out where it can store the heap, and load any applications to.
+
 ### DriveGetInfo
 
 ```rust
