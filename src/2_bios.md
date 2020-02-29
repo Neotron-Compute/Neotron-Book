@@ -45,9 +45,13 @@ While you could write an application which uses the BIOS directly, most applicat
 
 On ARM systems, calling a kernel API is usually done through a `SWI` or `SVC` machine instruction. This effectively triggers an interrupt, putting the CPU into interrupt mode where it starts executing the `SWI` exception handler. Unfortunately, passing arguments to the `SWI` Exception handler can only be done by stuffing pointers into specific registers, which means you can't write it all in pure Rust (or C for that matter) without using unstable in-line assembly.
 
-Monotron instead used a simple alternative - when the application was started by the OS, the OS passed it a pointer to a structure of function pointers. You can think of this as being like an old-fashioned jump table. When the application wanted to get the OS to do something, the application just called the appropriate function through the given pointer.
+Monotron instead used a simple alternative - when the application was started by the OS, the OS passed it a pointer to a structure of function pointers. You can think of this as being like an old-fashioned jump table. When the application wanted to get the OS to do something, the application just called the appropriate function through the given pointer. The Neotron BIOS takes the Monotron approach.
 
-We're going to take the same approach for the Neotron BIOS. The BIOS is responsible for starting the system and performing hardware initialisation. It will also search for the OS, either in Flash ROM, on disk, or perhaps even loaded over a UART. The OS then has its initialisation function called, to which the structure of BIOS function calls is passed. The initialisation function is specified as a function pointer stored at a specific offset (most likely the first four bytes of the OS image).
+The BIOS is responsible for starting the system and performing hardware initialisation. It will also search for the OS, either in Flash ROM, on disk, or perhaps even loaded over a UART. The OS then has its initialisation function called, to which the structure of BIOS function calls is passed. The initialisation function is specified as a function pointer stored at a specific offset (most likely the first four bytes of the OS image).
+
+## Character Sets
+
+While the video display engines on a Neotron system only support 8-bit fonts (that is, fonts with only 256 glyphs), and so the mapped text buffer memory works exclusively in the character set defined by the font, the rest of the BIOS API works exclusively in UTF-8 encoded text.
 
 ## Timeouts
 
@@ -64,6 +68,8 @@ impl Timeout {
 ```
 
 ## Supported API calls
+
+Note that these systems calls are listed here for documentation and discussion purposes. The canonical reference is the BIOS source code. Note also that these API must be `extern "C"`, which means we can't use references, str-slices, `Option` or `Result`. Instead we provide our own `extern "C"` alternatives.
 
 ### ApiVersionGet
 
@@ -971,7 +977,7 @@ fn AudioQueueSamples(tag: u8, data: *const u8, data_len: usize);
 fn InterruptQuery() -> u8;
 ```
 
-The Neotron BIOS has up to 8 external interrupts, numbered 0 to 7. A bit is set in the returned value for each interrupt that has been triggered. Calling this function automatically clears the interrupts, so the caller must ensure they are actioned. The mapping of interrupts to hardware is configured at the OS level - probably through a configuration file. The primary purpose of these interrupts is to avoid polling external hardware unnecessarily. You should call this function at least once per frame.
+The Neotron BIOS has up to 8 external interrupts, numbered 0 to 7. A bit is set in the returned value for each interrupt that has been triggered. Calling this function automatically clears the interrupts, so the caller must ensure they are actioned. The mapping of interrupts to hardware is configured at the OS level - probably through a configuration file. The primary purpose of these interrupts is to avoid polling external hardware unnecessarily. An OS should call this function at least once per frame, and action those interrupts as soon as possible.
 
 ### SystemReboot
 
