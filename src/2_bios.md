@@ -612,10 +612,17 @@ fn GpioPortGetLevels(port: u8, mask: u32) -> Result<u32, Error>;
 
 ### KeyboardRead
 
-Reads a scan-code from the attached keyboard. The BIOS decodes the scan-codes and we just get make/break and a key number. Mapping the key number to a particular character based on a particular keyboard layout is a job for the OS. This routine does not block. The system only supports a single keyboard - it may be a PS/2 device, or the BIOS may implement basic USB Host support for USB HID devices.
+Reads a scan-code from the attached keyboard. The BIOS decodes the scan-codes and we just get make/break and a key number. Mapping the key number to a particular character based on a particular keyboard layout is a job for the OS. This routine does not block. The system only supports a single keyboard - it may be a PS/2 device, or the BIOS may implement basic USB Host support for USB HID devices. The key codes are not guaranteed to match any particular existing OS or system, but have been inspired by the Linux kernel event sub-system.
 
 ```rust
-struct Key(u8);
+#[repr(u8)]
+enum Key {
+	KEY_A,
+	KEY_B,
+	....
+	KEY_BACKSLASH,
+	...
+}
 
 enum KeyboardEvent {
 	Make(Key),
