@@ -28,18 +28,20 @@ A BIOS should offer interfaces for:
 
 * Block devices (e.g. SD cards)
 * Selecting and using various video modes:
-	* Text modes which accept an 8-bit Code Page 850 characters
-	* Bitmap graphics modes
+	* Text modes which accept an 8-bit characters (where the current font specifies the supported character set)
+	* Bitmap graphics modes (which may be monochrome, block-colour, planar colour or chunky colour)
 * Accessing Serial/UART devices
 * Accessing any I2C buses
 * Accessing any SPI buses
-* Playing an audio sample
+* Loading audio samples
 * Tracking wall time
 * Delaying for defined periods of time
 * Hooking scan-line interrupts
 * Powering off / rebooting
 
 While you could write an application which uses the BIOS directly, most applications will use the higher-level APIs exposed by the OS.
+
+Note that the BIOS does not offer support for reading a Keyboard, unlike an IBM PC BIOS. It is expected that the Keyboard, and other Human Input Devices (HID) will be handled over I²C from an I²C HID Controller peripheral, or an I²C or SPI GPIO interface.
 
 ## Calling a BIOS API
 
@@ -608,64 +610,6 @@ Gets the level for a number of pins in a GPIO port. Only pins with a correspondi
 
 ```rust
 fn GpioPortGetLevels(port: u8, mask: u32) -> Result<u32, Error>;
-```
-
-### KeyboardRead
-
-Reads a scan-code from the attached keyboard. The BIOS decodes the scan-codes and we just get make/break and a key number. Mapping the key number to a particular character based on a particular keyboard layout is a job for the OS. This routine does not block. The system only supports a single keyboard - it may be a PS/2 device, or the BIOS may implement basic USB Host support for USB HID devices. The key codes are not guaranteed to match any particular existing OS or system, but have been inspired by the Linux kernel event sub-system.
-
-```rust
-#[repr(u8)]
-enum Key {
-	KEY_A,
-	KEY_B,
-	....
-	KEY_BACKSLASH,
-	...
-}
-
-enum KeyboardEvent {
-	Make(Key),
-	Break(Key),
-}
-
-fn KeyboardRead() -> Option<KeyboardEvent>;
-```
-
-### KeyboardSetLed
-
-```rust
-fn KeyboardSetLed(num_lock: bool, caps_lock: bool, scroll_lock: bool);
-```
-
-Sets the keyboard status LEDs. Handling Num Lock, Caps Lock and Scroll Lock is up to the Operating System.
-
-### MouseGetPosition
-
-Gets the mouse's relative movement since the last call. The system only supports a single mouse - it may be a Serial mouse, a PS/2 mouse or a USB HID mouse, depending on the hardware and the BIOS implementation. A typical implementation would put a PS/2 mouse into `remote` mode, and then poll it for position data once per frame - as standard a PS/2 mouse is in `stream` mode and would supply an update 100 times per second, which is faster than the video refresh rate.
-
-```rust
-struct MouseData {
-	/// Relative X movement since last call
-	x_movement: i16,
-	/// Relative Y movement since last call
-	y_movement: i16,
-	/// Relative scroll wheel movement since last call
-	scroll_movement: u8,
-	/// true if currently pressed down
-	left_button: bool,
-	/// true if currently pressed down
-	right_button: bool,
-	/// true if currently pressed down
-	middle_button: bool,
-}
-
-enum MouseBlocking {
-	Block,
-	NonBlocking
-}
-
-fn MouseGetPosition(timeout: Option<Timeout>) -> Option<MouseData>;
 ```
 
 ### DelayMs
