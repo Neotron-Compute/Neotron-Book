@@ -26,34 +26,82 @@ The Neotron BIOS is the hardware-abstraction layer for the Neotron Operating Sys
 
 A BIOS should offer interfaces for:
 
-* Block devices (e.g. SD cards)
+* Accessing sector-based block devices
+	* Whilst SD card can be accessed over an SPI bus, many systems have higher-speed 4-bit SD/MMC controllers.
+	* Systems could also have IDE or SCSI interfaces.
 * Selecting and using various video modes:
-	* Text modes which accept an 8-bit characters (where the current font specifies the supported character set)
-	* Bitmap graphics modes (which may be monochrome, block-colour, planar colour or chunky colour)
-* Accessing Serial/UART devices
-* Accessing any I2C buses
-* Accessing any SPI buses
-* Loading audio samples
-* Tracking wall time
-* Delaying for defined periods of time
+	* Text modes
+	    * A rectangular grid of *C* columns and *R* rows, giving *R x C* cells in total.
+		* Each cell takes two bytes of RAM
+		* Each cell accepts one 8-bit character
+		* Each cell also has a 4-bit foreground and 4-bit background colour attribute
+		* The BIOS provides a Unicode (UTF-8) to 8-bit Glyph mapping function for the current font
+		* RAM region used as text buffer can be moved on some systems
+		* Roller-buffer allows mapping any visible row of pixels to any position on screen (e.g. for smooth vertical scrolling, or flipping the screen)
+	* Bitmap graphics modes
+		* 1-bpp monochrome mode
+		* 1-bpp block-colour mode (with the colour taken from each cell in the corresponding text mode)
+		* 1-, 4- or 8-bpp planar colour modes (three greyscale bitplanes - one for each of R, G and B)
+		* 4- or 8-bit chunky colour modes (each N-bit value is one pixel) using a pallette lookup
+		* 16-bit, 24-bit and 32-bit high-colour modes (each N-bit value is one pixel)
+		* RAM region used as frame buffer must be supplied by OS and can be moved
+		* Adjustable row stride length - choosing a value greater than *number of pixels per row * number of bytes per pixel* allows for smooth scrolling effects.
+	* Split modes
+		* A scan-line can be specified to switch from text mode to video mode (or vice-versa), provided they have the same native resolution. This can reduce RAM requirements for video modes and improve text rendering performance.
+* Accessing Serial/UART Controllers
+* Accessing any I²C Controllers and describing any fixed devices attached to the bus
+* Accessing any SPI Controllers and describing any fixed devices attached to the bus
+* Accessing any USB Controllers
+* Learning about any GPIO interfaces and required pin configurations
+* Learning about any connected hardware in the system
+* Playing/recording audio samples at specific sample rates
+* Tracking wall time (in microseconds)
+* Setting timer interrupts
 * Hooking scan-line interrupts
 * Powering off / rebooting
 
-While you could write an application which uses the BIOS directly, most applications will use the higher-level APIs exposed by the OS.
+On top of these APIs sits the Neotron OS, which should be portable with almost zero changes to any device with a Neotron BIOS. While you could write an application which uses the BIOS directly, most applications will use the higher-level APIs exposed by the Neotron OS.
 
-Note that the BIOS does not offer support for reading a Keyboard, unlike an IBM PC BIOS. It is expected that the Keyboard, and other Human Input Devices (HID) will be handled over I²C from an I²C HID Controller peripheral, or an I²C or SPI GPIO interface.
+Note that the BIOS does not offer support for reading a Keyboard, unlike an IBM PC BIOS. It is expected that the Keyboard, and other Human Input Devices (HID) will be handled over I²C from an I²C HID Controller peripheral, over USB from a USB HID Device, or via an I²C or SPI GPIO interface connected to a keyboard matrix.
 
 ## Calling a BIOS API
 
-On ARM systems, calling a kernel API is usually done through a `SWI` or `SVC` machine instruction. This effectively triggers an interrupt, putting the CPU into interrupt mode where it starts executing the `SWI` exception handler. Unfortunately, passing arguments to the `SWI` Exception handler can only be done by stuffing pointers into specific registers, which means you can't write it all in pure Rust (or C for that matter) without using unstable in-line assembly.
+On ARM systems, calling a kernel API is usually done through a `SWI` or `SVC` machine instruction. This effectively triggers an interrupt, putting the CPU into interrupt mode where it starts executing the `SWI` exception handler. Unfortunately, calling the `SWI` instruction and passing arguments via registers can only be performed from assembly language, and is not supported by the `cortex-m` crate at this time.
 
-Monotron instead used a simple alternative - when the application was started by the OS, the OS passed it a pointer to a structure of function pointers. You can think of this as being like an old-fashioned jump table. When the application wanted to get the OS to do something, the application just called the appropriate function through the given pointer. The Neotron BIOS takes the Monotron approach.
+Monotron instead used a simple alternative - when the application was started by the OS, the OS passed it a pointer to a structure of function pointers. You can think of this as being like an old-fashioned jump table. When the application wanted to get the OS to do something, the application just called the appropriate function through the given pointer. The downside was that the Monotron OS functions used the same stack as the application, and it was impossible for an application to exit back to the OS unless it returned from `main` (i.e. there was no `exit()` function you could call). The Neotron BIOS accepts these downsides in the same of simplicity, and takes the Monotron approach.
 
 The BIOS is responsible for starting the system and performing hardware initialisation. It will also search for the OS, either in Flash ROM, on disk, or perhaps even loaded over a UART. The OS then has its initialisation function called, to which the structure of BIOS function calls is passed. The initialisation function is specified as a function pointer stored at a specific offset (most likely the first four bytes of the OS image).
 
+Most of these APIs will be 'blocking' - that is, the function call will not return until the BIOS has completed the operation (e.g. read the sector from disk, or written the bytes to the UART). It is possible in the future that BIOS APIs will be added which allows operations to be *asynchronous* - that is, to return immediately once the operation has been *queued* and then either call some function or set some marker value in memory once the operation has been completed. Such an API is more complex to develop, and has interesting challenges around ensuring the memory passed to the function remains available (i.e. it isn't just on the stack of the calling function). However, these APIs are generally more efficient in terms of CPU time, as the CPU does not have to waste cycles spinning in the main thread whilst it waits for the operation to complete - for example, you could be writing some sectors to disk and performing an I²C read from the HID controller asynchronously, whilst also calculating new display graphics and audio in the main thread.
+
+## Why split the OS and the BIOS?
+
+We could take the Linux approach, where the bootloader performs the bare minimum required to get the Kernel (or, in our case, what we call the 'OS') into RAM and start it running. These operations typically included DRAM setup, rudimentary console setup (either framebuffer or over UART) and accessing the Kernel from some kind of block device or non-volatile memory (e.g. SD Card). The Kernel the replaces the bootloader, which is never used again.
+
+Because our Neotron systems generally have Flash ROM, we don't actually need a bootloader in that sense. Instead, we implement something more like an IBM PC BIOS in that the BIOS provides a fixed application binary interface (ABI) which is unchanging. This allows OS development to be performed against a fixed target (or rather, multiple implementations of a fixed ABI) rather than requiring all of the drivers and board support packages to be upstream into the 'mainline' OS. We have seen with Linux that, for whatever reason, not all boards and peripherals get their driver support upstreamed, and because Linux does not maintain a binary ABI for drivers, anything that isn't upstream quickly becomes obsolete. As a case in point, try to update the version of Linux used on circa-2015 Android tablet - you'll quickly find yourself stuck on an old Kernel version with bespoke patches (or worse, binary blobs) that weren't upstreamed or open-sourced.
+
+The Neotron approach allows for:
+
+* Less centralised development - the Neotron developers do not need to look after (or even know about) your BIOS implementation, as long as it meets the ABI
+* Easier upgrades - any system with a Neotron BIOS should be updateable to a newer version of the Neotron OS
+* Smaller OS - the amount of code in the OS (e.g. for drivers) is reduced, which means the OS is easier to understand and review
+* Simpler builds - everyone can run basically the same build of the OS (subject to some constraints about the specific Arm architecture being targeted) as everything board specific is in the BIOS
+
+The downsides are:
+
+* It's slower - the can be no optimisation across the OS / BIOS boundary
+* It's harder to add new classes of peripheral, as the old BIOSes won't know about them
+* It's harder to design a binary-stable ABI in Rust than a plain function-call API, as you have to use `extern "C"` and avoid significant portions of the Standard Library in your API definition.
+
+## Testing
+
+For BIOS testing, there will be a special 'cut-down' version of the OS which offers only a very basic console, and direct access to all the BIOS APIs via that console.
+
 ## Character Sets
 
-While the video display engines on a Neotron system only support 8-bit fonts (that is, fonts with only 256 glyphs), and so the mapped text buffer memory works exclusively in the character set defined by the font, the rest of the BIOS API works exclusively in UTF-8 encoded text.
+The video display engines on a Neotron system only support 8-bit fonts (that is, fonts with only 256 glyphs), and so the mapped text buffer memory works exclusively in the character set defined by the font. The rest of the BIOS API works exclusively in UTF-8 encoded text, and mapping functions are provided by the BIOS to convert from UTF-8 to the font-specific character set. Generally the first 128 glyphs will match basic ASCII (and hence the first 128 UTF-8 code points) for performance reasons, although that isn't necessarily required.
+
+It is possible that Neotron could be adapted to support multi-byte character sets (e.g. for Japanese, Chinese or Korean text display where more than 256 glyphs are required), but there is no support for that planned at this time.
 
 ## Timeouts
 
@@ -68,6 +116,8 @@ impl Timeout {
 	fn microseconds(us: u16) -> Timeout;
 }
 ```
+
+All video modes on Neotron are 60 Hz and so 1 frame is approximately 16.667ms.
 
 ## Supported API calls
 
