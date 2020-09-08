@@ -697,48 +697,76 @@ enum AttrFormat {
 }
 
 struct VideoTextModeInfo {
-	rows: u8,
-	cols: u8,
-	buffer_size: usize,
+	/// Number of columns of text on screen
+	width: u8,
+	/// Number of rows of text on screen
+	height: u8,
+	/// Number of bytes per row (must be >= cols * 2)
+	row_size: usize,
+	/// Do we support colour or other attributes?
 	attr_format: AttrFormat,
+	/// How many pages of text are available
 	num_pages: u8,
+	/// Can the user supply a new bitmap font? If so, see `VideoModeFontSet`.
 	support_soft_font: bool,
 }
 
 enum ChunkyPixelFormat {
-	/// 1 bit per pixel monochrome
+	/// 1 bit per pixel monochrome.
 	Grey1,
-	/// Up to 8-bit greyscale
+	/// 8-bit greyscale (256 shades of grey), packed as bytes.
 	Grey8,
-	/// Up to 8-bit colour, packed as bytes.
+	/// 8-bit colour (256 colours), packed as bytes (with optional pallette lookup).
 	Colour8,
-	/// Up to 16-bit colour, packed as 16-bit words.
+	/// 16-bit colour (65536 colours), packed as 16-bit words.
 	Colour16,
-	/// Up to 24-bit colour, packed in 32-bit words
+	/// 24-bit colour, packed in 32-bit words.
 	Colour32
 }
 
 struct VideoChunkyBitmapModeInfo {
+	/// Number of pixels across the screen
 	width: u16,
+	/// Number of pixels down the screen
 	height: u16,
-	buffer_size: usize,
+	/// Number of bytes per row (must be >= width * bits-per-pixel / 8)
+	row_size: usize,
+	/// How many pages of video are available (e.g. 2 for double-buffering)
 	num_pages: u8,
-	attr_format: ChunkyPixelFormat,
+	/// What format are the pixels in? Determines how many bits are required for each pixel.
+	pixel_format: ChunkyPixelFormat,
+	/// How big each pallette entry is. '4' would mean each pallette entry gives a 4-bit (16-colour) value
+	/// (like CGA), whilst 18 would mean each pallette entry gave an 18-bit
+	/// (262,144-colour) value (like VGA)
+	pallete_entry_size_bits: u8,
 }
 
 enum PlanarPixelFormat {
-	/// 3 planes, 1-bpp each
+	/// 2 planes, 1-bpp each, for 4 colours (with pallette look-up)
+	Colour2,
+	/// 3 planes, 1-bpp each, for 8 colours (with optional pallette look-up)
 	Colour3,
-	/// 3 planes, 8-bpp (i.e. one byte per pixel) each
-	Colour24,
+	/// 4 planes, 1-bpp each, for 16 colours (with optional pallette look-up)
+	Colour4,
+	/// 3 planes, 8-bpp (i.e. one byte per pixel) each (24-bit true-colour)
+	Colour3x8,
 }
 
 struct VideoPlanarBitmapModeInfo {
+	/// Number of pixels across the screen
 	width: u16,
+	/// Number of pixels down the screen
 	height: u16,
-	buffer_size: usize,
+	/// Number of bytes per row (must be >= width * bits-per-pixel / 8)
+	row_size: usize,
+	/// How many pages of video are available (e.g. 2 for double-buffering)
 	num_pages: u8,
-	attr_format: PlanarPixelFormat,
+	/// What format are the pixels in? Determines how many bitplanes are required for each pixel.
+	pixel_format: PlanarPixelFormat,
+	/// How big each pallette entry is. '4' would mean each pallette entry gives a 4-bit (16-colour) value
+	/// (like CGA), whilst 18 would mean each pallette entry gave an 18-bit
+	/// (262,144-colour) value (like VGA)
+	pallete_entry_size_bits: u8,
 }
 
 enum VideoModeInfo {
@@ -766,13 +794,13 @@ Gets which video mode the system is currently in. A value of zero means video is
 fn VideoModeSet(mode: u8, buffer: *mut u8, buffer_len: usize) -> Result<(), Error>;
 ```
 
-Selects a new video mode. A pointer must be given to the area to be used for storing the graphics / text data. This region must be at least as large as the `buffer_size` value given in `VideoModeGetInfo`.
+Selects a new video mode. A pointer must be given to the area to be used for storing the graphics / text data. This region must be at least as large as `height * row_size * num_pages`.
 
 ### VideoModeFontGet
 
 ```rust
 struct FontInfo {
-	font: *mut u8,
+	font: *const u8,
 	font_len: usize,
 	glyph_width_pixels: u8,
 	glyph_height_rows: u8,
@@ -781,7 +809,7 @@ struct FontInfo {
 fn VideoModeFontGet() -> Result<FontInfo, Error>;
 ```
 
-Get a pointer to the current text-mode font. See [VideoModeFontSet](#videomodefontset).
+Get a information about the currently loaded bitmap font. See [VideoModeFontSet](#videomodefontset).
 
 ### VideoModeFontSet
 
@@ -789,9 +817,13 @@ Get a pointer to the current text-mode font. See [VideoModeFontSet](#videomodefo
 fn VideoModeFontSet(font_info: FontInfo) -> Result<(), Error>;
 ```
 
-Change the current text mode font. An error is returned if the current mode doesn't support soft fonts, or if the width/height parameters are not compatible with the current mode, or if the `font_len` does not equal `int((glyph_width_pixels + 7) / 8) * glyph_height_rows * 256`.
+Change the current bitmap font. Pixel data is laid out row-wise, with each row of each glyph packed into an integer number of bytes. For example, a 7-pixel wide glyph is packed into bytes (leaving the LSB unused), whilst a 9-pixel glyph is packed into two bytes as a big-endian 16-bit value, leaving the 7 LSBs of the second (low) byte unused.
 
-Neotron uses MS-DOS / IBM CodePage 850, so there are only 256 glyphs in a font. Unicode text must be mapped to this set of glyphs for display on-screen. Alternative the OS can implement its own rendering system and simply draw pixels using the BIOS.
+An error is returned if the current mode doesn't support soft fonts, or if the width/height parameters are not compatible with the current mode, or if the `font_len` does not equal `int((glyph_width_pixels + 7) / 8) * glyph_height_rows * 256`.
+
+Neotron uses 8-bit fonts, so there are only 256 glyphs in a font. Unicode text must be mapped to this set of glyphs for display on-screen. Alternative the OS can implement its own rendering system and simply draw pixels using the BIOS.
+
+The standard Neotron fonts match MS-DOS / IBM Code Page 850, but user-supplied fonts can do anything (they don't even have to be characters - they could be background tiles for a game, for example).
 
 ### VideoModePageSet
 
