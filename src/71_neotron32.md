@@ -1,31 +1,37 @@
 # Neotron 32
 
+The Neotron 32 is the baby of the Neotron range. As the name suggests, it has just 32 KiB of SRAM (along with 256 KiB of Flash ROM). It is based around a Texas Instruments Launchpad board, and uses the same basic design as the earlier Monotron project.
+
 ## Features
 
-The Neotron 32 is the baby of the Neotron range. As the name suggests, it has just 32 KiB of SRAM (along with 256 KiB of Flash ROM). The full specifications are:
+The full specifications are:
 
-* Texas Instruments TM4C123GXL Launchpad Microcontroller Board
-	* Texas Instruments TM4C123 Microcontroller
-		* ARM Cortex-M4F Core @ 80 MHz
-		* 32 KiB On-Chip SRAM
-		* 256 KiB On-Chip Flash
-	* USB Debug/Programming interface (via USB micro-B socket)
-	* USB micro-AB On-The-Go Interface
-* 800x600 @ 60Hz 8 colour VGA output (via standard 15-pin VGA connector)
-* One or Two Channel PWM Audio Output, with three tone generators and four waveforms (via 3.5mm stereo jack)
-* 80x36 green/black hi-res text mode
-* 48x36 eight-colour text mode
-* Two built-in 8x8 fonts: MS-DOS Code Page 850 and Teletext
-* 388x288 cell-colour graphics mode
-* 192x144 eight-colour graphics mode
-* SD card slot
-* IBM PC Parallel Port (via 2x13 pin 0.1" header, or optional DB25-F connector)
-* RS232 Serial Port (via 2x5 pin 0.1" header, or optional DE9-M connector)
-* Optional ESP01 WiFi module (via 2x3 0.1" socket)
-* MIDI In and Out (via two 6-pin DIN sockets)
-* 2x Neotron Expansion Slots (two 2x6 pin 0.1" headers)
-* 2x Atari/SEGA 9-pin Joystick Ports (via two DE9-M sockets)
-* PS/2 Keyboard and Mouse (via two 6-pin mini-DIN sockets)
+* **CPU:** Texas Instruments TM4C123 SoC, on a Texas Instruments Tiva-C Launchpad PCB
+  * **Processor Core**: 80 MHz ARM Cortex-M4F
+  * **RAM:** 32 KiB on-die SRAM
+  * **ROM:** 256 KiB on-die Flash
+  * **GPU:** None - software VGA using 3x SPI interfaces
+    * 800x600 nominal resolution
+    * 400x300 effective resolution
+    * 48-column colour text mode and 80-column mono text mode
+    * Maximum 8 colours
+* **Video Output:** SVGA
+  * Nominally 800x600 at 60 Hz
+  * Simple 330 ohm terminated video output
+* **Storage:** SD Card slot, supports FAT16/FAT32 and MS-DOS partition tables
+* **USB:** 1x external USB 2.0 Full-speed micro-AB port
+* **Audio:** 37 kHz PWM audio with three channel wavetable synthesiser
+  * 3.5mm stereo Line Out
+* **Keyboard/Mouse:** 2x PS/2 Ports (2x 6-pin mini-DIN)
+* **MIDI**: MIDI In and MIDI Out (2x 5-pin 180-degree DIN)
+* **Serial**: RS-232 on 10-pin 2.54mm header suitable for DE-9 plug on IDC ribbon
+* **Parallel**: 3.3v PC-style Parallel Port with DB-25 port
+  * Also functions as 3.3v GPIO with 12 outputs and 4 inputs.
+* **Joystick**: 2x 9-pin game ports
+  * supports Atari-compatible two-button joysticks, or SEGA MegaDrive/Genesis controllers
+* **Expansion**: 2x internal 2.54mm 2x6 headers carrying power, SPI, I2C and a dedicated IRQ line
+* **RTC**: Coin-cell battery backup for the main CPU's RTC.
+* **Mechanical Form Factor:** Fits Hammond [1598D] case
 
 The Cortex-M4 is responsible for generating the video pixels, at a rate of 40 million mono pixels/second (in high-res text mode) or 20 million colour pixels/second (in all other modes). This leaves only around 4.5% of the CPU available (during the vertical blanking interval) to run your application, which brings the performance down to around the same as a 2 MHz 6502. This is enough to run simple games or a BASIC interpreter. The challenge is to see how much you can squeeze out of such limited resources!
 
