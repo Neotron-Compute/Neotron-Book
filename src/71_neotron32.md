@@ -30,7 +30,7 @@ The full specifications are:
 * **Joystick**: 2x 9-pin game ports
   * supports Atari-compatible two-button joysticks, or SEGA MegaDrive/Genesis controllers
 * **Expansion**: 2x internal 2.54mm 2x6 headers carrying power, SPI, I2C and a dedicated IRQ line
-* **RTC**: Coin-cell battery backup for the main CPU's RTC.
+* **RTC**: MCP7940N and coin-cell battery backup
 * **Mechanical Form Factor:** Fits Hammond [1598D] case
 
 The Cortex-M4 is responsible for generating the video pixels, at a rate of 40 million mono pixels/second (in high-res text mode) or 20 million colour pixels/second (in all other modes). This leaves only around 4.5% of the CPU available (during the vertical blanking interval) to run your application, which brings the performance down to around the same as a 2 MHz 6502. This is enough to run simple games or a BASIC interpreter. The challenge is to see how much you can squeeze out of such limited resources!
