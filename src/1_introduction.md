@@ -114,9 +114,9 @@ This book describes the Neotron system - from the hardware schematics, all the w
 
 Each component has a semantic version number - `major.minor.patch`. The assocation is:
 
-* The BIOS will require a specific hardware version.
-* The OS will require a specific BIOS version.
-* The Shell and Applications will require a specific OS version.
+* The BIOS will require a compatible hardware version.
+* The OS will require a compatible BIOS version.
+* The Shell and Applications will require a compatible OS version.
 
 ## Open Source and Commercial Sales
 
