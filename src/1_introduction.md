@@ -64,7 +64,7 @@ You can do what you can do with most 1980s home computers:
 * Make various beepy noises
 * Connect to external hardware, such as Printers, Ethernet interfaces, or WiFi modules.
 
-But most importantly, you can learn the fundamentals of what it takes for a computer to be a *computer*. And you can study the source code and hardware schematics required to make that happen. You can even take the designs and go off and produce your own version - maybe to add a specific interface for a particular peripheral that interests you - all with no licences fees to pay.
+But most importantly, you can learn the fundamentals of what it takes for a computer to be a *computer*. And you can study the source code and hardware schematics required to make that happen. You can even take the designs and go off and produce your own version - maybe to add a specific interface for a particular peripheral that interests you - all with no licence fees to pay.
 
 ## Is this a good idea?
 
