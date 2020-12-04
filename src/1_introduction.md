@@ -90,7 +90,7 @@ At the present time, there is no 68k backend in LLVM. If there was, a 68000 syst
 
 ### PowerPC based systems
 
-LLVM does have a PowerPC backend, but unfortunately the only PowerPC CPU or SoC available in a hand-solderable package (i.e. not a BGA) is an aging 200 MHz 603e from Microchip.
+LLVM does have a PowerPC backend, but unfortunately most PowerPC based chips only come in monster 380+ pin BGA packages, with multiple power rails. This unfortunately puts them beyond the scope of a simple hobby project, much as the author would love to build a machine that harks back to the IBM RS/6000 and PowerMacintosh machines of the 1990s.
 
 ### RISC-V based systems
 
