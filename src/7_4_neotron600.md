@@ -2,6 +2,12 @@
 
 The Neotron 600 is an open-source PCB which plugs into the Teensy 4.1. Using the Teensy 4.1 gives it excellent performance, an Ethernet PHY and a support for an easy-to-fit external QuadSPI SRAM chip. The only downside is that the pinout limits the colour output to 7 bits (128 colours).
 
+## Links
+
+* Hardware: <https://github.com/Neotron-Compute/Neotron-600-Hardware>
+* BIOS: <https://github.com/Neotron-Compute/Neotron-600-BIOS>
+* Main CPU: <https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1060-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1060>
+
 ## Features
 
 * **Processor Module**: Teensy 4.1

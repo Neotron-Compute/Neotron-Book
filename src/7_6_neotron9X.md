@@ -6,6 +6,12 @@ As it runs an ARM9 core and has 64 MiB of DDR2 SDRAM, it would run RISC OS, or e
 
 Because the ARM9 will not run Cortex-M3/4/7 (i.e. ARMv7-M or ARMv7E-M) machine code, it is incompatible with standard Neotron applications, and they will need to be recompiled for the ARM9 (i.e. ARMv5TE architecture). You could make an argument, therefore, that the Neotron 9X isn't a Neotron at all.
 
+## Links
+
+* Hardware: <https://github.com/Neotron-Compute/Neotron-9X-Hardware>
+* BIOS: <https://github.com/Neotron-Compute/Neotron-9X-BIOS>
+* Main CPU: <https://www.microchip.com/wwwproducts/en/SAM9X60D5M>
+
 ## Features
 
 * **CPU:** Microchip SAM9X60D5M System-in-Package

@@ -2,6 +2,12 @@
 
 The Neotron 32 is the baby of the Neotron range. As the name suggests, it has just 32 KiB of SRAM (along with 256 KiB of Flash ROM). It is based around a Texas Instruments Launchpad board, and uses the same basic design as the earlier Monotron project.
 
+## Links
+
+* Hardware: <https://github.com/Neotron-Compute/Neotron-32-Hardware>
+* BIOS: <https://github.com/Neotron-Compute/Neotron-32-BIOS>
+* Main CPU Board: <https://www.ti.com/tool/EK-TM4C123GXL>
+
 ## Features
 
 The full specifications are:

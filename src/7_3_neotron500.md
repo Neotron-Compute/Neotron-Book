@@ -4,6 +4,12 @@ The Neotron 500 is an unfinished attempt an an open-source PCB using an STM32H7.
 
 It should also be noted that almsot all STM32 F7 and H7 series parts currently do not include a High-Speed USB2.0 PHY, instead requiring an external ULPI PHY. There are some very new parts which do include a USB2.0 High-Speed PHY, but they don't include a TFT controller.
 
+## Links
+
+* Hardware: <https://github.com/Neotron-Compute/Neotron-500-Hardware>
+* BIOS: <https://github.com/Neotron-Compute/Neotron-500-BIOS>
+* Main CPU: <https://www.st.com/en/microcontrollers-microprocessors/stm32h743ii.html>
+
 ## Features
 
 * 480 MHz 32-bit ARM Cortex-M7 CPU core
@@ -22,6 +28,5 @@ It should also be noted that almsot all STM32 F7 and H7 series parts currently d
 * SD/MMC Slot
 * PS/2 Keyboard and Mouse ports
 * 2x Atari/Sega joystick ports
-* IDE Interface for hard drive, Zip drive, LS-120 or CD-ROM
 * Battery-backed Real-time Clock and CMOS RAM
 * SPI and I2C based expansion bus
