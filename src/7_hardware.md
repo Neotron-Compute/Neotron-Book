@@ -6,12 +6,12 @@ The Netron OS is intended to be binary-portable across any machine with a Neotro
 
 To demonstrate the practicality of making a portable OS for ARMv7-M, we are in the process of producing a number of Neotron compatible systems. Note that some (or all) of these may never be completed, but all in-progress designs remain available under an open-licence.
 
-* [Neotron 32](./61_neotron32.md) - an open-source PCB which plugs into the Texas Instruments TM4C Launchpad (a derivative of the original Montron project).
-* [Neotron 340ST](./62_neotron340st.md) - based on an STM32F7-DISCOVERY PCB; not open-source hardware, but easily available from ST and it comes with schematics.
-* [Neotron 500](./63_neotron500.md) - an unfinished attempt an an open-source PCB using an STM32H7 and other parts from the JLCPCB catalog so it could be built using their assembly service.
-* [Neotron 600](./64_neotron600.md) - an open-source PCB which plugs into the Teensy 4.1.
-* [Neotron 1000](./65_neotron1000.md) - an open-source PCB based around the STM32H7, along with a Lattice iCE40 FPGA for hardware accelerated video output.
-* [Neotron 9X](./66_neotron9X.md) - an open-source PCB based around the Microchip SAM9X60D5M system-in-package. Possibly not a "Neotron" as not a Cortex-M chip.
+* [Neotron 32](./7_1_neotron32.md) - an open-source PCB which plugs into the Texas Instruments TM4C Launchpad (a derivative of the original Montron project).
+* [Neotron 340ST](./7_2_neotron340st.md) - based on an STM32F7-DISCOVERY PCB; not open-source hardware, but easily available from ST and it comes with schematics.
+* [Neotron 500](./7_3_neotron500.md) - an unfinished attempt an an open-source PCB using an STM32H7 and other parts from the JLCPCB catalog so it could be built using their assembly service.
+* [Neotron 600](./7_4_neotron600.md) - an open-source PCB which plugs into the Teensy 4.1.
+* [Neotron 1000](./7_5_neotron1000.md) - an open-source PCB based around the STM32H7, along with a Lattice iCE40 FPGA for hardware accelerated video output.
+* [Neotron 9X](./7_6_neotron9X.md) - an open-source PCB based around the Microchip SAM9X60D5M system-in-package. Possibly not a "Neotron" as not a Cortex-M chip.
 
 ## Form Factor
 
@@ -19,7 +19,7 @@ The original Monotron didn't have a particular form-factor - the PCB was simply 
 
 One of the nice features of the IBM PC (and its clones), and also the Apple II series, was the provision of expansion slots. These allowed extra functionality to be added at a later date - often well beyond what the original designer had envisaged at the time the main system was developed. Whilst the Hammond cases work well as a small desktop, they do lack the space for expansion cards - at least, expansion cards with their own connectors.
 
-The alternative would be to produce a board based around the ATX standard - either full-size ATX (305x244mm) or micro-ATX (244x244mm), or a shallower 170mm deep variation of either of the same. These boards would include some crucial components (e.g. audio codec, VGA DAC, power supply), but move much of the other functionality off onto expansion cards (MIDI, Parallel Port, Joystick Ports, etc). Rather than use ISA-style card-edge connectors (which require the expansion card to have a harder gold finish which can survive the plugging-unplugging), we're considering using standard IDC headers. These would, however, be located such that the expansion cards would line up with standard ATX case expansion slot holes.
+The alternative would be to produce a board based around the ATX standard - either full-size ATX (305x244mm), micro-ATX (244x244mm), or micro-ITX (170x170mm). These boards would include some crucial components (e.g. audio codec, VGA DAC, power supply), but move much of the other functionality off onto expansion cards (MIDI, Parallel Port, Joystick Ports, etc). Rather than use ISA-style card-edge connectors (which require the expansion card to have a harder gold finish which can survive the plugging-unplugging), we're considering using standard IDC headers. These would, however, be located such that the expansion cards would line up with standard ATX case expansion slot holes.
 
 Unfortunately, being quite a large board means it can be quite expensive to produce. We also note that many of our target CPUs are only supplied in BGA package, which means four layers at a minimum, and the decoupling capacitors have to be fitted to the reverse of the board. This seems to place a high-bar on self-assembly at home - requiring basically a full surface-mount rework station. Instead, it seemed to make sense to locate the complex components on a carrier card (CPU, SDRAM, etc) and leave the main board to carry the through-hole connectors and simpler, lower pin-count, parts like the audio codec.
 
@@ -68,8 +68,8 @@ In the end, it's probably easier to come up with our own standard to suit our sp
 	* /Enable
     * IRQ x8
 * Power (6)
-	* 2x 5.0V (taken from DC in)
-	* 2x 3.3V (limited to 200mA)
+	* 2x 5.0V @ 2A max, combined
+	* 2x 3.3V @ 200mA max, combined
 	* 4x GND
 * SPI @ 25 MHz (11)
     * COPI
@@ -86,10 +86,9 @@ In the end, it's probably easier to come up with our own standard to suit our sp
 
 This requires at least 74 pins, ideally more as we probably want to include more Ground pins around the high-speed signals. There is a risk that despite this, sending high speed signals (USB 2.0 High-Speed, 40MHz+ parallel RGB) will cause significant EMC issues.
 
-We could include the VGA DAC on the MCU card, reducing the VGA pins from 24 (18-bit digital RGB + 4) to 7 (3x analog video + 4), but that would then preclude the use of a parallel-RGB to DVI/HDMI encoder at a later date.
+We could include the VGA DAC on the MCU card, reducing the VGA pins from 22 (18x digital RGB + 4) to 7 (3x analog video + 4), but that would then preclude the use of a parallel-RGB to DVI/HDMI encoder at a later date.
 
 If we stick with simple 0.1" pitch pins (easy to solder), one option is two 2xN headers, like the Launchpad uses.
-
 
 ```
 o o                 o o
@@ -119,7 +118,7 @@ This has 80 pins, and occupies 51mm by 31mm. As you can see it would produce qui
 [Waveshare CoreH743I board]: https://www.waveshare.com/coreh743i.htm
 [Colour Maximite 2]: https://geoffg.net/CMM2_Description.html
 
-We could also a double-square arrangement:
+We could also try a double-square arrangement:
 
 ```
 o o o o o o o o o o o o
@@ -163,7 +162,7 @@ When it comes to picking an SoC for a new Neotron model, the following are impor
 * Uses an ARMv7E-M compatible core (i.e. Cortex-M4, Cortex-M7 or Cortex-M33)
 * Can generate digital RGB video at 40 MHz (800x600) or some integer fraction
     * Anything between 3-bits and 24-bits per pixel is acceptable.
-    * Ideally would also support the VGA 25.175 MHz as well
+    * Ideally would also support the VGA standard 640x480@60 and 640x400@70 25.175 MHz modes as well
 * Has a four-wire UART for a backup console
 * Has at least 256 KiB of memory for BIOS / OS (Flash or RAM) 
 * Has enough RAM to support the desired video modes (800x600, 8bpp needs around 470 KiB)
@@ -185,7 +184,7 @@ When it comes to picking an SoC for a new Neotron model, the following are impor
 * Available from mainstream catalog vendors (e.g. Digikey)
     * Ideally also available from the JLCPCB Parts Catalog
 
-We've identified the following parts as meeting the criteria:
+We've identified the following parts as meeting some or more of the above criteria:
 
 | Manuf. | Part Number     | Core      | Clock   | Package   | RAM (KiB) | Flash (KiB) | Price  | Notes                                     |
 |:-------|:----------------|:----------|:--------|:----------|:----------|:------------|:-------|:------------------------------------------|
@@ -194,3 +193,5 @@ We've identified the following parts as meeting the criteria:
 | ST     | STM32H743ZGT6   | Cortex-M7 | 480 MHz | LQFP 144  | 1024      | 1024        | £9.38  | Cheapest 1 MiB H7                         |
 | ST     | STM32H7A3ZIT6   | Cortex-M7 | 280 MHz | LQFP 144  | 1344      | 2048        | £10.35 | Big SRAM - might not need external RAM?   |
 | TI     | TM4C1299KCZADI3 | Cortex-M4 | 120 MHz | VFBGA 212 | 256       | 512         | £12.78 | Poor value, but same family as Neotron-32 |
+
+It is worth also considering the Lattice range of small, low-cost FPGAs, and loading an RISC-V soft-core like the VexRiscv.
