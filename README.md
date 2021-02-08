@@ -2,7 +2,7 @@
 
 ![Neotron - ARM Cortex-m based Home Computer](./neotron.png)
 
-This book is written in [mdbook](https://crates.io/crates/mdbook). Start with the [summary](./src/SUMMARY.md) page if viewing through Github.
+This book is written in [mdbook](https://crates.io/crates/mdbook). Start with the [summary](./src/SUMMARY.md) page if viewing through Github. The main branch is also published to https://neotron-compute.github.io/Neotron-Book/.
 
 ## Licensing
 
