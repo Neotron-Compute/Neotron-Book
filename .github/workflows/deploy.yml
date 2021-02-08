@@ -2,7 +2,7 @@ name: Build and Deploy
 on:
   push:	
     branches:	
-      - master
+      - main
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -10,12 +10,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
     - name: Install mdbook
-      run: curl -L "https://github.com/rust-lang/mdBook/releases/download/v0.3.5/mdbook-v0.3.5-x86_64-unknown-linux-gnu.tar.gz" | tar xvz
+      run: curl -L "https://github.com/rust-lang/mdBook/releases/download/v0.4.6/mdbook-v0.4.6-x86_64-unknown-linux-gnu.tar.gz" | tar xvz
     - name: Build and Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v2
       env:
         ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BASE_BRANCH: master # The branch the action should deploy from.
+        BASE_BRANCH: main # The branch the action should deploy from.
         BRANCH: gh-pages # The branch the action should deploy to.
         FOLDER: book # The folder the action should deploy.
         BUILD_SCRIPT: ./mdbook build
