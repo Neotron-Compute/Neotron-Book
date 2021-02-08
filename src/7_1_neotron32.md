@@ -25,7 +25,7 @@ The full specifications are:
   * Nominally 800x600 at 60 Hz
   * Simple 330 ohm terminated video output
 * **Storage:** SD Card slot, supports FAT16/FAT32 and MS-DOS partition tables
-* **USB:** 1x external USB 2.0 Full-speed micro-AB port
+* **USB:** 1x internal USB 2.0 Full-speed micro-AB port
 * **Audio:** 37 kHz PWM audio with three channel wavetable synthesiser
   * 3.5mm stereo Line Out
 * **Keyboard/Mouse:** 2x PS/2 Ports (2x 6-pin mini-DIN)
