@@ -2,7 +2,9 @@
 
 ## Introduction
 
-The Neotron BIOS is the hardware-abstraction layer for the Neotron Operating System. It allows the OS to run on different hardware platforms with the minimum number of changes.
+The Neotron BIOS is the hardware-abstraction layer for the Neotron Operating
+System. It allows the OS to run on different hardware platforms with the minimum
+number of changes.
 
 ```
 +-------+-------------+
@@ -26,86 +28,191 @@ The Neotron BIOS is the hardware-abstraction layer for the Neotron Operating Sys
 
 A BIOS should offer interfaces for:
 
-* Accessing sector-based block devices
-	* Whilst SD card can be accessed over an SPI bus, many systems have higher-speed 4-bit SD/MMC controllers.
-	* Systems could also have IDE or SCSI interfaces.
+* Discovering the hardware available to the OS
+	* UART controllers
+	* I²C controllers
+	* SPI controllers (with chip selects)
+	* USB Host Controllers
+	* SD/MMC controllers
+	* Internal Real-Time Clock
 * Selecting and using various video modes:
 	* Text modes
-	    * A rectangular grid of *C* columns and *R* rows, giving *R x C* cells in total.
+		* A rectangular grid of *C* columns and *R* rows, giving *R x C* cells
+		  in total.
 		* Each cell takes two bytes of RAM
 		* Each cell accepts one 8-bit character
-		* Each cell also has a 4-bit foreground and 4-bit background colour attribute
-		* The BIOS provides a Unicode (UTF-8) to 8-bit Glyph mapping function for the current font
-		* RAM region used as text buffer can be moved on some systems
-		* Roller-buffer allows mapping any visible row of pixels to any position on screen (e.g. for smooth vertical scrolling, or flipping the screen)
+		* Each cell also has a 4-bit foreground and 4-bit background colour
+		  attribute
+		* The BIOS provides a Unicode to 8-bit Glyph mapping function for the
+		  current font
 	* Bitmap graphics modes
 		* 1-bpp monochrome mode
-		* 1-bpp block-colour mode (with the colour taken from each cell in the corresponding text mode)
-		* 1-, 4- or 8-bpp planar colour modes (three greyscale bitplanes - one for each of R, G and B)
-		* 4- or 8-bit chunky colour modes (each N-bit value is one pixel) using a pallette lookup
-		* 16-bit, 24-bit and 32-bit high-colour modes (each N-bit value is one pixel)
-		* RAM region used as frame buffer must be supplied by OS and can be moved
-		* Adjustable row stride length - choosing a value greater than *number of pixels per row * number of bytes per pixel* allows for smooth scrolling effects.
+		* 1-bpp block-colour mode (with the colour taken from each cell in the
+		  corresponding text mode)
+		* 1-, 4- or 8-bpp planar colour modes (three greyscale bitplanes - one
+		  for each of R, G and B)
+		* 4- or 8-bit chunky colour modes (each N-bit value is one pixel) using
+		  a pallette lookup
+		* 16-bit, 24-bit and 32-bit high-colour modes (each N-bit value is one
+		  pixel)
+		* RAM region used as frame buffer must be supplied by OS and can be
+		  moved
+		* Adjustable row stride length - choosing a value greater than *number
+		  of pixels per row * number of bytes per pixel* allows for smooth
+		  scrolling effects.
 	* Split modes
-		* A scan-line can be specified to switch from text mode to video mode (or vice-versa), provided they have the same native resolution. This can reduce RAM requirements for video modes and improve text rendering performance.
+		* A scan-line can be specified to switch from text mode to video mode
+		  (or vice-versa), provided they have the same native resolution. This
+		  can reduce RAM requirements for video modes and improve text rendering
+		  performance.
+	* Layered Modes
+		* Some video systems allow multiple layers, each in a different mode
+		  (but at the same resolution).
+	* Hooking video scan-line interrupts
 * Accessing Serial/UART Controllers
-* Accessing any I²C Controllers and describing any fixed devices attached to the bus
-* Accessing any SPI Controllers and describing any fixed devices attached to the bus
-* Accessing any USB Controllers
-* Learning about any GPIO interfaces and required pin configurations
-* Learning about any connected hardware in the system
+* Accessing any I²C Controllers, and any devices attached to its bus
+* Accessing any SPI Controllers, and any devices attached to its chip selects
+* Accessing any USB Host Controllers, and any USB devices attached
+* Accessing any SD/MMC Controllers, and the SD card attached to the controller
+* Reading/writing an internal RTC
 * Playing/recording audio samples at specific sample rates
 * Tracking wall time (in microseconds)
 * Setting timer interrupts
-* Hooking scan-line interrupts
-* Powering off / rebooting
+* Hooking interrupts for the external IRQ lines
 
-On top of these APIs sits the Neotron OS, which should be portable with almost zero changes to any device with a Neotron BIOS. While you could write an application which uses the BIOS directly, most applications will use the higher-level APIs exposed by the Neotron OS.
+On top of these APIs sits the Neotron OS, which should be portable with almost
+zero changes to any device with a Neotron BIOS. While you could write an
+application which uses the BIOS directly, most applications will use the
+higher-level APIs exposed by the Neotron OS.
 
-Note that the BIOS does not offer support for reading a Keyboard, unlike an IBM PC BIOS. It is expected that the Keyboard, and other Human Input Devices (HID) will be handled over I²C from an I²C HID Controller peripheral, over USB from a USB HID Device, or via an I²C or SPI GPIO interface connected to a keyboard matrix.
+Note that the BIOS does not currently offer support for reading a Keyboard,
+unlike an IBM PC BIOS. It is expected that the Keyboard, and other Human Input
+Devices (HID) will be handled over I²C from an I²C HID Controller peripheral,
+over USB from a USB HID Device, or via an I²C or SPI GPIO interface connected to
+a keyboard matrix.
 
 ## Calling a BIOS API
 
-On ARM systems, calling a kernel API is usually done through a `SWI` or `SVC` machine instruction. This effectively triggers an interrupt, putting the CPU into interrupt mode where it starts executing the `SWI` exception handler. Unfortunately, calling the `SWI` instruction and passing arguments via registers can only be performed from assembly language, and is not supported by the `cortex-m` crate at this time.
+On ARM systems, calling a kernel API is usually done through a `SWI` or `SVC`
+machine instruction. This effectively triggers an interrupt, putting the CPU
+into interrupt mode where it starts executing the `SWI` exception handler.
+Unfortunately, calling the `SWI` instruction and passing arguments via registers
+can only be performed from assembly language, and is not supported by the
+`cortex-m` crate at this time.
 
-Monotron instead used a simple alternative - when the application was started by the OS, the OS passed it a pointer to a structure of function pointers. You can think of this as being like an old-fashioned jump table. When the application wanted to get the OS to do something, the application just called the appropriate function through the given pointer. The downside was that the Monotron OS functions used the same stack as the application, and it was impossible for an application to exit back to the OS unless it returned from `main` (i.e. there was no `exit()` function you could call). The Neotron BIOS accepts these downsides in the same of simplicity, and takes the Monotron approach.
+Monotron instead used a simple alternative - when the application was started by
+the OS, the OS passed it a pointer to a structure of function pointers. You can
+think of this as being like an old-fashioned jump table. When the application
+wanted to get the OS to do something, the application just called the
+appropriate function through the given pointer. The downside was that the
+Monotron OS functions used the same stack as the application, and it was
+impossible for an application to exit back to the OS unless it returned from
+`main` (i.e. there was no `exit()` function you could call). The Neotron BIOS
+accepts these downsides in the same of simplicity, and takes the Monotron
+approach.
 
-The BIOS is responsible for starting the system and performing hardware initialisation. It will also search for the OS, either in Flash ROM, on disk, or perhaps even loaded over a UART. The OS then has its initialisation function called, to which the structure of BIOS function calls is passed. The initialisation function is specified as a function pointer stored at a specific offset (most likely the first four bytes of the OS image).
+The BIOS is responsible for starting the system and performing hardware
+initialisation. It will also search for the OS, either in Flash ROM, on disk, or
+perhaps even loaded over a UART. The OS then has its initialisation function
+called, to which the structure of BIOS function calls is passed. The
+initialisation function is specified as a function pointer stored at a specific
+offset (most likely the first four bytes of the OS image).
 
-Most of these APIs will be 'blocking' - that is, the function call will not return until the BIOS has completed the operation (e.g. read the sector from disk, or written the bytes to the UART). It is possible in the future that BIOS APIs will be added which allows operations to be *asynchronous* - that is, to return immediately once the operation has been *queued* and then either call some function or set some marker value in memory once the operation has been completed. Such an API is more complex to develop, and has interesting challenges around ensuring the memory passed to the function remains available (i.e. it isn't just on the stack of the calling function). However, these APIs are generally more efficient in terms of CPU time, as the CPU does not have to waste cycles spinning in the main thread whilst it waits for the operation to complete - for example, you could be writing some sectors to disk and performing an I²C read from the HID controller asynchronously, whilst also calculating new display graphics and audio in the main thread.
+Most of these APIs will be 'blocking' - that is, the function call will not
+return until the BIOS has completed the operation (e.g. read the sector from
+disk, or written the bytes to the UART). It is possible in the future that BIOS
+APIs will be added which allows operations to be *asynchronous* - that is, to
+return immediately once the operation has been *queued* and then either call
+some function or set some marker value in memory once the operation has been
+completed. Such an API is more complex to develop, and has interesting
+challenges around ensuring the memory passed to the function remains available
+(i.e. it isn't just on the stack of the calling function). However, these APIs
+are generally more efficient in terms of CPU time, as the CPU does not have to
+waste cycles spinning in the main thread whilst it waits for the operation to
+complete - for example, you could be writing some sectors to disk and performing
+an I²C read from the HID controller asynchronously, whilst also calculating new
+display graphics and audio in the main thread.
 
 ## Why split the OS and the BIOS?
 
-We could take the Linux approach, where the bootloader performs the bare minimum required to get the Kernel (or, in our case, what we call the 'OS') into RAM and start it running. These operations typically included DRAM setup, rudimentary console setup (either framebuffer or over UART) and accessing the Kernel from some kind of block device or non-volatile memory (e.g. SD Card). The Kernel the replaces the bootloader, which is never used again.
+We could take the Linux / Windows NT approach, where the bootloader performs the
+bare minimum required to get the kernel (or, in our case, what we call the 'OS')
+into RAM and start it running. The bootloader for a PC is usually a UEFI BIOS
+but on an older system might be an IBM PC-compatible 'legacy' BIOS. The
+operations performed typically include DRAM setup, rudimentary console setup
+(either framebuffer or over UART) and accessing the kernel from some kind of
+block device or non-volatile memory (e.g. SD Card). The kernel then replaces the
+bootloader, which is never used again.
 
-Because our Neotron systems generally have Flash ROM, we don't actually need a bootloader in that sense. Instead, we implement something more like an IBM PC BIOS in that the BIOS provides a fixed application binary interface (ABI) which is unchanging. This allows OS development to be performed against a fixed target (or rather, multiple implementations of a fixed ABI) rather than requiring all of the drivers and board support packages to be upstream into the 'mainline' OS. We have seen with Linux that, for whatever reason, not all boards and peripherals get their driver support upstreamed, and because Linux does not maintain a binary ABI for drivers, anything that isn't upstream quickly becomes obsolete. As a case in point, try to update the version of Linux used on circa-2015 Android tablet - you'll quickly find yourself stuck on an old Kernel version with bespoke patches (or worse, binary blobs) that weren't upstreamed or open-sourced.
+Because our Neotron systems generally have Flash ROM, we don't actually need a
+bootloader in that sense. Instead, we implement something more like the
+interface provided by an IBM PC-compatible 'legacy' BIOS for running MS-DOS. In
+that case, the BIOS provides a fixed application binary interface (ABI) which is
+unchanging. This allowed development of MS-DOS to be performed against a fixed
+target (or rather, multiple implementations of a fixed ABI), allowing the same
+copy of MS-DOS to run on a variety of PCs from a variety of manufacturers. The
+alternative would be to require all of the drivers and board support packages to
+added into OS kernel (as usually happens with Linux), or for the drivers to be
+loaded from disk at boot-up (as with Windows). We have seen with Linux that, for
+whatever reason, not all boards and peripherals get their driver support
+upstreamed, and because Linux does not maintain a binary ABI for drivers,
+anything that isn't upstream quickly becomes obsolete. As a case in point, try
+to update the version of Linux used on circa-2015 Android tablet - you'll
+quickly find yourself stuck on an old Kernel version with bespoke patches (or
+worse, binary blobs) that weren't upstreamed or open-sourced. Whilst Windows
+maintains a binary ABI for drivers, they are usually closed-source and of
+varying quality, leading to system instabilities that are almost impossible to
+debug.
 
 The Neotron approach allows for:
 
-* Less centralised development - the Neotron developers do not need to look after (or even know about) your BIOS implementation, as long as it meets the ABI
-* Easier upgrades - any system with a Neotron BIOS should be updateable to a newer version of the Neotron OS
-* Smaller OS - the amount of code in the OS (e.g. for drivers) is reduced, which means the OS is easier to understand and review
-* Simpler builds - everyone can run basically the same build of the OS (subject to some constraints about the specific Arm architecture being targeted) as everything board specific is in the BIOS
+* Less centralised development - the Neotron developers do not need to look
+  after (or even know about) your BIOS implementation, as long as it meets the
+  ABI
+* Easier upgrades - any system with a Neotron BIOS should be updateable to a
+  newer version of the Neotron OS
+* Smaller OS - the amount of code in the OS (e.g. for drivers) is reduced, which
+  means the OS is easier to understand and review
+* Simpler builds - everyone can run basically the same build of the OS (subject
+  to some constraints about the specific Arm architecture being targeted) as
+  everything board specific is in the BIOS
 
 The downsides are:
 
-* It's slower - the can be no optimisation across the OS / BIOS boundary
-* It's harder to add new classes of peripheral, as the old BIOSes won't know about them
-* It's harder to design a binary-stable ABI in Rust than a plain function-call API, as you have to use `extern "C"` and avoid significant portions of the Standard Library in your API definition.
+* It's slower - there can be no optimisation across the OS / BIOS boundary
+* It's harder to add new classes of peripheral bus (e.g. if we ever wanted to
+  add support for I3C), as the old BIOSes won't know about them
+* It's harder to design a binary-stable ABI in Rust than a plain function-call
+  API, as you have to use `extern "C"` and avoid significant portions of the
+  Standard Library in your API definition.
 
 ## Testing
 
-For BIOS testing, there will be a special 'cut-down' version of the OS which offers only a very basic console, and direct access to all the BIOS APIs via that console.
+For BIOS testing, there will be a special 'cut-down' version of the OS which
+offers only a very basic console, and direct access to all the BIOS APIs via
+that console.
 
 ## Character Sets
 
-The video display engines on a Neotron system only support 8-bit fonts (that is, fonts with only 256 glyphs), and so the mapped text buffer memory works exclusively in the character set defined by the font. The rest of the BIOS API works exclusively in UTF-8 encoded text, and mapping functions are provided by the BIOS to convert from UTF-8 to the font-specific character set. Generally the first 128 glyphs will match basic ASCII (and hence the first 128 UTF-8 code points) for performance reasons, although that isn't necessarily required.
+The video display engines on a Neotron system only support monospaced 8-bit
+fonts (that is, fonts with only 256 glyphs and where each glyph occupies the
+same horizontal space on screen), and so the mapped text buffer memory works
+exclusively in the character set defined by the font. The rest of the BIOS API
+works exclusively in UTF-8 encoded text, and mapping functions are provided by
+the BIOS to convert from a Unicode codepoint to the font-specific character set.
+Generally the first 128 glyphs will match basic ASCII (and hence the first 128
+Unicode code points) for performance reasons, although that isn't necessarily
+required.
 
-It is possible that Neotron could be adapted to support multi-byte character sets (e.g. for Japanese, Chinese or Korean text display where more than 256 glyphs are required), but there is no support for that planned at this time.
+It is possible that Neotron could be adapted to support multi-byte character
+sets (e.g. for Chinese, Japanese or Korean text display where more than 256
+glyphs are required), but there is no support for that planned at this time.
 
 ## Timeouts
 
-Some functions accept a timeout argument. If this argument is `None`, then the function blocks. Otherwise the function waits for up to the period specified, or the operation is complete, whichever occurs first.
+Some functions accept a timeout argument. If this argument is `None`, then the
+function blocks. Otherwise the function waits for up to the period specified, or
+the operation is complete, whichever occurs first.
 
 ```rust
 struct Timeout(u16);
@@ -121,7 +228,10 @@ All video modes on Neotron are 60 Hz and so 1 frame is approximately 16.667ms.
 
 ## Supported API calls
 
-Note that these systems calls are listed here for documentation and discussion purposes. The canonical reference is the BIOS source code. Note also that these API must be `extern "C"`, which means we can't use references, str-slices, `Option` or `Result`. Instead we provide our own `extern "C"` alternatives.
+Note that these systems calls are listed here for documentation and discussion
+purposes. The canonical reference is the BIOS source code. Note also that these
+API must be `extern "C"`, which means we can't use references, str-slices,
+`Option` or `Result`. Instead we provide our own `extern "C"` alternatives.
 
 ### ApiVersionGet
 
@@ -129,7 +239,8 @@ Note that these systems calls are listed here for documentation and discussion p
 fn ApiVersionGet() -> u32;
 ```
 
-Gets the version number of the BIOS API. You need this value to determine which of the following API calls are valid in this particular version.
+Gets the version number of the BIOS API. You need this value to determine which
+of the following API calls are valid in this particular version.
 
 ### BiosVersionGet
 
@@ -137,23 +248,29 @@ Gets the version number of the BIOS API. You need this value to determine which 
 fn BiosVersionGet() -> ApiStrRef;
 ```
 
-Returns a pointer to a static string slice. This string contains the version number and build string of the BIOS.
+Returns a pointer to a static string slice. This string contains the version
+number and build string of the BIOS.
 
 ### MemoryInfoGet
 
 ```rust
 enum MemoryType {
-	ReadOnly,
-	Flash,
-	InternalSRAM,
-	ExternalSRAM,
-	MemoryMappedRegisters,
-	ExternalROM,
-	ExternalFlash,
-	ExternalDRAM,
+	/// An on-chip memory optimised for code
+	InstructionTightlyCoupled,
+	/// An on-chip memory optimised for data
+	DataTightlyCoupled,
+	/// An on-chip Static RAM that can be used for code or data
+	InternalStatic,
+	/// An on-chip Dynamic RAM that can be used for code or data
+	InternalDynamic,
+	/// An off-chip Static RAM that can be used for code or data
+	ExternalStatic,
+	/// An off-chip Dynamic RAM that can be used for code or data
+	ExternalDynamic,
 }
 
 struct MemoryInfo {
+	/// A human-readable label for this region
 	name: ApiStrRef,
 	/// The first address in the region (e.g. 0x0000)
 	start_addr: usize,
@@ -166,114 +283,56 @@ struct MemoryInfo {
 fn MemoryInfoGet(index: u8) -> Option<MemoryInfo>
 ```
 
-Gets information about the regions of memory in the system. An OS can use this to work out where it can store the heap, and load any applications to.
+Gets information about the regions of memory in the system. An OS can use this
+to work out where it can store the heap, and load any applications to. Regions
+should be ordered according to their relative performance, with the fastest
+region listed first. The fastest regions will be used for the most commonly used
+data structures (e.g. the system stack). Regions labelled as
+`InstructionTightlyCoupled` will ony be used for code (e.g code loaded from
+disk) and not for data (e.g. variables).
 
-### DriveGetInfo
-
-```rust
-struct DriveInfo {
-	name: ApiStrRef,
-	vendor: String8,
-	product: String16,
-	revision: String4,
-	sector_size: u16,
-	num_sectors: u32,
-	removable: bool,
-	soft_eject: bool,
-}
-
-struct DriveSectorAddress(u32);
-
-fn DriveGetInfo(drive: u8) -> Option<DriveInfo>;
-```
-
-Returns information about any fixed disks in the system. The OS will call with incrementing values of `drive` until this function returns `None`. The BIOS knows nothing of MBR or GPT partition tables - it only knows how to read, write and verify sectors.
-
-Note that if you have 512 byte sectors, the largest supported block device is `2**32 * 512 bytes = 2 TiB`. Also note that the FAT16/FAT32 file system used by the Neotron OS requires 512 byte sectors, so support for other sector sizes is TBD; the only likely candidate is a CD-ROM where the ISO9660 format uses 2048 byte sectors.
-
-Disks might include:
-
-* SD cards connected to high-speed 4-bit SD Card interfaces
-* SD cards connected to SPI peripherals
-* An IDE hard disk connected to appropriate controllers
-* A LUN on a SCSI device connected to an appropriate controller
-* USB flash keys connected to a USB Host port (where the BIOS is operating the USB stack and not the OS)
-* A PC-style floppy drive connected to an appropriate controller
-
-Floppy drives with built-in DOS, such as those used with the Commodore 64, are not listed as drives, but instead a CBM Serial interface would appear as a serial port you can send commands down.
-
-### DriveSectorRead
-
-```rust
-fn DriveSectorRead(drive: u8, sector: DriveSectorAddress, buffer: &mut [u8]) -> Result<(), Error>;
-```
-
-Reads a sector or sectors from a block device. Blocks operation until the read is complete, or an error occurs. The number of sectors to be read is the same as the largest number of whole sectors that fit into `buffer`. For example, if `buffer.len() == 1025` and the sector size is 512 bytes, two sectors will be read, leaving the final 1 byte untouched.
-
-### DriveSectorWrite
-
-```rust
-fn DriveSectorWrite(drive: u8, sector: DriveSectorAddress, buffer: &[u8]) -> Result<(), Error>;
-```
-
-Writes a sector or sectors to a block device. Blocks operation until the write is complete, or an error occurs. The number of sectors to be written is the same as the largest number of whole sectors that fit into `buffer`. For example, if `buffer.len() == 1025` and the sector size is 512 bytes, two sectors will be written, leaving the final 1 byte untouched.
-
-### DriveSectorVerify
-
-```rust
-fn DriveSectorVerify(drive: u8, sector: DriveSectorAddress, buffer: &[u8]) -> Result<(), Error>;
-```
-
-Verifies that a block device contains the given sector or sectors at the specified address. Blocks operation until the write is complete, or an error occurs. The number of sectors to be verified is the same as the largest number of whole sectors that fit into `buffer`. For example, if `buffer.len() == 1025` and the sector size is 512 bytes, two sectors will be verified, leaving the final 1 byte untouched.
-
-### DriveCommandSend
-
-```rust
-enum DriveCommand {
-	Reset,
-	TestUnitReady,
-	Start,
-	Stop,
-	Eject,
-	Load,
-	MediumRemovalAllow,
-	MediumRemovalPrevent,
-}
-
-fn DriveCommandSend(drive: u8, command: DriveCommand) -> Result<(), Error>;
-```
-
-Sends a command to the device. The implementation of these commands is controller-specific, but they have an obvious analogy in the SCSI-2 command set and so should be generally applicable.
+Neotron OS has no support for memory refresh. If this is required, it must be
+arranged by the BIOS in the background.
 
 ### SerialGetInfo
 
 ```rust
 enum SerialType {
+	/// An RS-232 interface, but at TTL voltages. Typically used with an
+	/// FTDI FT232 cable.
+	TtlUart,
+	/// An RS-232 interface
+	Rs232,
+	/// A USB Device implementing Communications Class Device (also known as
+	/// a USB Serial port). The USB Device implementation may be on-chip
+	/// (handled by the BIOS), or off-chip.
+	UsbCdc,
 	/// A MIDI interface
 	Midi,
 	/// A Commodore Serial interface
 	Cbm,
 	/// An RS-485 bus
 	Rs485,
-	/// An RS-232 interface
-	Rs232,
-	/// An RS-232 interface, but at TTL voltages. Typically used with an
-	/// FTDI FT232 cable.
-	TtlUart,
-	/// A USB Device implementing Communications Class Device (also known as
-	/// a USB Serial port). The USB Device implementation may be on-chip, or off-chip.
-	UsbCdc,
 }
 
 struct SerialInfo {
 	name: ApiStrRef,
 	type: SerialType,
+	data_rate_bps: u32,
 }
 
 fn SerialGetInfo(device: u8) -> Option<SerialInfo>;
 ```
 
-Get information about the Serial ports in the system. Serial ports are ordered octet-oriented pipes. You can push octets into them using a 'write' call, and pull bytes out of them using a 'read' call. They have options which allow them to be configured at different speeds, or with different transmission settings (parity bits, stop bits, etc) - you set these with a call to `SerialConfigure`. They may physically be a MIDI interface, an RS-232 port or a USB-Serial port. There is no sense of 'open' or 'close' - that is an Operating System level design feature. These APIs just reflect the raw hardware, in a similar manner to the registers exposed by a memory-mapped UART peripheral.
+Get information about the Serial ports in the system. Serial ports are ordered
+octet-oriented pipes. You can push octets into them using a 'write' call, and
+pull bytes out of them using a 'read' call. They have options which allow them
+to be configured at different speeds, or with different transmission settings
+(parity bits, stop bits, etc) - you set these with a call to `SerialConfigure`.
+They may physically be a MIDI interface, an RS-232 port or a USB-Serial port.
+There is no sense of 'open' or 'close' - that is an Operating System level
+design feature. These APIs just reflect the raw hardware, in a similar manner to
+the registers exposed by a memory-mapped UART peripheral.
 
 ### SerialConfigure
 
@@ -307,10 +366,15 @@ struct SerialConfig {
 	handshaking: SerialHandshaking,
 }
 
-fn SerialConfigure(device: u8, config: SerialConfig) -> Result<(), Error>;
+fn SerialConfigure(device: u8, config: Option<SerialConfig>) -> Result<(), Error>;
 ```
 
-Set the options for a given serial device. An error is returned if the options are invalid for that serial device.
+Set the options for a given serial device. An error is returned if the options
+are invalid for that serial device (e.g. you have picked a data rate that isn't
+supported).
+
+Passing `None` will power-down and/or deactivate the peripheral to the extent
+supported by the peripheral.
 
 ### SerialWrite
 
@@ -318,7 +382,30 @@ Set the options for a given serial device. An error is returned if the options a
 fn SerialWrite(device: u8, data: &[u8], timeout: Option<Timeout>) -> Result<usize, Error>;
 ```
 
-Write bytes to a serial port. There is no sense of 'opening' or 'closing' the device - serial devices are always open. If the return value is `Ok(n)`, the value `n` may be less than the size of the given buffer. If so, that means not all of the data could be transmitted - only the first `n` bytes were.
+Write bytes to a serial port. There is no sense of 'opening' or 'closing' the
+device - serial devices are always open. If the return value is `Ok(n)`, the
+value `n` may be less than `data.len()`. If so, that means not all of the data
+could be transmitted - only the first `n` bytes were.
+
+### SerialWriteAsync
+
+```rust
+struct AsyncBuffer(*mut u8, usize);
+struct AsyncHandle(u16);
+
+fn SerialWriteAsync(device: u8, data: AsyncBuffer, timeout: Option<Timeout>) -> Result<AsyncHandle, Error>;
+```
+
+Write bytes to a serial port asynchronously - that is, the call will return when
+the write is queued, not when the write has completed. The `AsyncBuffer` must
+remain valid until the call has complete. An implementation that does not have
+asynchronous support may just implement this function by calling `SerialWrite`.
+
+You should register an interrupt with `SerialRegisterInterrupt` and poll all of
+your `AsyncHandle` objects on interrupt.
+
+Each implementation will have a limit on the number of `AsyncBuffer` objects it
+can queue before returning an error.
 
 ### SerialRead
 
@@ -326,109 +413,47 @@ Write bytes to a serial port. There is no sense of 'opening' or 'closing' the de
 fn SerialRead(device: u8, data: &mut [u8], timeout: Option<Timeout>) -> Result<usize, Error>;
 ```
 
-Read bytes from a serial port. There is no sense of 'opening' or 'closing' the device - serial devices are always open. If the return value is `Ok(n)`, the value `n` may be less than the size of the given buffer. If so, that means not all of the buffer could be filled with received data - only the first `n` bytes were.
+Read bytes from a serial port. There is no sense of 'opening' or 'closing' the
+device - serial devices are always open. If the return value is `Ok(n)`, the
+value `n` may be less than `data.len()`. If so, that means not all of the buffer
+could be filled with received data - only the first `n` bytes were.
 
 ### SerialFlush
 
 ```rust
-fn SerialRead(device: u8, timeout: Option<Timeout>) -> Result<(), Error>;
+fn SerialFlush(device: u8, timeout: Option<Timeout>) -> Result<(), Error>;
 ```
 
-Wait until any bytes previously accepted by `SerialRead` have actually left the UART device (as opposed to just sitting in a hardware buffer).
+Wait until any bytes previously accepted by `SerialRead` have actually left the
+UART device (as opposed to just sitting in a hardware buffer).
 
-### PrinterPortGetInfo
+### SerialRegisterInterrupt
 
 ```rust
-enum PrinterPortMode {
-	/// Standard 'Centronics' uni-directional printer interface.
-	Spp,
-	/// Nibble-mode bi-directional support
-	Bidirectional,
-	/// Enhanced Parallel Port
-	Epp,
-	/// Enhanced Control Port
-	Ecp
+enum SerialInterruptFlag {
+	/// SerialRead will return a non-zero value.
+	RxReady = 1,
+	/// The last SerialWrite has completed.
+	TxComplete = 2,
+	Break = 4
 }
 
-struct PrinterPortInfo {
-	name: ApiStrRef,
-	mode: PrinterPortMode
-}
+struct SerialInterruptFlagSet(u32);
 
-fn PrinterPortGetInfo(device: u8) -> Option<PrinterPortInfo>;
+type SerialCallback = Fn(device: u8, flags: SerialInterruptFlagSet);
+
+fn SerialRegisterInterrupt(device: u8, function: SerialCallback, flags: SerialInterruptFlagSet) -> Result<(), Error>;
 ```
 
-Gets information about any printer ports the system has.
-
-### PrinterPortGetStatus
-
-```rust
-struct PrinterPortStatus(u8);
-
-impl PrinterPortStatus {
-	/// Read DB25 pin 10
-	fn is_ack_asserted(&self) -> bool;
-	/// Read DB25 pin 11
-	fn is_busy_asserted(&self) -> bool;
-	/// Read DB25 pin 12
-	fn is_paper_out_asserted(&self) -> bool;
-	/// Read DB25 pin 13
-	fn is_select_in_asserted(&self) -> bool;
-	/// Read DB25 pin 15
-	fn is_error_asserted(&self) -> bool;
-	/// Get all the bits together
-	fn get_byte(&self) -> u8;
-}
-
-fn PrinterPortGetStatus(device: u8) -> Result<PrinterPortStatus, Error>;
-```
-
-Gets the status of the given printer port.
-
-### PrinterPortSetControl
-
-```rust
-struct PrinterPortControl(u8, u8);
-
-impl PrinterPortControl {
-	/// Control DB25 pin 1 (enabled is low)
-	fn set_strobe(&mut self, enabled: bool);
-	/// Control DB25 pin 14 (enabled is low)
-	fn set_auto_linefeed(&mut self, enabled: bool);
-	/// Control DB25 pin 16 (enabled is high)
-	fn set_reset(&mut self, enabled: bool);
-	/// Control DB25 pin 17 (enabled is low)
-	fn set_select_printer(&mut self, enabled: bool);
-	/// Does not appear on the port - controls whether PrinterPortSendBytes blocks or not.
-	fn set_blocking(&mut self, enabled: bool);
-	/// Set all the bits at once
-	fn set_byte(&mut self, byte: u8);
-}
-
-fn PrinterPortSetControl(device: u8, control: PrinterPortControl) -> Result<(), Error>;
-```
-
-Gets the status of the given printer port. This includes buffer status, and signals from the printer including 'Paper Error'.
-
-### PrinterPortSetData
-
-```rust
-fn PrinterPortSetByte(device, byte: u8) -> Result<(), Error>;
-```
-
-Sets a byte on the data bus for the parallel port. Does not operate the Strobe line - you have to do that manually using `PrinterPortSetControl`.
-
-### PrinterPortSendBytes
-
-```rust
-fn PrinterPortSendBytes(device: u8, data: &[u8], timeout: Option<Timeout>) -> Result<usize, Error>;
-```
-
-Sends bytes to the printer. In basic 'SPP' mode the 'strobe' line is raised after each byte is written, and the system waits until the remote device lowers the `busy` pin. The operation in other modes is TBD. This function blocks until all the bytes have been sent, an error occurs or the optional timeout is reached. If the result is `Ok(n)` then `n` indicates how many bytes were successfully sent.
+When any of the properties specified in `flags` are true, the given `function`
+will be executed from the hardware interrupt handler. Note that calling Neotron
+BIOS functions from interrupt handlers is not, in general, supported, and so the
+callback should set some state and to inform the main thread that something has
+occurred.
 
 ### TimestampGet
 
-```
+```rust
 fn TimestampGet() -> u64
 ```
 
@@ -436,8 +461,8 @@ Returns a value indicating how long the system has been running. This is typical
 
 ### TimestampRate
 
-```
-fn TimestampRate() -> u32
+```rust
+fn TimestampRate() -> u16
 ```
 
 Returns the number of timestamp ticks in a second. You can use this to convert the difference between two `TimestampGet` values into a duration in seconds.
@@ -447,13 +472,21 @@ Returns the number of timestamp ticks in a second. You can use this to convert t
 ```rust
 struct Time {
 	seconds_since_epoch: u32,
-	frames_since_second: u8
+	ticks_since_second: u16
 }
 
 fn TimeGet() -> Time;
 ```
 
-Get the current wall time. The Neotron BIOS does not understand time zones, leap-seconds or the Gregorian calendar. Nor does it promise that time is monotonic - users can (and will) move the clock backwards and forwards in time. It simply stores time as an incrementing number of seconds since some epoch, and the number of video frames (at 60 Hz) since that second began. A day is assumed to be exactly 86,400 seconds long. This is a lot like POSIX time, except we have a different epoch. The Neotron epoch is 2000-01-01T00:00:00Z. It is highly recommend that you store UTC in the BIOS and use the OS to handle time-zones.
+Get the current wall time. The Neotron BIOS does not understand time zones,
+leap-seconds or the Gregorian calendar. Nor does it promise that time is
+monotonic - users can (and will) move the clock backwards and forwards in time.
+It simply stores time as an incrementing number of seconds since some epoch, and
+the number of ticks (typically 60 Hz, but see `TimestampRate`) since that second
+began. A day is assumed to be exactly 86,400 seconds long. This is a lot like
+POSIX time, except we have a different epoch - the Neotron epoch is
+2000-01-01T00:00:00Z. It is highly recommend that you store UTC in the BIOS and
+use the OS to handle time-zones.
 
 ### TimeSet
 
@@ -467,12 +500,18 @@ Set the current wall time to the given value. See [TimeGet](#timeget).
 
 ```rust
 enum I2CBusSpeed {
-	Low10kbps,
-	Standard100kbps,
-	Fast400kbps,
-	FastPlus1Mbps,
-	High3M4bps,
-	UltraFast5Mbps,
+	// 10kbps
+	Low,
+	/// 100kbps
+	Standard,
+	/// 400kbps
+	Fast,
+	/// 1Mbps
+	FastPlus,
+	/// 3.4Mbps
+	High,
+	/// 5Mbps
+	UltraFast,
 }
 
 struct I2CBusInfo {
@@ -502,11 +541,11 @@ fn I2CBusWriteRead(bus: u8, address: u8, out_buffer: &[u8], in_buffer: &mut [u8]
 Writes data to the I2C bus, then reads data. Performs the following operations (courtesy of the Embedded HAL documentation):
 
 ```
-          +---+-----+---+--+---+--+---+---+--+---+--+-----+---+--+---+--+---+---+--+----+--+
-     Main | ST|SAD+W|   |O0|   |O1|   |...|OM|   |SR|SAD+R|   |  |MAK|  |MAK|...|  |NMAK|SP|
-          +---+-----+---+--+---+--+---+---+--+---+--+-----+---+--+---+--+---+---+--+----+--|
+		  +---+-----+---+--+---+--+---+---+--+---+--+-----+---+--+---+--+---+---+--+----+--+
+	 Main | ST|SAD+W|   |O0|   |O1|   |...|OM|   |SR|SAD+R|   |  |MAK|  |MAK|...|  |NMAK|SP|
+		  +---+-----+---+--+---+--+---+---+--+---+--+-----+---+--+---+--+---+---+--+----+--|
 Secondary |   |     |SAK|  |SAK|  |SAK|...|  |SAK|  |     |SAK|I0|   |I1|   |...|IN|    |  |
-          +---+-----+---+--+---+--+---+---+--+---+--+-----+---+--+---+--+---+---+--+----+--+
+		  +---+-----+---+--+---+--+---+---+--+---+--+-----+---+--+---+--+---+---+--+----+--+
 ```
 
 Where:
@@ -524,13 +563,24 @@ Where:
 
 The given address must in the range `1..127`. The BIOS does not handle device detection or even know what devices are fitted - that is all handled in the operating system.
 
+### I2CBusWriteReadAsync
+
+```rust
+fn I2CBusWriteRead(bus: u8, address: u8, out_buffer: AsyncBuffer, in_buffer: AsyncBuffer) -> Result<AsyncHandle, Error>;
+```
+
 ### SpiBusGetInfo
 
 ```rust
 struct SpiBusInfo {
+	/// A name for this SPI bus
 	name: ApiStrRef,
+	/// The number of unique chip select signals associated with this SPI bus
 	num_chip_selects: u8,
-	max_speed_bps: u32,
+	/// The maximum SPI bus speed supported
+	max_bus_speed_bps: u32,
+	/// Will be 1, 2 or 4
+	max_bus_width_bits: u8,
 }
 
 fn SpiBusGetInfo(bus: u8) -> Option<SpiBusInfo>;
@@ -538,13 +588,28 @@ fn SpiBusGetInfo(bus: u8) -> Option<SpiBusInfo>;
 
 Gets information about the SPI buses in the system.
 
-### SpiBusSetSpeed
+### SpiBusConfigure
 
 ```rust
-fn SpiBusSetSpeed(bus: u8, speed_bps: u32) -> Result<u32, Error>;
+enum SpiMode {
+	Mode0,
+	Mode1,
+	Mode2,
+	Mode3
+}
+
+struct SpiBusConfig {
+	bus_speed_bps: u32,
+	bus_width_bits: u8,
+	mode: SpiMode
+}
+
+fn SpiBusConfigure(bus: u8, config: Option<SpiBusConfig>) -> Result<u32, Error>;
 ```
 
-Configure the speed of the SPI bus. Where arbitrary speeds are not supported by the bus, the BIOS will select the closest supported speed which is not greater than the given speed.
+Configure the SPI bus. Where arbitrary speeds are not supported by the bus, the
+BIOS will select the closest supported speed which is not greater than the given
+speed.
 
 ### SpiDeviceTransfer
 
@@ -573,7 +638,7 @@ enum DataBuffer<'a> {
 	U32(&'a [u32]),
 }
 
-fn SPIDeviceTransfer(bus: u8, device: u8, buffer: DataBuffer) -> Result<(), Error>;
+fn SpiDeviceWrite(bus: u8, device: u8, buffer: DataBuffer) -> Result<(), Error>;
 ```
 
 ### USBxxx
@@ -791,10 +856,10 @@ Gets which video mode the system is currently in. A value of zero means video is
 ### VideoModeSet
 
 ```rust
-fn VideoModeSet(mode: u8, buffer: *mut u8, buffer_len: usize) -> Result<(), Error>;
+fn VideoModeSet(mode: u8) -> Result<(), Error>;
 ```
 
-Selects a new video mode. A pointer must be given to the area to be used for storing the graphics / text data. This region must be at least as large as `height * row_size * num_pages`.
+Selects a new video mode.
 
 ### VideoModeFontGet
 
@@ -887,122 +952,6 @@ fn VideoHookScanline(context: u32, scan_line: u16, fn: VideoScanlineFunction);
 ```
 
 Supply a function to be called just before the given scan-line is rendered. The function is called in Interrupt Context, and so may pre-empt other functions. The function is automatically un-hooked before it is called, and it is safe for the called function to re-hook itself, or to hook some other function, using `VideoHookScanline` but it is not safe to call any other BIOS function.
-
-### AudioGetInfo
-
-Gets information about the audio system - number of tone channels, PCM sample rate, etc. Most Neotron systems will use the 800x600 @ 60 Hz video mode with a 37.878 kHz vertical frequency. The PCM sample rates will therefore likely be some integer fraction of that vertical frequency, as the audio playback needs to be interleaved with the video generation.
-
-```rust
-/// Bit-depth for a PCM mode
-enum AudioBitsPerSample {
-	Eight = 8,
-	Sixteen = 16,
-}
-
-/// A supported set of settings for the PCM playback engine
-struct AudioPcmMode {
-	// 1 for mono, 2 for stereo, etc
-	num_channels: u8,
-	// e.g. 44100 for CD Quality Audio
-	samples_per_second: u16,
-	// e.g. AudioBitsPerSample::Sixteen for 16-bit PCM audio
-	bits_per_sample: AudioBitsPerSample,
-}
-
-/// Tones we can get from the synthesiser
-enum Waveform {
-	Square,
-	Sawtooth,
-	Sine,
-	Noise,
-	Custom(&[u8])
-}
-
-struct AudioInfo {
-	/// How many simultaneous tones can the hardware play?
-	num_tone_channels: u8,
-	/// The set of supported waveforms on each tone channel
-	waveforms: &[Waveform],
-	/// Does tone generator support envelope control?
-	envelope_supported: bool,
-	/// Does tone generator support modulating with a low-frequency oscillator?
-	lfo_modulation_supported: bool,
-	/// Does tone generator support stereo panning?
-	stereo_tones_supported: bool,
-	/// Various PCM audio output (playback) modes supported. May be an empty list.
-	pcm_output_modes: &[AudioPcmMode],
-	/// Various PCM audio input (record) modes supported. May be an empty list.
-	pcm_input_modes: &[AudioPcmMode],
-}
-
-fn AudioGetInfo() -> Option<AudioInfo>;
-```
-
-### AudioPlayTone
-
-Plays an audio tone on a given channel.
-
-```rust
-/// Controls the 'shape' of the volume of a tone as it plays
-struct Envelope {
-	/// Rise time for the signal. 0 => 2ms. 15 => 8s.
-	attack: u8,
-	/// Decay time for the signal. 0 => 6ms. 15 => 24s.
-	decay: u8,
-	/// Volume level of the sustained signal. 0 => silence, 15 => maximum volume
-	sustain: u8,
-	/// Release time for the signal. 0 => 6ms. 15 => 24s.
-	release: u8,
-}
-
-/// A tone is a combination of a Waveform and a Frequency to play that waveform at.
-struct Tone {
-	/// The waveform to play
-	waveform: Waveform,
-	/// The frequency to play it at, in Hertz.
-	frequency_hz: u32
-}
-
-fn AudioPlayTone(tone_channel: u8, tone: Tone, lfo: Option<Tone>, envelope: Option<Envelope>, peak_volume: u8, pan: i8) -> Result<(), Error>;
-```
-
-ADSR envelope filtering controls the volume of the tone as it plays. In general terms, the envelope looks like:
-
-```
-    /\
-   /  \
-  /   ^\________
- /^   |   ^     \
-/ |   |   |     ^\
-  |   |   |     |
-Attack| Sustain |
-    Decay     Release
-```
-
-### AudioBufferSamples
-
-If supported, queues PCM audio samples to be played. You should use DelayVblank to synchronise playback with the video. The samples are not copied - only the pointer and length is stored. It is therefore important to ensure the samples are allocated in a static buffer, or at least a buffer that lives long enough for them to be played.
-
-In a stereo mode, the left and right samples are interleaved. In a 16-bit mode, each sample is two bytes, in little-endian format. Thus, in a 16-bit stereo mode, there are four bytes per sample:
-
-```
-+----------+----------+-----------+-----------+------------+...
-|N Left MSB|N Left LSB|N Right MSB|N Right LSB|N+1 Left MSB|
-+----------+----------+-----------+-----------+------------+...
-```
-
-```rust
-/// Configures the PCM playback system
-fn AudioConfigureOutput(mode_index: Option<u8>) -> Result<(), Error>;
-
-/// Returns the tag of the most recent queued sample buffer to have been entirely played.
-fn AudioSamplesTagReleased() -> Option<u8>;
-
-/// Queues samples for playback. Supplying a unique tag allows the
-/// `AudioSamplesTagReleased` function to inform the caller when these samples
-/// have been played.
-fn AudioQueueSamples(tag: u8, data: *const u8, data_len: usize);
-```
 
 ### InterruptQuery
 
