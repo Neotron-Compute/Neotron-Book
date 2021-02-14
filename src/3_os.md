@@ -204,14 +204,17 @@ On some Neotron systems, pressing the 'Up' arrow key will restore the previous c
 use neotron::fs::File;
 let mut buffer = [0u8; 16];
 /// The standard Neotron file read functions can be used to read from the console.
-let mut console = File::open("CON$:").expect("Failed to open console for reading");
+let mut console = File::open("CON$:")
+	.expect("Failed to open console for reading");
 match console.read(&mut buffer) {
 	Ok(0) => {
 		println!("You entered an empty string");
 	}
 	Ok(n) => {
 		// The Neotron OS guarantees this will be valid UTF-8
-		let read_string = unsafe { core::str::from_utf8_unchecked(&buffer[0..n]) };
+		let read_string = unsafe {
+			core::str::from_utf8_unchecked(&buffer[0..n])
+		};
 		println!("You entered {:?}", read_string);
 	}
 	Err(e) => {
@@ -219,7 +222,9 @@ match console.read(&mut buffer) {
 	}
 }
 /// There is also a Neotron Application Library helper function which reads to a buffer (unlike the normal Rust Standard Library function which reads to a `String`).
-let bytes_read = neotron::io::stdin().read_line(&mut buffer).expect("Failed to read from console");
+let bytes_read = neotron::io::stdin()
+	.read_line(&mut buffer)
+	.expect("Failed to read from console");
 ```
 
 ### Reading from `KBD$:`
@@ -329,7 +334,7 @@ Opening this device with the option `raw`, enables raw mode. In this mode, each 
 |          2 | 1 to enable RESET (active high)         |
 |          3 | 1 to enable SELECT_PRINTER (active low) |
 
-In `raw` mode you can use the Parallel Port as a generic GPIO port with 12 output pins, and 5 [input pins](#reading-from-gfx).
+In `raw` mode you can use the Parallel Port as a generic GPIO port with 12 output pins, and 5 [input pins](#reading-from-prn).
 
 ### Reading from `PRNx$:`
 
@@ -345,7 +350,7 @@ A read will return one byte which is a bitmask of the status bits, regardless of
 
 ### Writing to `DISCx$:`
 
-Allows access to the raw blocks on a disk. Useful for writing out disk images. Support for creating partition tables is TBD, and may have to be done at the application level by writing to the first sector on disk.
+Allows access to the raw blocks on a disk. Useful for writing out disk images. Support for creating partition tables is TBD, and may have to be done at the application level by writing to the first sector on disk. Writing to raw disk structures whilst files are open on that volume is likely to lead to filesystem corruption.
 
 ### Reading from `DISCx$:`
 

@@ -2,6 +2,7 @@
 
 - [Introduction](./1_introduction.md)
 - [The Neotron BIOS](./2_bios.md)
+	- [API Calls](./2_1_api_calls.md)
 - [The Neotron OS](./3_os.md)
 - [The Neotron Command Shell](./4_command_shell.md)
 - [The Neotron Command Menu](./5_menu_shell.md)
