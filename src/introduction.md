@@ -1,6 +1,4 @@
-# Introduction
-
-## What is Neotron?
+# What is Neotron?
 
 Neotron is an attempt to make computers simple again, whilst also taking advantage of the very latest in programming language development. We are saddened by chat clients that require multi-Gigabyte installs, and systems with hundreds of millions of lines of source code that no one person could ever hope to understand. We want to build a machine that is sized for an individual to comprehend, not a trillion-dollar corporation.
 
@@ -55,16 +53,35 @@ As with the CP/M and MS-DOS machines, we hope that in the future there will be a
 
 You can do what you can do with most 1980s home computers:
 
-* Type things on the keyboard
-* Use a joystick or a mouse
-* Manage files on disk
-* Type in your own programs
-* Load programs from external media (although we have SD Cards rather than Floppy Discs)
-* Put text and graphics on the screen
-* Make various beepy noises
-* Connect to external hardware, such as Printers, Ethernet interfaces, or WiFi modules.
+* Type things on the keyboard.
+* Use a joystick or a mouse.
+* Manage files on internal or removable storage.
+* Load programs from internal or removable storage.
+* Type in your own programs.
+* Put text and graphics on the screen.
+* Make various beepy noises.
+* Connect various internal expansion cards or external peripherals.
+* Expand the system in ways the designer couldn't imagine.
 
 But most importantly, you can learn the fundamentals of what it takes for a computer to be a *computer*. And you can study the source code and hardware schematics required to make that happen. You can even take the designs and go off and produce your own version - maybe to add a specific interface for a particular peripheral that interests you - all with no licence fees to pay.
+
+## What can't I do with it?
+
+A Neotron system will probably never:
+
+* Support multiple processes (although Windows 3.1-style co-operative task switching is plausible).
+* Support 3D graphics (e.g. OpenGL).
+* Support virtual addressing (i.e. make use of an MMU).
+* Be POSIX compatible.
+* Have a huge software library (or probably any real library of software).
+* Run existing MS-DOS, Windows or Linux programs.
+* Be able to run `rustc`.
+* Have a port of Rust's `libstd`.
+* Be directly targetable from Rust with `--target=thumbv7em-unknown-neotron-eabi`.
+* Be useful for day to day use.
+* Be finished.
+
+If you want a decent open-source UNIX Operating System, have a look at FreeBSD (or NetBSD, or OpenBSD). If you want a small teaching-oriented open-source UNIX Operating System, look at XV6, or maybe MINIX 3. If you want to learn about Linux, try Linux from Scratch. If you want to learn an ancient Arm based Operating System which still has a flavour of the original BBC Microcomputer, look at RISC OS (it's open source now). If you want a proper OS written in Rust, look at Redox. And if you want to do any of that on a system you don't have, try qemu, or rpcemu.
 
 ## Is this a good idea?
 
@@ -120,7 +137,7 @@ Each component has a semantic version number - `major.minor.patch`. The assocati
 
 ## Open Source and Commercial Sales
 
-Neotron is designed to be open - the user must have free reign to inspect the source code and the schematics, and change them to suit their needs. To this end, the main BIOS and OS implementations are licensed under the [GNU Public Licence v3](https://www.gnu.org/licenses/gpl-3.0.en.html) or any later version. To encourage the adoption of Rust for embedded development, most of the library crates developed for this project are licensed under both the [MIT] and [Apache 2.0] licences, just like the Rust compiler itself. We do intend to sell a range of kits and pre-built PCBs, but you can (and should!) take our designs as inspiration and put your own spin on them.
+Neotron is designed to be open - the user must have free rein to inspect the source code and the schematics, and change them to suit their needs. To this end, the main BIOS and OS implementations are licensed under the [GNU Public Licence v3](https://www.gnu.org/licenses/gpl-3.0.en.html) or any later version. To encourage the adoption of Rust for embedded development, most of the library crates developed for this project are licensed under both the [MIT] and [Apache 2.0] licences, just like the Rust compiler itself. We do intend to sell a range of kits and pre-built PCBs, but you can (and should!) take our designs as inspiration and put your own spin on them.
 
 This book is licensed under Creative Commons [CC-BY-SA 4.0]. Any source examples in this book may also be used under the [MIT] or [Apache 2.0] licences.
 
