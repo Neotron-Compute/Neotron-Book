@@ -5,29 +5,49 @@ purposes. The canonical reference is the BIOS source code. Note also that these
 API must be `extern "C"`, which means we can't use references, str-slices,
 `Option` or `Result`. Instead we provide our own `extern "C"` alternatives.
 
-## Metadata and Versioning
+## Timeouts
 
-### ApiVersionGet
+Some functions accept a timeout argument. If this argument is `None`, then the
+function blocks. Otherwise the function waits for up to the period specified, or
+the operation is complete, whichever occurs first.
 
 ```rust
-fn ApiVersionGet() -> u32;
+struct Timeout(...);
+
+impl Timeout {
+	fn frames(frames: u16) -> Timeout;
+	fn milliseconds(ms: u16) -> Timeout;
+	fn microseconds(us: u16) -> Timeout;
+}
+```
+
+All video modes on Neotron are 60 Hz and so 1 frame is approximately 16.667ms.
+
+## Metadata and Versioning
+
+### api_version_get
+
+```rust
+struct SemanticVersion(...);
+
+fn api_version_get() -> SemanticVersion;
 ```
 
 Gets the version number of the BIOS API. You need this value to determine which
 of the following API calls are valid in this particular version.
 
-### BiosVersionGet
+### bios_info_get
 
 ```rust
-fn BiosVersionGet() -> ApiStrRef;
+fn bios_info_get() -> ApiStrRef;
 ```
 
 Returns a pointer to a static string slice. This string contains the version
-number and build string of the BIOS.
+number and build string of this particular BIOS.
 
 ## System Functions
 
-### SystemMemoryInfoGet
+### system_memory_info_get
 
 ```rust
 enum SystemMemoryType {
@@ -56,7 +76,7 @@ struct SystemMemoryInfo {
 	memory_type: SystemMemoryType,
 }
 
-fn SystemMemoryInfoGet(index: u8) -> Option<SystemMemoryInfo>
+fn system_memory_info_get(index: u8) -> Option<SystemMemoryInfo>
 ```
 
 Gets information about the regions of memory in the system. An OS can use this
@@ -70,41 +90,59 @@ disk) and not for data (e.g. variables).
 Neotron OS has no support for memory refresh. If this is required, it must be
 arranged by the BIOS in the background.
 
-### SystemInterruptQuery
+### system_interrupt_query
 
 ```rust
-fn SystemInterruptQuery() -> u8;
+struct InterruptMask(u16);
+
+enum Interrupt {
+	ExtInterrupt0,
+	ExtInterrupt15
+}
+
+type InterruptFunction = fn(interrupt: Interrupt);
+
+fn system_interrupt_enable(interrupt: Interrupt);
+
+fn system_interrupt_get_enabled() -> InterruptMask;
+
+fn system_interrupt_disable(interrupt: Interrupt);
+
+fn system_interrupt_hook(interrupt: Interrupt, fn: InterruptFunction) -> Option<InterruptFunction>;
 ```
 
-The Neotron BIOS has up to 8 external interrupts, numbered 0 to 7. A bit is set in the returned value for each interrupt that has been triggered. Calling this function automatically clears the interrupts, so the caller must ensure they are actioned. The mapping of interrupts to hardware is configured at the OS level - probably through a configuration file. The primary purpose of these interrupts is to avoid polling external hardware unnecessarily. An OS should call this function at least once per frame, and action those interrupts as soon as possible.
+The Neotron BIOS has up to 16 external interrupts, numbered 0 to 15. Note that
+this only applies to *external* interrupts - that is, from expansion cards
+fitted to expansion slots, or peripherals on the baseboard that are connected
+like expansion cards. These functions do not apply to internal interrupts (e.g. for UART data received) - see the device specific APIs for any interrupt support that may be available.
 
-### SystemReboot
+### system_reboot
 
 ```rust
-fn SystemReboot() -> !;
+fn system_reboot() -> !;
 ```
 
 Reboots the system.
 
-### SystemHalt
+### system_halt
 
 ```rust
-fn SystemHalt() -> !;
+fn system_halt() -> !;
 ```
 
 Halts the system. The OS should display some 'This system is now safe to power off' message first, in case the hardware can't actually power itself off.
 
-### SystemControl
+### sytem_control
 
 ```rust
-fn SystemControl(command: u32, data: *const u8, data_len: usize) -> Result<u32, Error>;
+fn sytem_control(command: u32, data: *const u8, data_len: usize) -> Result<u32, Error>;
 ```
 
 Sends a BIOS-specific command. See your BIOS user guide for details.
 
 ## Serial Ports (UARTs)
 
-### SerialGetInfo
+### serial_get_info
 
 ```rust
 enum SerialType {
@@ -128,10 +166,9 @@ enum SerialType {
 struct SerialInfo {
 	name: ApiStrRef,
 	type: SerialType,
-	data_rate_bps: u32,
 }
 
-fn SerialGetInfo(device: u8) -> Option<SerialInfo>;
+fn serial_get_info(device_idx: u8) -> Option<SerialInfo>;
 ```
 
 Get information about the Serial ports in the system. Serial ports are ordered
@@ -144,7 +181,7 @@ There is no sense of 'open' or 'close' - that is an Operating System level
 design feature. These APIs just reflect the raw hardware, in a similar manner to
 the registers exposed by a memory-mapped UART peripheral.
 
-### SerialConfigure
+### serial_configure
 
 ```rust
 enum SerialParity {
@@ -176,7 +213,7 @@ struct SerialConfig {
 	handshaking: SerialHandshaking,
 }
 
-fn SerialConfigure(device: u8, config: Option<SerialConfig>) -> Result<(), Error>;
+fn serial_configure(device_idx: u8, config: Option<SerialConfig>) -> Result<(), Error>;
 ```
 
 Set the options for a given serial device. An error is returned if the options
@@ -186,73 +223,63 @@ supported).
 Passing `None` will power-down and/or deactivate the peripheral to the extent
 supported by the peripheral.
 
-### SerialWrite
+### serial_write
 
 ```rust
-fn SerialWrite(device: u8, data: &[u8], timeout: Option<Timeout>) -> Result<usize, Error>;
+fn serial_write(device_idx: u8, data: &[u8], timeout: Option<Timeout>) -> Result<usize, Error>;
 ```
 
-Write bytes to a serial port. There is no sense of 'opening' or 'closing' the
+Write octets to a serial port. There is no sense of 'opening' or 'closing' the
 device - serial devices are always open. If the return value is `Ok(n)`, the
 value `n` may be less than `data.len()`. If so, that means not all of the data
-could be transmitted - only the first `n` bytes were.
+could be transmitted - only the first `n` octets were.
 
-### SerialWriteAsync
-
-```rust
-struct AsyncBuffer(*mut u8, usize);
-struct AsyncHandle(u16);
-
-fn SerialWriteAsync(device: u8, data: AsyncBuffer, timeout: Option<Timeout>) -> Result<AsyncHandle, Error>;
-```
-
-Write bytes to a serial port asynchronously - that is, the call will return when
-the write is queued, not when the write has completed. The `AsyncBuffer` must
-remain valid until the call has complete. An implementation that does not have
-asynchronous support may just implement this function by calling `SerialWrite`.
-
-You should register an interrupt with `SerialRegisterInterrupt` and poll all of
-your `AsyncHandle` objects on interrupt.
-
-Each implementation will have a limit on the number of `AsyncBuffer` objects it
-can queue before returning an error.
-
-### SerialRead
+### serial_read
 
 ```rust
-fn SerialRead(device: u8, data: &mut [u8], timeout: Option<Timeout>) -> Result<usize, Error>;
+fn serial_read(device_idx: u8, buffer: &mut [u8], timeout: Option<Timeout>) -> Result<usize, Error>;
 ```
 
-Read bytes from a serial port. There is no sense of 'opening' or 'closing' the
-device - serial devices are always open. If the return value is `Ok(n)`, the
-value `n` may be less than `data.len()`. If so, that means not all of the buffer
-could be filled with received data - only the first `n` bytes were.
+Read octets from a serial port. There is no sense of 'opening' or 'closing'
+the device - serial devices are always open. If the return value is `Ok(n)`,
+the value `n` may be equal or less than `buffer.len()` (never great). If less,
+that means not all of the buffer could be filled with received data - only the
+first `n` octets were.
 
-### SerialFlush
+### serial_flush_write
 
 ```rust
-fn SerialFlush(device: u8, timeout: Option<Timeout>) -> Result<(), Error>;
+fn serial_flush_write(device_idx: u8, timeout: Option<Timeout>) -> Result<(), Error>;
 ```
 
-Wait until any bytes previously accepted by `SerialRead` have actually left the
+Wait until any bytes previously accepted by `serial_write` have actually left the
 UART device (as opposed to just sitting in a hardware buffer).
 
-### SerialRegisterInterrupt
+### serial_flush_read
+
+```rust
+fn serial_flush_read(device_idx: u8, timeout: Option<Timeout>) -> Result<(), Error>;
+```
+
+Empty any serial buffers so that, if no further characters are received on the UART, `serial_read` will return `Ok(0)`.
+
+### serial_interrupt_register
 
 ```rust
 enum SerialInterruptFlag {
-	/// SerialRead will return a non-zero value.
+	/// `serial_read` will return a non-zero value.
 	RxReady = 1,
-	/// The last SerialWrite has completed.
+	/// The last `serial_write` has completed.
 	TxComplete = 2,
+	/// A *break* condition has been received
 	Break = 4
 }
 
 struct SerialInterruptFlagSet(u32);
 
-type SerialCallback = Fn(device: u8, flags: SerialInterruptFlagSet);
+type SerialCallback = Fn(device_idx: u8, flags: SerialInterruptFlagSet);
 
-fn SerialRegisterInterrupt(device: u8, function: SerialCallback, flags: SerialInterruptFlagSet) -> Result<(), Error>;
+fn serial_interrupt_register(device_idx: u8, function: SerialCallback, flags: SerialInterruptFlagSet) -> Result<(), Error>;
 ```
 
 When any of the properties specified in `flags` are true, the given `function`
@@ -263,23 +290,23 @@ occurred.
 
 ## Current Time
 
-### TimestampGet
+### timestamp_get
 
 ```rust
-fn TimestampGet() -> u64
+fn timestamp_get() -> u64
 ```
 
 Returns a value indicating how long the system has been running. This is typically the number of video lines generated since the system was powered on. This value is guaranteed to always be greater than (or equal to) the last time this function was called - unless the system is rebooted.
 
-### TimestampRate
+### timestamp_rate
 
 ```rust
-fn TimestampRate() -> u16
+fn timestamp_rate() -> u16
 ```
 
 Returns the number of timestamp ticks in a second. You can use this to convert the difference between two `TimestampGet` values into a duration in seconds.
 
-### TimeGet
+### time_get
 
 ```rust
 struct Time {
@@ -287,7 +314,7 @@ struct Time {
 	ticks_since_second: u16
 }
 
-fn TimeGet() -> Time;
+fn time_get() -> Time;
 ```
 
 Get the current wall time. The Neotron BIOS does not understand time zones,
@@ -300,17 +327,17 @@ POSIX time, except we have a different epoch - the Neotron epoch is
 2000-01-01T00:00:00Z. It is highly recommend that you store UTC in the BIOS and
 use the OS to handle time-zones.
 
-### TimeSet
+### time_set
 
 ```rust
-fn TimeSet(time: Time);
+fn time_set(time: Time);
 ```
 
 Set the current wall time to the given value. See [TimeGet](#timeget).
 
 ## I2C Bus
 
-### I2CBusGetInfo
+### i2c_bus_get_info
 
 ```rust
 enum I2CBusSpeed {
@@ -333,23 +360,23 @@ struct I2CBusInfo {
 	supported_speeds: &[I2CBusSpeed],
 }
 
-fn I2CBusGetInfo(bus: u8) -> Option<I2CBusInfo>;
+fn i2c_bus_get_info(bus_idx: u8) -> Option<I2CBusInfo>;
 ```
 
 Gets information about the I2C buses in the system..
 
-### I2CBusSetSpeed
+### i2c_bus_set_speed
 
 ```rust
-fn I2CBusSetSpeed(bus: u8, speed: I2CBusSpeed) -> Result<(), Error>;
+fn i2c_bus_set_speed(bus_idx: u8, speed: I2CBusSpeed) -> Result<(), Error>;
 ```
 
 Set the I2C bus speed.
 
-### I2CBusWriteRead
+### i2c_device_write_read
 
 ```rust
-fn I2CBusWriteRead(bus: u8, address: u8, out_buffer: &[u8], in_buffer: &mut [u8]) -> Result<(), Error>;
+fn i2c_device_write_read(bus_idx: u8, address: u8, out_buffer: &[u8], in_buffer: &mut [u8]) -> Result<(), Error>;
 ```
 
 Writes data to the I2C bus, then reads data. Performs the following operations (courtesy of the Embedded HAL documentation):
@@ -377,15 +404,9 @@ Where:
 
 The given address must in the range `1..127`. The BIOS does not handle device detection or even know what devices are fitted - that is all handled in the operating system.
 
-### I2CBusWriteReadAsync
-
-```rust
-fn I2CBusWriteRead(bus: u8, address: u8, out_buffer: AsyncBuffer, in_buffer: AsyncBuffer) -> Result<AsyncHandle, Error>;
-```
-
 ## SPI Bus
 
-### SpiBusGetInfo
+### spi_bus_get_info
 
 ```rust
 struct SpiBusInfo {
@@ -399,12 +420,12 @@ struct SpiBusInfo {
 	max_bus_width_bits: u8,
 }
 
-fn SpiBusGetInfo(bus: u8) -> Option<SpiBusInfo>;
+fn spi_bus_get_info(bus_idx: u8) -> Option<SpiBusInfo>;
 ```
 
 Gets information about the SPI buses in the system.
 
-### SpiBusConfigure
+### spi_bus_configure
 
 ```rust
 enum SpiMode {
@@ -420,14 +441,14 @@ struct SpiBusConfig {
 	mode: SpiMode
 }
 
-fn SpiBusConfigure(bus: u8, config: Option<SpiBusConfig>) -> Result<u32, Error>;
+fn spi_bus_configure(bus_idx: u8, config: Option<SpiBusConfig>) -> Result<u32, Error>;
 ```
 
 Configure the SPI bus. Where arbitrary speeds are not supported by the bus, the
 BIOS will select the closest supported speed which is not greater than the given
 speed.
 
-### SpiDeviceTransfer
+### spi_device_transfer
 
 Write to and read from an SPI device.
 
@@ -438,12 +459,12 @@ enum MutableDataBuffer<'a> {
 	U32(&'a mut [u32]),
 }
 
-fn SPIDeviceTransfer(bus: u8, device: u8, word_size: u8, buffer: MutableDataBuffer) -> Result<(), Error>;
+fn spi_device_transfer(bus_idx: u8, device_idx: u8, word_size: u8, buffer: MutableDataBuffer) -> Result<(), Error>;
 ```
 
 Writes data to an SPI device and reads data from the same SPI simultaneously. Data is both read from and written to the same buffer. When writing with a word size of 8 or less, each word should be stored in the least-significant bits of each `u8` in a `MutableDataBuffer::U8`. When writing with a word size of `8 < x <= 16`, each word should be stored in the least-significant bits of each `u16` in a `MutableDataBuffer::U16`. When writing with a word size of `16 < x <= 32`, each word should be stored in the least-significant bits of each `u32` in a `MutableDataBuffer::U32`.
 
-### SpiDeviceWrite
+### spi_device_write
 
 Write to an SPI device, discarding any read data.
 
@@ -454,7 +475,7 @@ enum DataBuffer<'a> {
 	U32(&'a [u32]),
 }
 
-fn SpiDeviceWrite(bus: u8, device: u8, buffer: DataBuffer) -> Result<(), Error>;
+fn spi_device_write(bus_idx: u8, device_idx: u8, buffer: DataBuffer) -> Result<(), Error>;
 ```
 
 ## Universal Serial Bus
@@ -467,7 +488,7 @@ This is where the Neotron system is a USB Host and the OS wants to access any at
 
 ## General-Purpose Input/Output
 
-### GpioPortGetInfo
+### gpio_port_get_info
 
 ```rust
 struct GpioPortInfo {
@@ -484,14 +505,12 @@ struct GpioPin(pub u8);
 #[derive(Copy, Clone)]
 struct GpioPinMask(pub u32);
 
-fn GpioPortGetInfo(port: GpioPort) -> Option<GpioPortInfo>;
+fn gpio_port_get_info(port: GpioPort) -> Option<GpioPortInfo>;
 ```
 
 Gets information about the GPIO ports on this system. Note that each GPIO port can only have up to 32 pins.
 
-### GpioPinGetInfo
-
-Gets information about the GPIO pins on a specific port.
+### gpio_pin_get_info
 
 ```rust
 enum GpioPinMode {
@@ -507,84 +526,83 @@ struct GpioPinInfo {
 	state: GpioPinMode
 }
 
-fn GpioPinGetInfo(port: GpioPort, pin: GpioPin) -> Option<GpioPinInfo>;
+fn gpio_pin_get_info(port: GpioPort, pin: GpioPin) -> Option<GpioPinInfo>;
 ```
 
-### GpioPinSetMode
+Gets information about the GPIO pins on a specific port.
+
+### gpio_pin_set_mode
+
+```rust
+fn gpio_pin_set_mode(port: GpioPort, pin: GpioPin, mode: GpioPinMode) -> Result<(), Error>;
+```
 
 Sets the mode for a GPIO pin.
 
-```rust
-fn GpioPinSetMode(port: GpioPort, pin: GpioPin, mode: GpioPinMode) -> Result<(), Error>;
-```
+### gpio_port_set_mode
 
-### GpioPortSetMode
+```rust
+fn gpio_port_set_mode(port: GpioPort, mode: &[Option<GpioPinMode>]) -> Result<(), Error>;
+```
 
 Sets the mode for a number of pins in a GPIO port. The length of `mode` must be in the range 1 to `num_pins`. You can pass `None` to leave a pin's mode unchanged.
 
-```rust
-fn GpioPortSetMode(port: GpioPort, mode: &[Option<GpioPinMode>]) -> Result<(), Error>;
-```
+### gpio_pin_set_level
 
-### GpioPinSetLevel
+```rust
+fn gpio_pin_set_level(port: GpioPort, pin: GpioPin, level: bool) -> Result<(), Error>;
+```
 
 Sets the output level for an Output GPIO pin. The behaviour if this pin is not currently configured as an output is undefined.
 
+### gpio_port_set_levels
+
 ```rust
-fn GpioPinSetLevel(port: GpioPort, pin: GpioPin, level: bool) -> Result<(), Error>;
+fn gpio_port_set_levels(port: GpioPort, mask: GpioPinMask, levels: u32) -> Result<(), Error>;
 ```
-### GpioPortSetLevel
 
 Sets the level for a number of pins in a GPIO port. Only pins with a corresponding `1` bit in `mask` get set to the corresponding bit in `level`.
 
-```rust
-fn GpioPortSetLevels(port: GpioPort, mask: GpioPinMask, levels: u32) -> Result<(), Error>;
-```
+### gpio_pin_get_level
 
-### GpioPinGetLevel
+```rust
+fn gpio_pin_get_level(port: GpioPort, pin: GpioPin) -> Result<bool, Error>;
+```
 
 Gets the input level for an Input GPIO pin. The behaviour if this pin is not currently configured as an input is undefined.
 
-```rust
-fn GpioPinGetLevel(port: GpioPort, pin: GpioPin) -> Result<bool, Error>;
-```
-### GpioPortGetLevel
+### gpio_port_get_levels
 
 Gets the level for a number of pins in a GPIO port. Only pins with a corresponding `1` bit in `mask` get a bit set in the returned value.
 
 ```rust
-fn GpioPortGetLevels(port: GpioPort, mask: GpioPinMask) -> Result<u32, Error>;
+fn gpio_port_get_levels(port: GpioPort, mask: GpioPinMask) -> Result<u32, Error>;
 ```
 
 ## Delay functions
 
-### DelayMs
+### delay
 
 ```rust
-fn DelayMs(period_ms: u16);
+fn delay(period: Timeout);
 ```
 
-Delays for at least a given number of milliseconds. Because some systems have lengthy interrupt routines (e.g. CPU powered video rendering), the application may be delayed for considerably more than the requested period (but never less than the requested period).
+Delays for at least a given amount of time. Because some systems have lengthy
+interrupt routines (e.g. CPU powered video rendering), the application may be
+delayed for considerably more than the requested period (but never less than
+the requested period).
 
-### DelayUs
-
-```rust
-fn DelayUs(period_us: u16);
-```
-
-Delays for at least a given number of microseconds. Because some systems have lengthy interrupt routines (e.g. CPU powered video rendering), the application may be delayed for considerably more than the requested period (but never less than the requested period).
-
-### DelayVblank
+### delay_vblank
 
 ```rust
-fn DelayVblank();
+fn delay_vblank();
 ```
 
 Delays until the next vertical blanking interval. That is, it waits until the screen has finished drawing and the raster beam is in the off-screen portion. During this time the video memory can be safely updated without causing tearing on the screen. Only supported if you have built-in video.
 
 ## Video functions
 
-### VideoModeGetInfo
+### video_mode_get_info
 
 ```rust
 #[derive(Copy, Clone)]
@@ -678,28 +696,28 @@ enum VideoModeInfo {
 	ChunkyBitmap(VideoChunkyBitmapModeInfo),
 }
 
-fn VideoModeGetInfo(mode: VideoMode) -> Option<VideoModeInfo>;
+fn video_mode_get_info(mode: VideoMode) -> Option<VideoModeInfo>;
 ```
 
 Gets information about a specific video mode. Returns `None` if that video mode is not supported. Video Mode 0 is always 'no video' - i.e. the video output is disabled or not available.
 
-### VideoModeGet
+### video_mode_get
 
 ```rust
-fn VideoModeGet() -> VideoMode;
+fn video_mode_get() -> VideoMode;
 ```
 
 Gets which video mode the system is currently in. A value of zero means video is currently disabled.
 
-### VideoModeSet
+### video_mode_set
 
 ```rust
-fn VideoModeSet(mode: VideoMode) -> Result<(), Error>;
+fn video_mode_set(mode: VideoMode) -> Result<(), Error>;
 ```
 
 Selects a new video mode. Selecting any mode where `VideoModeGetInfo(mode)` returns `None` will give an error. 
 
-### VideoModeFontGet
+### video_font_get
 
 ```rust
 struct FontInfo {
@@ -709,15 +727,15 @@ struct FontInfo {
 	glyph_height_rows: u8,
 }
 
-fn VideoModeFontGet() -> Result<FontInfo, Error>;
+fn video_font_get() -> Result<FontInfo, Error>;
 ```
 
-Get a information about the currently loaded bitmap font. See [VideoModeFontSet](#videomodefontset).
+Get a information about the currently loaded bitmap font. See [video_font_set](#video_font_set).
 
-### VideoModeFontSet
+### video_font_set
 
 ```rust
-fn VideoModeFontSet(font_info: FontInfo) -> Result<(), Error>;
+fn video_font_set(font_info: FontInfo) -> Result<(), Error>;
 ```
 
 Change the current bitmap font. Pixel data is laid out row-wise, with each row of each glyph packed into an integer number of bytes. For example, a 7-pixel wide glyph is packed into bytes (leaving the LSB unused), whilst a 9-pixel glyph is packed into two bytes as a big-endian 16-bit value, leaving the 7 LSBs of the second (low) byte unused.
@@ -728,18 +746,18 @@ Neotron uses 8-bit fonts, so there are only 256 glyphs in a font. Unicode text m
 
 The standard Neotron fonts match MS-DOS / IBM Code Page 850, but user-supplied fonts can do anything (they don't even have to be characters - they could be background tiles for a game, for example).
 
-### VideoModePageSet
+### video_page_set
 
 ```rust
-fn VideoModePageSet(page: u8) -> Result<(), Error>;
+fn video_page_set(page: u8) -> Result<(), Error>;
 ```
 
 Changes the currently displayed video page (if the current video mode supports multiple pages).
 
-### VideoModeTextScroll
+### video_text_scroll
 
 ```rust
-fn VideoModeTextScroll(line: u8) -> Result<(), Error>;
+fn video_text_scroll(line: u8) -> Result<(), Error>;
 ```
 
 Changes which 'line' of the text buffer is displayed at the top of the screen. When the text renderer gets the bottom of the text buffer, it starts taking lines from the top of the buffer.
@@ -772,10 +790,10 @@ Setting the start line to 2, will give:
 +----------+
 ```
 
-### VideoSetText
+### video_text_write
 
 ```rust
-fn VideoSetText(
+fn video_text_write(
 	top_left: VideoCoord, bottom_right: VideoCoord,
 	text: &[u8],
 	foreground: u8, background: u8);
@@ -787,7 +805,7 @@ understand carriage return characters, new-line characters or any other screen
 formatting - each value simply selects one of 256 glyphs to be displayed at
 that position on the screen.
 
-### VideoSetPixel
+### video_pixel_set
 
 ```rust
 enum VideoColour {
@@ -802,17 +820,17 @@ struct VideoCoord {
 	y: u16
 }
 
-fn VideoSetPixel(pos: VideoCoord, colour: VideoColour);
+fn video_pixel_set(pos: VideoCoord, colour: VideoColour);
 ```
 
 Sets a single pixel at the given location to the given colour.
 
 This function is not supported if video is currently disabled, or in a text mode.
 
-### VideoSetPixels
+### video_pixel_set_rect
 
 ```rust
-fn VideoSetPixels(
+fn video_pixel_set_rect(
 	top_left: VideoCoord,
 	bottom_right: VideoCoord,
 	colour: VideoColour);
@@ -823,10 +841,10 @@ Sets multiple pixels to the same value, as specified by the rectangle given by
 
 This function is not supported if video is currently disabled, or in a text mode.
 
-### VideoBlitRaw
+### video_pixel_blit_raw
 
 ```rust
-unsafe fn VideoBlitRaw(
+unsafe fn video_pixel_blit_raw(
 	top_left: VideoCoord,
 	bottom_right: VideoCoord,
 	source: *const u8);
@@ -842,10 +860,10 @@ length of a pixel in bytes depends on the current video mode.
 
 This function is not supported if video is currently disabled, or in a text mode.
 
-### VideoBlitBinary
+### video_pixel_blit
 
 ```rust
-fn VideoBlitBinary(
+fn video_pixel_blit(
 	top_left: VideoCoord,
 	bottom_right: VideoCoord,
 	foreground: VideoColour,
@@ -863,10 +881,10 @@ top_left.x) * (1 + bottom_right.y - top_left.y)` pixels in length.
 
 This function is not supported if video is currently disabled, or in a text mode.
 
-### VideoBlit
+### video_blit
 
 ```rust
-fn VideoBlitRaw(
+fn video_blit(
 	top_left: VideoCoord,
 	bottom_right: VideoCoord,
 	source: &[VideoColour]);
@@ -881,23 +899,23 @@ bottom_right.y - top_left.y)` elements in length.
 
 This function is not supported if video is currently disabled, or in a text mode.
 
-### VideoDrawLine
+### video_draw_line
 
 ```rust
-fn VideoDrawLine(
+fn video_draw_line(
 	start: VideoCoord,
 	end: VideoCoord,
 	colour: VideoColour);
 ```
 
-Draws a line from `start` to `end`, applying the colour given by `colour` (see `VideoSetPixel`).
+Draws a line from `start` to `end`, applying the colour given by `colour` (see `video_pixel_set`).
 
 This function is not supported if video is currently disabled, or in a text mode.
 
-### VideoDrawRect
+### video_draw_rect
 
 ```rust
-fn VideoDrawRect(
+fn video_draw_rect(
 	top_left: VideoCoord,
 	bottom_right: VideoCoord,
 	colour: VideoColour);
@@ -909,14 +927,14 @@ the rectangle is unchanged.
 
 This function is not supported if video is currently disabled, or in a text mode.
 
-### VideoHookScanline
+### video_hook_scanline
 
 ```rust
-type VideoHookFunction = fn(usize, u16);
-fn VideoHookScanline(context: usize, scan_line: u16, fn: VideoScanlineFunction) -> Result<(), Error>;
+type VideoHookCallback = fn(usize, u16);
+fn video_hook_scanline(context: usize, scan_line: u16, fn: VideoHookCallback) -> Result<(), Error>;
 ```
 
-Supply a function to be called just before the given scan-line is rendered. The function is called in Interrupt Context, and so may pre-empt other functions. The function is automatically un-hooked before it is called, and it is safe for the called function to re-hook itself, or to hook some other function, using `VideoHookScanline` but it is not safe to call any other BIOS function.
+Supply a function to be called just before the given scan-line is rendered. The function is called in Interrupt Context, and so may pre-empt other functions. The function is automatically un-hooked before it is called, and it is safe for the called function to re-hook itself, or to hook some other function, using `video_hook_scanline` but it is not safe to call any other BIOS function.
 
 This function is not supported if video is currently disabled. Passing a value
 of `scan_line` which is out of bounds for the current video mode will return
