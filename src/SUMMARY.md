@@ -1,8 +1,7 @@
 # Summary
 
 # Getting Started
-
-- [What is Neotron?](./introduction.md)
+- [What is Neotron?](./README.md)
 - [Licence](./licence.md)
 - [Credits](./credits.md)
 
