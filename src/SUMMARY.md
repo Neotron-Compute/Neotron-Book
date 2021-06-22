@@ -57,6 +57,7 @@
 	- [MIDI](./neotron_32_midi.md)
 	- [USB](./neotron_32_usb.md)
 	- [RTC](./neotron_32_rtc.md)
+- [Neotron Pico](./neotron_pico.md)
 - [Neotron 340ST](./neotron_340st.md)
 - [Neotron 500](./neotron_500.md)
 - [Neotron 600](./neotron_600.md)
