@@ -1,0 +1,1131 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>API Calls - Neotron - The Embedded Rust Home Computer Platform</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> What is Neotron?</a></li><li class="chapter-item expanded "><a href="licence.html"><strong aria-hidden="true">2.</strong> Licence</a></li><li class="chapter-item expanded "><a href="credits.html"><strong aria-hidden="true">3.</strong> Credits</a></li><li class="chapter-item expanded affix "><li class="part-title">The Software</li><li class="chapter-item expanded "><a href="software.html"><strong aria-hidden="true">4.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="software_bios.html"><strong aria-hidden="true">5.</strong> The Neotron BIOS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="software_bios_apicalls.html" class="active"><strong aria-hidden="true">5.1.</strong> API Calls</a></li></ol></li><li class="chapter-item expanded "><a href="software_os.html"><strong aria-hidden="true">6.</strong> The Neotron OS</a></li><li class="chapter-item expanded "><a href="software_command_shell.html"><strong aria-hidden="true">7.</strong> The Neotron Command Shell</a></li><li class="chapter-item expanded "><a href="software_menu_shell.html"><strong aria-hidden="true">8.</strong> The Neotron Command Menu</a></li><li class="chapter-item expanded "><a href="software_applications.html"><strong aria-hidden="true">9.</strong> Neotron Applications</a></li><li class="chapter-item expanded affix "><li class="part-title">The Hardware</li><li class="chapter-item expanded "><a href="hardware.html"><strong aria-hidden="true">10.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="hardware_soc.html"><strong aria-hidden="true">11.</strong> The System On Chip</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="hardware_soc_video.html"><strong aria-hidden="true">11.1.</strong> Video</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.2.</strong> Audio</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.3.</strong> GPIO</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.4.</strong> SPI Bus</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.5.</strong> I²C Bus</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.6.</strong> UART/MIDI</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.7.</strong> RTC</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.8.</strong> SD Card</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.9.</strong> USB</div></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.</strong> Expanding the System</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">12.1.</strong> Video</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.2.</strong> Audio</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.3.</strong> GPIO</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.4.</strong> UART/MIDI/RS-232</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.5.</strong> RTC</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.6.</strong> SD Card</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.7.</strong> Keyboard/Mouse</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.8.</strong> Ethernet</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.9.</strong> Wi-Fi</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.10.</strong> Bluetooth</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.11.</strong> USB</div></li></ol></li><li class="chapter-item expanded "><a href="hardware_baseboards.html"><strong aria-hidden="true">13.</strong> Baseboards</a></li><li class="chapter-item expanded affix "><li class="part-title">Neotron Systems</li><li class="chapter-item expanded "><a href="systems.html"><strong aria-hidden="true">14.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="neotron_32.html"><strong aria-hidden="true">15.</strong> Neotron 32</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="neotron_32_video.html"><strong aria-hidden="true">15.1.</strong> Video</a></li><li class="chapter-item expanded "><a href="neotron_32_audio.html"><strong aria-hidden="true">15.2.</strong> Audio</a></li><li class="chapter-item expanded "><a href="neotron_32_sdmmc.html"><strong aria-hidden="true">15.3.</strong> SD Card Slot</a></li><li class="chapter-item expanded "><a href="neotron_32_ps2.html"><strong aria-hidden="true">15.4.</strong> PS/2 and Joystick</a></li><li class="chapter-item expanded "><a href="neotron_32_wifi.html"><strong aria-hidden="true">15.5.</strong> WiFi</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">15.6.</strong> Expansion</div></li><li class="chapter-item expanded "><a href="neotron_32_parallel.html"><strong aria-hidden="true">15.7.</strong> Parallel Port</a></li><li class="chapter-item expanded "><a href="neotron_32_rs232.html"><strong aria-hidden="true">15.8.</strong> RS-232</a></li><li class="chapter-item expanded "><a href="neotron_32_midi.html"><strong aria-hidden="true">15.9.</strong> MIDI</a></li><li class="chapter-item expanded "><a href="neotron_32_usb.html"><strong aria-hidden="true">15.10.</strong> USB</a></li><li class="chapter-item expanded "><a href="neotron_32_rtc.html"><strong aria-hidden="true">15.11.</strong> RTC</a></li></ol></li><li class="chapter-item expanded "><a href="neotron_pico.html"><strong aria-hidden="true">16.</strong> Neotron Pico</a></li><li class="chapter-item expanded "><a href="neotron_340st.html"><strong aria-hidden="true">17.</strong> Neotron 340ST</a></li><li class="chapter-item expanded "><a href="neotron_500.html"><strong aria-hidden="true">18.</strong> Neotron 500</a></li><li class="chapter-item expanded "><a href="neotron_600.html"><strong aria-hidden="true">19.</strong> Neotron 600</a></li><li class="chapter-item expanded "><a href="neotron_1000.html"><strong aria-hidden="true">20.</strong> Neotron 1000</a></li><li class="chapter-item expanded "><a href="neotron_9x.html"><strong aria-hidden="true">21.</strong> Neotron 9X</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Neotron - The Embedded Rust Home Computer Platform</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#the-neotron-bios---api-calls" id="the-neotron-bios---api-calls">The Neotron BIOS - API Calls</a></h1>
+<p>Note that these systems calls are listed here for documentation and discussion
+purposes. The canonical reference is the BIOS source code. Note also that these
+API must be <code>extern &quot;C&quot;</code>, which means we can't use references, str-slices,
+<code>Option</code> or <code>Result</code>. Instead we provide our own <code>extern &quot;C&quot;</code> alternatives.</p>
+<h2><a class="header" href="#timeouts" id="timeouts">Timeouts</a></h2>
+<p>Some functions accept a timeout argument. If this argument is <code>None</code>, then the
+function blocks. Otherwise the function waits for up to the period specified, or
+the operation is complete, whichever occurs first.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Timeout(...);
+
+impl Timeout {
+	fn frames(frames: u16) -&gt; Timeout;
+	fn milliseconds(ms: u16) -&gt; Timeout;
+	fn microseconds(us: u16) -&gt; Timeout;
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>All video modes on Neotron are 60 Hz and so 1 frame is approximately 16.667ms.</p>
+<h2><a class="header" href="#metadata-and-versioning" id="metadata-and-versioning">Metadata and Versioning</a></h2>
+<h3><a class="header" href="#api_version_get" id="api_version_get">api_version_get</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct SemanticVersion(...);
+
+fn api_version_get() -&gt; SemanticVersion;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Gets the version number of the BIOS API. You need this value to determine which
+of the following API calls are valid in this particular version.</p>
+<h3><a class="header" href="#bios_info_get" id="bios_info_get">bios_info_get</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn bios_info_get() -&gt; ApiStrRef;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Returns a pointer to a static string slice. This string contains the version
+number and build string of this particular BIOS.</p>
+<h2><a class="header" href="#system-functions" id="system-functions">System Functions</a></h2>
+<h3><a class="header" href="#system_memory_info_get" id="system_memory_info_get">system_memory_info_get</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum SystemMemoryType {
+	/// An on-chip memory optimised for code
+	InstructionTightlyCoupled,
+	/// An on-chip memory optimised for data
+	DataTightlyCoupled,
+	/// An on-chip Static RAM that can be used for code or data
+	InternalStatic,
+	/// An on-chip Dynamic RAM that can be used for code or data
+	InternalDynamic,
+	/// An off-chip Static RAM that can be used for code or data
+	ExternalStatic,
+	/// An off-chip Dynamic RAM that can be used for code or data
+	ExternalDynamic,
+}
+
+struct SystemMemoryInfo {
+	/// A human-readable label for this region
+	name: ApiStrRef,
+	/// The first address in the region (e.g. 0x0000)
+	start_addr: usize,
+	/// The length of the region
+	length: usize,
+	/// The memory type
+	memory_type: SystemMemoryType,
+}
+
+fn system_memory_info_get(index: u8) -&gt; Option&lt;SystemMemoryInfo&gt;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Gets information about the regions of memory in the system. An OS can use this
+to work out where it can store the heap, and load any applications to. Regions
+should be ordered according to their relative performance, with the fastest
+region listed first. The fastest regions will be used for the most commonly used
+data structures (e.g. the system stack). Regions labelled as
+<code>InstructionTightlyCoupled</code> will ony be used for code (e.g code loaded from
+disk) and not for data (e.g. variables).</p>
+<p>Neotron OS has no support for memory refresh. If this is required, it must be
+arranged by the BIOS in the background.</p>
+<h3><a class="header" href="#system_interrupt_query" id="system_interrupt_query">system_interrupt_query</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct InterruptMask(u16);
+
+enum Interrupt {
+	ExtInterrupt0,
+	ExtInterrupt15
+}
+
+type InterruptFunction = fn(interrupt: Interrupt);
+
+fn system_interrupt_enable(interrupt: Interrupt);
+
+fn system_interrupt_get_enabled() -&gt; InterruptMask;
+
+fn system_interrupt_disable(interrupt: Interrupt);
+
+fn system_interrupt_hook(interrupt: Interrupt, fn: InterruptFunction) -&gt; Option&lt;InterruptFunction&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>The Neotron BIOS has up to 16 external interrupts, numbered 0 to 15. Note that
+this only applies to <em>external</em> interrupts - that is, from expansion cards
+fitted to expansion slots, or peripherals on the baseboard that are connected
+like expansion cards. These functions do not apply to internal interrupts (e.g. for UART data received) - see the device specific APIs for any interrupt support that may be available.</p>
+<h3><a class="header" href="#system_reboot" id="system_reboot">system_reboot</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn system_reboot() -&gt; !;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Reboots the system.</p>
+<h3><a class="header" href="#system_halt" id="system_halt">system_halt</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn system_halt() -&gt; !;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Halts the system. The OS should display some 'This system is now safe to power off' message first, in case the hardware can't actually power itself off.</p>
+<h3><a class="header" href="#sytem_control" id="sytem_control">sytem_control</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn sytem_control(command: u32, data: *const u8, data_len: usize) -&gt; Result&lt;u32, Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Sends a BIOS-specific command. See your BIOS user guide for details.</p>
+<h2><a class="header" href="#serial-ports-uarts" id="serial-ports-uarts">Serial Ports (UARTs)</a></h2>
+<h3><a class="header" href="#serial_get_info" id="serial_get_info">serial_get_info</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum SerialType {
+	/// An RS-232 interface, but at TTL voltages. Typically used with an
+	/// FTDI FT232 cable.
+	TtlUart,
+	/// An RS-232 interface
+	Rs232,
+	/// A USB Device implementing Communications Class Device (also known as
+	/// a USB Serial port). The USB Device implementation may be on-chip
+	/// (handled by the BIOS), or off-chip.
+	UsbCdc,
+	/// A MIDI interface
+	Midi,
+	/// A Commodore Serial interface
+	Cbm,
+	/// An RS-485 bus
+	Rs485,
+}
+
+struct SerialInfo {
+	name: ApiStrRef,
+	type: SerialType,
+}
+
+fn serial_get_info(device_idx: u8) -&gt; Option&lt;SerialInfo&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Get information about the Serial ports in the system. Serial ports are ordered
+octet-oriented pipes. You can push octets into them using a 'write' call, and
+pull bytes out of them using a 'read' call. They have options which allow them
+to be configured at different speeds, or with different transmission settings
+(parity bits, stop bits, etc) - you set these with a call to <code>SerialConfigure</code>.
+They may physically be a MIDI interface, an RS-232 port or a USB-Serial port.
+There is no sense of 'open' or 'close' - that is an Operating System level
+design feature. These APIs just reflect the raw hardware, in a similar manner to
+the registers exposed by a memory-mapped UART peripheral.</p>
+<h3><a class="header" href="#serial_configure" id="serial_configure">serial_configure</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum SerialParity {
+	Odd,
+	Even,
+	None
+}
+
+enum SerialHandshaking {
+	None,
+	RtsCts,
+}
+
+enum SerialStopBits {
+	One,
+	Two
+}
+
+enum SerialDataBits {
+	Seven,
+	Eight,
+}
+
+struct SerialConfig {
+	data_rate_bps: u32,
+	data_bits: SerialDataBits,
+	stop_bits: SerialStopBits,
+	parity: SerialParity,
+	handshaking: SerialHandshaking,
+}
+
+fn serial_configure(device_idx: u8, config: Option&lt;SerialConfig&gt;) -&gt; Result&lt;(), Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Set the options for a given serial device. An error is returned if the options
+are invalid for that serial device (e.g. you have picked a data rate that isn't
+supported).</p>
+<p>Passing <code>None</code> will power-down and/or deactivate the peripheral to the extent
+supported by the peripheral.</p>
+<h3><a class="header" href="#serial_write" id="serial_write">serial_write</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn serial_write(device_idx: u8, data: &amp;[u8], timeout: Option&lt;Timeout&gt;) -&gt; Result&lt;usize, Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Write octets to a serial port. There is no sense of 'opening' or 'closing' the
+device - serial devices are always open. If the return value is <code>Ok(n)</code>, the
+value <code>n</code> may be less than <code>data.len()</code>. If so, that means not all of the data
+could be transmitted - only the first <code>n</code> octets were.</p>
+<h3><a class="header" href="#serial_read" id="serial_read">serial_read</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn serial_read(device_idx: u8, buffer: &amp;mut [u8], timeout: Option&lt;Timeout&gt;) -&gt; Result&lt;usize, Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Read octets from a serial port. There is no sense of 'opening' or 'closing'
+the device - serial devices are always open. If the return value is <code>Ok(n)</code>,
+the value <code>n</code> may be equal or less than <code>buffer.len()</code> (never great). If less,
+that means not all of the buffer could be filled with received data - only the
+first <code>n</code> octets were.</p>
+<h3><a class="header" href="#serial_flush_write" id="serial_flush_write">serial_flush_write</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn serial_flush_write(device_idx: u8, timeout: Option&lt;Timeout&gt;) -&gt; Result&lt;(), Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Wait until any bytes previously accepted by <code>serial_write</code> have actually left the
+UART device (as opposed to just sitting in a hardware buffer).</p>
+<h3><a class="header" href="#serial_flush_read" id="serial_flush_read">serial_flush_read</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn serial_flush_read(device_idx: u8, timeout: Option&lt;Timeout&gt;) -&gt; Result&lt;(), Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Empty any serial buffers so that, if no further characters are received on the UART, <code>serial_read</code> will return <code>Ok(0)</code>.</p>
+<h3><a class="header" href="#serial_interrupt_register" id="serial_interrupt_register">serial_interrupt_register</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum SerialInterruptFlag {
+	/// `serial_read` will return a non-zero value.
+	RxReady = 1,
+	/// The last `serial_write` has completed.
+	TxComplete = 2,
+	/// A *break* condition has been received
+	Break = 4
+}
+
+struct SerialInterruptFlagSet(u32);
+
+type SerialCallback = Fn(device_idx: u8, flags: SerialInterruptFlagSet);
+
+fn serial_interrupt_register(device_idx: u8, function: SerialCallback, flags: SerialInterruptFlagSet) -&gt; Result&lt;(), Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>When any of the properties specified in <code>flags</code> are true, the given <code>function</code>
+will be executed from the hardware interrupt handler. Note that calling Neotron
+BIOS functions from interrupt handlers is not, in general, supported, and so the
+callback should set some state and to inform the main thread that something has
+occurred.</p>
+<h2><a class="header" href="#current-time" id="current-time">Current Time</a></h2>
+<h3><a class="header" href="#timestamp_get" id="timestamp_get">timestamp_get</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn timestamp_get() -&gt; u64
+<span class="boring">}
+</span></code></pre></pre>
+<p>Returns a value indicating how long the system has been running. This is typically the number of video lines generated since the system was powered on. This value is guaranteed to always be greater than (or equal to) the last time this function was called - unless the system is rebooted.</p>
+<h3><a class="header" href="#timestamp_rate" id="timestamp_rate">timestamp_rate</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn timestamp_rate() -&gt; u16
+<span class="boring">}
+</span></code></pre></pre>
+<p>Returns the number of timestamp ticks in a second. You can use this to convert the difference between two <code>TimestampGet</code> values into a duration in seconds.</p>
+<h3><a class="header" href="#time_get" id="time_get">time_get</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Time {
+	seconds_since_epoch: u32,
+	ticks_since_second: u16
+}
+
+fn time_get() -&gt; Time;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Get the current wall time. The Neotron BIOS does not understand time zones,
+leap-seconds or the Gregorian calendar. Nor does it promise that time is
+monotonic - users can (and will) move the clock backwards and forwards in time.
+It simply stores time as an incrementing number of seconds since some epoch, and
+the number of ticks (typically 60 Hz, but see <code>TimestampRate</code>) since that second
+began. A day is assumed to be exactly 86,400 seconds long. This is a lot like
+POSIX time, except we have a different epoch - the Neotron epoch is
+2000-01-01T00:00:00Z. It is highly recommend that you store UTC in the BIOS and
+use the OS to handle time-zones.</p>
+<h3><a class="header" href="#time_set" id="time_set">time_set</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn time_set(time: Time);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Set the current wall time to the given value. See <a href="#timeget">TimeGet</a>.</p>
+<h2><a class="header" href="#i2c-bus" id="i2c-bus">I2C Bus</a></h2>
+<h3><a class="header" href="#i2c_bus_get_info" id="i2c_bus_get_info">i2c_bus_get_info</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum I2CBusSpeed {
+	// 10kbps
+	Low,
+	/// 100kbps
+	Standard,
+	/// 400kbps
+	Fast,
+	/// 1Mbps
+	FastPlus,
+	/// 3.4Mbps
+	High,
+	/// 5Mbps
+	UltraFast,
+}
+
+struct I2CBusInfo {
+	name: ApiStrRef,
+	supported_speeds: &amp;[I2CBusSpeed],
+}
+
+fn i2c_bus_get_info(bus_idx: u8) -&gt; Option&lt;I2CBusInfo&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Gets information about the I2C buses in the system..</p>
+<h3><a class="header" href="#i2c_bus_set_speed" id="i2c_bus_set_speed">i2c_bus_set_speed</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn i2c_bus_set_speed(bus_idx: u8, speed: I2CBusSpeed) -&gt; Result&lt;(), Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Set the I2C bus speed.</p>
+<h3><a class="header" href="#i2c_device_write_read" id="i2c_device_write_read">i2c_device_write_read</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn i2c_device_write_read(bus_idx: u8, address: u8, out_buffer: &amp;[u8], in_buffer: &amp;mut [u8]) -&gt; Result&lt;(), Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Writes data to the I2C bus, then reads data. Performs the following operations (courtesy of the Embedded HAL documentation):</p>
+<pre><code>		  +---+-----+---+--+---+--+---+---+--+---+--+-----+---+--+---+--+---+---+--+----+--+
+	 Main | ST|SAD+W|   |O0|   |O1|   |...|OM|   |SR|SAD+R|   |  |MAK|  |MAK|...|  |NMAK|SP|
+		  +---+-----+---+--+---+--+---+---+--+---+--+-----+---+--+---+--+---+---+--+----+--|
+Secondary |   |     |SAK|  |SAK|  |SAK|...|  |SAK|  |     |SAK|I0|   |I1|   |...|IN|    |  |
+		  +---+-----+---+--+---+--+---+---+--+---+--+-----+---+--+---+--+---+---+--+----+--+
+</code></pre>
+<p>Where:</p>
+<ul>
+<li>ST = start condition
+* SAD+W = secondary address followed by bit 0 to indicate writing
+* SAK = secondary acknowledge
+* Oi = ith outgoing byte of data
+* SR = repeated start condition
+* SAD+R = secondary address followed by bit 1 to indicate reading
+* Ii = ith incoming byte of data
+* MAK = main acknowledge
+* NMAK = main no acknowledge
+* SP = stop condition</li>
+</ul>
+<p>The given address must in the range <code>1..127</code>. The BIOS does not handle device detection or even know what devices are fitted - that is all handled in the operating system.</p>
+<h2><a class="header" href="#spi-bus" id="spi-bus">SPI Bus</a></h2>
+<h3><a class="header" href="#spi_bus_get_info" id="spi_bus_get_info">spi_bus_get_info</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct SpiBusInfo {
+	/// A name for this SPI bus
+	name: ApiStrRef,
+	/// The number of unique chip select signals associated with this SPI bus
+	num_chip_selects: u8,
+	/// The maximum SPI bus speed supported
+	max_bus_speed_bps: u32,
+	/// Will be 1, 2 or 4
+	max_bus_width_bits: u8,
+}
+
+fn spi_bus_get_info(bus_idx: u8) -&gt; Option&lt;SpiBusInfo&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Gets information about the SPI buses in the system.</p>
+<h3><a class="header" href="#spi_bus_configure" id="spi_bus_configure">spi_bus_configure</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum SpiMode {
+	Mode0,
+	Mode1,
+	Mode2,
+	Mode3
+}
+
+struct SpiBusConfig {
+	bus_speed_bps: u32,
+	bus_width_bits: u8,
+	mode: SpiMode
+}
+
+fn spi_bus_configure(bus_idx: u8, config: Option&lt;SpiBusConfig&gt;) -&gt; Result&lt;u32, Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Configure the SPI bus. Where arbitrary speeds are not supported by the bus, the
+BIOS will select the closest supported speed which is not greater than the given
+speed.</p>
+<h3><a class="header" href="#spi_device_transfer" id="spi_device_transfer">spi_device_transfer</a></h3>
+<p>Write to and read from an SPI device.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum MutableDataBuffer&lt;'a&gt; {
+	U8(&amp;'a mut [u8]),
+	U16(&amp;'a mut [u16]),
+	U32(&amp;'a mut [u32]),
+}
+
+fn spi_device_transfer(bus_idx: u8, device_idx: u8, word_size: u8, buffer: MutableDataBuffer) -&gt; Result&lt;(), Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Writes data to an SPI device and reads data from the same SPI simultaneously. Data is both read from and written to the same buffer. When writing with a word size of 8 or less, each word should be stored in the least-significant bits of each <code>u8</code> in a <code>MutableDataBuffer::U8</code>. When writing with a word size of <code>8 &lt; x &lt;= 16</code>, each word should be stored in the least-significant bits of each <code>u16</code> in a <code>MutableDataBuffer::U16</code>. When writing with a word size of <code>16 &lt; x &lt;= 32</code>, each word should be stored in the least-significant bits of each <code>u32</code> in a <code>MutableDataBuffer::U32</code>.</p>
+<h3><a class="header" href="#spi_device_write" id="spi_device_write">spi_device_write</a></h3>
+<p>Write to an SPI device, discarding any read data.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum DataBuffer&lt;'a&gt; {
+	U8(&amp;'a [u8]),
+	U16(&amp;'a [u16]),
+	U32(&amp;'a [u32]),
+}
+
+fn spi_device_write(bus_idx: u8, device_idx: u8, buffer: DataBuffer) -&gt; Result&lt;(), Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<h2><a class="header" href="#universal-serial-bus" id="universal-serial-bus">Universal Serial Bus</a></h2>
+<h3><a class="header" href="#usbxxx" id="usbxxx">USBxxx</a></h3>
+<p>This is where the Neotron system is a USB Host and the OS wants to access any attached USB devices.</p>
+<p><em>TODO: Add a bunch of functions here along the lines of the USB OHCI. Then check we can implement them using a Tiva-C 123 and an STM32H7.</em></p>
+<h2><a class="header" href="#general-purpose-inputoutput" id="general-purpose-inputoutput">General-Purpose Input/Output</a></h2>
+<h3><a class="header" href="#gpio_port_get_info" id="gpio_port_get_info">gpio_port_get_info</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct GpioPortInfo {
+	name: ApiStrRef,
+	num_pins: u8,
+}
+
+#[derive(Copy, Clone)]
+struct GpioPort(pub u8);
+
+#[derive(Copy, Clone)]
+struct GpioPin(pub u8);
+
+#[derive(Copy, Clone)]
+struct GpioPinMask(pub u32);
+
+fn gpio_port_get_info(port: GpioPort) -&gt; Option&lt;GpioPortInfo&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Gets information about the GPIO ports on this system. Note that each GPIO port can only have up to 32 pins.</p>
+<h3><a class="header" href="#gpio_pin_get_info" id="gpio_pin_get_info">gpio_pin_get_info</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum GpioPinMode {
+	InputFloating,
+	InputPullUp,
+	InputPullDown,
+	Output,
+	OutputOpenCollector,
+}
+
+struct GpioPinInfo {
+	name: ApiStrRef,
+	state: GpioPinMode
+}
+
+fn gpio_pin_get_info(port: GpioPort, pin: GpioPin) -&gt; Option&lt;GpioPinInfo&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Gets information about the GPIO pins on a specific port.</p>
+<h3><a class="header" href="#gpio_pin_set_mode" id="gpio_pin_set_mode">gpio_pin_set_mode</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn gpio_pin_set_mode(port: GpioPort, pin: GpioPin, mode: GpioPinMode) -&gt; Result&lt;(), Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Sets the mode for a GPIO pin.</p>
+<h3><a class="header" href="#gpio_port_set_mode" id="gpio_port_set_mode">gpio_port_set_mode</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn gpio_port_set_mode(port: GpioPort, mode: &amp;[Option&lt;GpioPinMode&gt;]) -&gt; Result&lt;(), Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Sets the mode for a number of pins in a GPIO port. The length of <code>mode</code> must be in the range 1 to <code>num_pins</code>. You can pass <code>None</code> to leave a pin's mode unchanged.</p>
+<h3><a class="header" href="#gpio_pin_set_level" id="gpio_pin_set_level">gpio_pin_set_level</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn gpio_pin_set_level(port: GpioPort, pin: GpioPin, level: bool) -&gt; Result&lt;(), Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Sets the output level for an Output GPIO pin. The behaviour if this pin is not currently configured as an output is undefined.</p>
+<h3><a class="header" href="#gpio_port_set_levels" id="gpio_port_set_levels">gpio_port_set_levels</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn gpio_port_set_levels(port: GpioPort, mask: GpioPinMask, levels: u32) -&gt; Result&lt;(), Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Sets the level for a number of pins in a GPIO port. Only pins with a corresponding <code>1</code> bit in <code>mask</code> get set to the corresponding bit in <code>level</code>.</p>
+<h3><a class="header" href="#gpio_pin_get_level" id="gpio_pin_get_level">gpio_pin_get_level</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn gpio_pin_get_level(port: GpioPort, pin: GpioPin) -&gt; Result&lt;bool, Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Gets the input level for an Input GPIO pin. The behaviour if this pin is not currently configured as an input is undefined.</p>
+<h3><a class="header" href="#gpio_port_get_levels" id="gpio_port_get_levels">gpio_port_get_levels</a></h3>
+<p>Gets the level for a number of pins in a GPIO port. Only pins with a corresponding <code>1</code> bit in <code>mask</code> get a bit set in the returned value.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn gpio_port_get_levels(port: GpioPort, mask: GpioPinMask) -&gt; Result&lt;u32, Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<h2><a class="header" href="#delay-functions" id="delay-functions">Delay functions</a></h2>
+<h3><a class="header" href="#delay" id="delay">delay</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn delay(period: Timeout);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Delays for at least a given amount of time. Because some systems have lengthy
+interrupt routines (e.g. CPU powered video rendering), the application may be
+delayed for considerably more than the requested period (but never less than
+the requested period).</p>
+<h3><a class="header" href="#delay_vblank" id="delay_vblank">delay_vblank</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn delay_vblank();
+<span class="boring">}
+</span></code></pre></pre>
+<p>Delays until the next vertical blanking interval. That is, it waits until the screen has finished drawing and the raster beam is in the off-screen portion. During this time the video memory can be safely updated without causing tearing on the screen. Only supported if you have built-in video.</p>
+<h2><a class="header" href="#video-functions" id="video-functions">Video functions</a></h2>
+<h3><a class="header" href="#video_mode_get_info" id="video_mode_get_info">video_mode_get_info</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Copy, Clone)]
+struct VideoMode(pub u8);
+
+enum VideoAttrFormat {
+	// No attribute bytes
+	None,
+	// Suports the given number of foreground and background colours
+	IndexColour(u8),
+}
+
+struct VideoTextModeInfo {
+	/// Number of columns of text on screen
+	width: u8,
+	/// Number of rows of text on screen
+	height: u8,
+	/// Number of bytes per row (must be &gt;= cols * 2)
+	row_size: usize,
+	/// Do we support colour or other attributes?
+	attr_format: VideoAttrFormat,
+	/// How many pages of text are available
+	num_pages: u8,
+	/// Can the user supply a new bitmap font? If so, see `VideoModeFontSet`.
+	support_soft_font: bool,
+}
+
+enum ChunkyPixelFormat {
+	/// 1 bit per pixel monochrome.
+	Grey1,
+	/// 8-bit greyscale (256 shades of grey), packed as one pixel per byte.
+	Grey8,
+	/// 4-bit colour (16 colours), packed two pixels per byte, with pallette lookup.
+	Indexed8,
+	/// 8-bit colour (256 colours), packed as one pixel per byte, with pallette lookup.
+	Indexed8,
+	/// 16-bit colour (65536 colours), using two bytes per pixel.
+	Colour16,
+	/// 24-bit colour, packed in four-byte words.
+	Colour32
+}
+
+struct VideoChunkyBitmapModeInfo {
+	/// Number of pixels across the screen
+	width: u16,
+	/// Number of pixels down the screen
+	height: u16,
+	/// Number of bytes per row (must be &gt;= width * bits-per-pixel / 8)
+	row_size: usize,
+	/// How many pages of video are available (e.g. 2 for double-buffering)
+	num_pages: u8,
+	/// What format are the pixels in? Determines how many bits are required for each pixel.
+	pixel_format: ChunkyPixelFormat,
+	/// How big each pallette entry is. '4' would mean each pallette entry gives a 4-bit (16-colour) value
+	/// (like CGA), whilst 18 would mean each pallette entry gave an 18-bit
+	/// (262,144-colour) value (like VGA)
+	pallete_entry_size_bits: u8,
+}
+
+enum PlanarPixelFormat {
+	/// 2 planes, 1-bpp each, for 4 colours (with pallette look-up)
+	Colour2,
+	/// 3 planes, 1-bpp each, for 8 colours (with optional pallette look-up)
+	Colour3,
+	/// 4 planes, 1-bpp each, for 16 colours (with optional pallette look-up)
+	Colour4,
+	/// 3 planes, 8-bpp (i.e. one byte per pixel) each (24-bit true-colour)
+	Colour3x8,
+}
+
+struct VideoPlanarBitmapModeInfo {
+	/// Number of pixels across the screen
+	width: u16,
+	/// Number of pixels down the screen
+	height: u16,
+	/// Number of bytes per row (must be &gt;= width * bits-per-pixel / 8)
+	row_size: usize,
+	/// How many pages of video are available (e.g. 2 for double-buffering)
+	num_pages: u8,
+	/// What format are the pixels in? Determines how many bitplanes are required for each pixel.
+	pixel_format: PlanarPixelFormat,
+	/// How big each pallette entry is. '4' would mean each pallette entry gives a 4-bit (16-colour) value
+	/// (like CGA), whilst 18 would mean each pallette entry gave an 18-bit
+	/// (262,144-colour) value (like VGA)
+	pallete_entry_size_bits: u8,
+}
+
+enum VideoModeInfo {
+	Disabled,
+	Text(VideoTextModeInfo),
+	ChunkyBitmap(VideoChunkyBitmapModeInfo),
+}
+
+fn video_mode_get_info(mode: VideoMode) -&gt; Option&lt;VideoModeInfo&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Gets information about a specific video mode. Returns <code>None</code> if that video mode is not supported. Video Mode 0 is always 'no video' - i.e. the video output is disabled or not available.</p>
+<h3><a class="header" href="#video_mode_get" id="video_mode_get">video_mode_get</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn video_mode_get() -&gt; VideoMode;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Gets which video mode the system is currently in. A value of zero means video is currently disabled.</p>
+<h3><a class="header" href="#video_mode_set" id="video_mode_set">video_mode_set</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn video_mode_set(mode: VideoMode) -&gt; Result&lt;(), Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Selects a new video mode. Selecting any mode where <code>VideoModeGetInfo(mode)</code> returns <code>None</code> will give an error. </p>
+<h3><a class="header" href="#video_font_get" id="video_font_get">video_font_get</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct FontInfo {
+	font: *const u8,
+	font_len: usize,
+	glyph_width_pixels: u8,
+	glyph_height_rows: u8,
+}
+
+fn video_font_get() -&gt; Result&lt;FontInfo, Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Get a information about the currently loaded bitmap font. See <a href="#video_font_set">video_font_set</a>.</p>
+<h3><a class="header" href="#video_font_set" id="video_font_set">video_font_set</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn video_font_set(font_info: FontInfo) -&gt; Result&lt;(), Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Change the current bitmap font. Pixel data is laid out row-wise, with each row of each glyph packed into an integer number of bytes. For example, a 7-pixel wide glyph is packed into bytes (leaving the LSB unused), whilst a 9-pixel glyph is packed into two bytes as a big-endian 16-bit value, leaving the 7 LSBs of the second (low) byte unused.</p>
+<p>An error is returned if the current mode doesn't support soft fonts, or if the width/height parameters are not compatible with the current mode, or if the <code>font_len</code> does not equal <code>int((glyph_width_pixels + 7) / 8) * glyph_height_rows * 256</code>.</p>
+<p>Neotron uses 8-bit fonts, so there are only 256 glyphs in a font. Unicode text must be mapped to this set of glyphs for display on-screen. Alternative the OS can implement its own rendering system and simply draw pixels using the BIOS.</p>
+<p>The standard Neotron fonts match MS-DOS / IBM Code Page 850, but user-supplied fonts can do anything (they don't even have to be characters - they could be background tiles for a game, for example).</p>
+<h3><a class="header" href="#video_page_set" id="video_page_set">video_page_set</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn video_page_set(page: u8) -&gt; Result&lt;(), Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Changes the currently displayed video page (if the current video mode supports multiple pages).</p>
+<h3><a class="header" href="#video_text_scroll" id="video_text_scroll">video_text_scroll</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn video_text_scroll(line: u8) -&gt; Result&lt;(), Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Changes which 'line' of the text buffer is displayed at the top of the screen. When the text renderer gets the bottom of the text buffer, it starts taking lines from the top of the buffer.</p>
+<p>The default start line is 0, giving:</p>
+<pre><code>+----------+
+| Line 0   |
+| Line 1   |
+| Line 2   |
+:          :
+| Line N-3 |
+| Line N-2 |
+| Line N-1 |
++----------+
+</code></pre>
+<p>Setting the start line to 2, will give:</p>
+<pre><code>+----------+
+| Line 2   |
+| Line 3   |
+| Line 4   |
+:          :
+| Line N-1 |
+| Line 0   |
+| Line 1   |
++----------+
+</code></pre>
+<h3><a class="header" href="#video_text_write" id="video_text_write">video_text_write</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn video_text_write(
+	top_left: VideoCoord, bottom_right: VideoCoord,
+	text: &amp;[u8],
+	foreground: u8, background: u8);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Write text to the display, using the given indexed foreground and background
+colours. The written text will wrap inside the video rectangle, but does not
+understand carriage return characters, new-line characters or any other screen
+formatting - each value simply selects one of 256 glyphs to be displayed at
+that position on the screen.</p>
+<h3><a class="header" href="#video_pixel_set" id="video_pixel_set">video_pixel_set</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum VideoColour {
+	Binary(bool),
+	Indexed(u8),
+	High(u16),
+	True(u8, u8, u8)
+}
+
+struct VideoCoord {
+	x: u16,
+	y: u16
+}
+
+fn video_pixel_set(pos: VideoCoord, colour: VideoColour);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Sets a single pixel at the given location to the given colour.</p>
+<p>This function is not supported if video is currently disabled, or in a text mode.</p>
+<h3><a class="header" href="#video_pixel_set_rect" id="video_pixel_set_rect">video_pixel_set_rect</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn video_pixel_set_rect(
+	top_left: VideoCoord,
+	bottom_right: VideoCoord,
+	colour: VideoColour);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Sets multiple pixels to the same value, as specified by the rectangle given by
+<code>top_left</code> to <code>bottom_right</code>.</p>
+<p>This function is not supported if video is currently disabled, or in a text mode.</p>
+<h3><a class="header" href="#video_pixel_blit_raw" id="video_pixel_blit_raw">video_pixel_blit_raw</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>unsafe fn video_pixel_blit_raw(
+	top_left: VideoCoord,
+	bottom_right: VideoCoord,
+	source: *const u8);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Draws pixel data onto the screen, in the region specified by the rectangle
+given by <code>top_left</code> to <code>bottom_right</code>. The supplied pixel data must be in the
+same format as the screen.</p>
+<p>The buffer pointed to by <code>source</code> must be at least <code>(1 + bottom_right.x - top_left.x) * (1 + bottom_right.y - top_left.y)</code> pixels in length where the
+length of a pixel in bytes depends on the current video mode.</p>
+<p>This function is not supported if video is currently disabled, or in a text mode.</p>
+<h3><a class="header" href="#video_pixel_blit" id="video_pixel_blit">video_pixel_blit</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn video_pixel_blit(
+	top_left: VideoCoord,
+	bottom_right: VideoCoord,
+	foreground: VideoColour,
+	background: VideoColour,
+	source: *const u8);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Draws monochrome greyscale pixel data to the screen - where a bit is set in
+the source data the <code>foreground</code> colour is used, otherwise the <code>background</code>
+colour is used. You might use this to draw text to a bitmap display, for
+example.</p>
+<p>The buffer pointed to by <code>source</code> must be at least <code>(1 + bottom_right.x - top_left.x) * (1 + bottom_right.y - top_left.y)</code> pixels in length.</p>
+<p>This function is not supported if video is currently disabled, or in a text mode.</p>
+<h3><a class="header" href="#video_blit" id="video_blit">video_blit</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn video_blit(
+	top_left: VideoCoord,
+	bottom_right: VideoCoord,
+	source: &amp;[VideoColour]);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Draws pixel data onto the screen, in the region specified by the rectangle
+given by <code>top_left</code> to <code>bottom_right</code>. The supplied pixel data will be
+converted to screen format as required.</p>
+<p>The slice <code>source</code> must be at least <code>(1 + bottom_right.x - top_left.x) * (1 + bottom_right.y - top_left.y)</code> elements in length.</p>
+<p>This function is not supported if video is currently disabled, or in a text mode.</p>
+<h3><a class="header" href="#video_draw_line" id="video_draw_line">video_draw_line</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn video_draw_line(
+	start: VideoCoord,
+	end: VideoCoord,
+	colour: VideoColour);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Draws a line from <code>start</code> to <code>end</code>, applying the colour given by <code>colour</code> (see <code>video_pixel_set</code>).</p>
+<p>This function is not supported if video is currently disabled, or in a text mode.</p>
+<h3><a class="header" href="#video_draw_rect" id="video_draw_rect">video_draw_rect</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn video_draw_rect(
+	top_left: VideoCoord,
+	bottom_right: VideoCoord,
+	colour: VideoColour);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Sets multiple pixels to the same value, as specified by the rectangle given by
+<code>top_left</code> to <code>bottom_right</code>. Only the outer edge is filled - the interior of
+the rectangle is unchanged.</p>
+<p>This function is not supported if video is currently disabled, or in a text mode.</p>
+<h3><a class="header" href="#video_hook_scanline" id="video_hook_scanline">video_hook_scanline</a></h3>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>type VideoHookCallback = fn(usize, u16);
+fn video_hook_scanline(context: usize, scan_line: u16, fn: VideoHookCallback) -&gt; Result&lt;(), Error&gt;;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Supply a function to be called just before the given scan-line is rendered. The function is called in Interrupt Context, and so may pre-empt other functions. The function is automatically un-hooked before it is called, and it is safe for the called function to re-hook itself, or to hook some other function, using <code>video_hook_scanline</code> but it is not safe to call any other BIOS function.</p>
+<p>This function is not supported if video is currently disabled. Passing a value
+of <code>scan_line</code> which is out of bounds for the current video mode will return
+an error.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="software_bios.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="software_os.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="software_bios.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="software_os.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
