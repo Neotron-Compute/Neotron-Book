@@ -2,8 +2,6 @@
 
 Neotron started as a project called 'Monotron', by [@thejpster]. This was based on the work of the [Rust Embedded Working Group](https://github.com/rust-embedded), and inspiration from the following (in no particular order):
 
-[@thejpster]:https://github.com/thejpster
-
 * [Colour Maximite](http://geoffg.net/maximite.html) - A modern PIC32 based single-board home computer.
 * [PE6502](http://putnamelectronics.com/products.html) - A modern 6502 based single-board home computer.
 * [Gigatron](https://gigatron.io/) - A single-board home computer, with a custom CPU built from TTL logic chips.
@@ -14,4 +12,8 @@ Neotron started as a project called 'Monotron', by [@thejpster]. This was based 
 * The BBC Microcomputer range (the Model B through to the Archimedes A3000) - as used in UK schools in the 1980s
 * The Amstrad range of CP/M machines, particularly the PCW9512
 
-After meeting [@IGBC](https://github.com/IGBC) at Oxidize 2019, discussions started around a next-generation system with higher performance. This led to the Neotron 1000, and then to the whole Neotron concept.
+After meeting [@IGBC] at Oxidize 2019, discussions started around a next-generation system with higher performance. This led to the Neotron 1000, and then to the whole Neotron concept. We've also great benefited from conversations with [@jamesmunns], and others in the Rust Embedded Working Group.
+
+[@thejpster]:https://github.com/thejpster
+[@IGBC]:https://github.com/IGBC
+[@jamesmunns]:https://github.com/jamesmunns

@@ -113,7 +113,7 @@ LLVM does have a PowerPC backend, but unfortunately most PowerPC based chips onl
 
 There is an increasing number of RISC-V based microcontrollers with very small SRAMs, matched by an increasing number of multi-core 64-bit SoCs designed to run Linux from a huge bank of DDR3. At the current time, however, there isn't much in the middle.
 
-A Neotron system built around an open-source RISC-V code run from an FPGA would be an interesting way to increase the openness of the system and remains a future possibility.
+A Neotron system built around an open-source RISC-V code run from an FPGA would be an interesting way to increase the openness of the system and remains a future possibility. The simplicity of the RISC-V ISA is also appealing, as compared to the historical mis-mash that is ARMv7E-M.
 
 ### SPARC based systems
 
@@ -121,44 +121,20 @@ The Gaisler LEON3 is available in VHDL form under the GPL, along with a number o
 
 ### Atmel AVR based systems
 
-Many people have built Atmel AVR based systems, but those CPUs are fairly limited in terms of performance and tend to need to be programmed in raw assembler. There is a Rust AVR port, but it's only in alpha state at the moment.
+Many people have built Atmel AVR based systems, but those CPUs are fairly limited in terms of performance and tend to need to be programmed in raw assembler, or at least non-portable C (such as when storing strings in program memory with a 24-bit pointer instead of in data memory with an 8-bit pointer). There is a Rust AVR port, but it's only in alpha state at the moment.
 
+### MIPS32 based systems, like the PIC32
+
+The PIC32 family would make a very interesting home computer. Indeed, a PIC32 can be found in the Colour Maximite. I think it is telling though that the next revision of the Colour Maximite switched over to a Cortex-M7 based STM32H7. You could also point to the fact that  MIPS themselves have publicly switched to producing RISC-V designs that maybe this architecture doesn't have the best future ahead of it.
+ 
 ## What is this book?
 
 This book describes the Neotron system - from the hardware schematics, all the way up to how to write applications for the system. It is intended to be the canonical reference, although where the source code differs from what is described in this book, we reserve the right to be pragmatic and change either to match the other (or leave them in disagreement...). This book also represents our latest thoughts on a particular topic, and the source code may lag behind while we get around to the implementation. We endeavour to note where this is the case.
 
 ## Versioning
 
-Each component has a semantic version number - `major.minor.patch`. The assocation is:
+Each component has a semantic version number - `major.minor.patch`. The association is:
 
 * The BIOS will require a compatible hardware version.
 * The OS will require a compatible BIOS version.
 * The Shell and Applications will require a compatible OS version.
-
-## Open Source and Commercial Sales
-
-Neotron is designed to be open - the user must have free rein to inspect the source code and the schematics, and change them to suit their needs. To this end, the main BIOS and OS implementations are licensed under the [GNU Public Licence v3](https://www.gnu.org/licenses/gpl-3.0.en.html) or any later version. To encourage the adoption of Rust for embedded development, most of the library crates developed for this project are licensed under both the [MIT] and [Apache 2.0] licences, just like the Rust compiler itself. We do intend to sell a range of kits and pre-built PCBs, but you can (and should!) take our designs as inspiration and put your own spin on them.
-
-This book is licensed under Creative Commons [CC-BY-SA 4.0]. Any source examples in this book may also be used under the [MIT] or [Apache 2.0] licences.
-
-[MIT]:https://opensource.org/licenses/MIT
-[Apache 2.0]:https://www.apache.org/licenses/LICENSE-2.0
-[CC-BY-SA 4.0]:https://creativecommons.org/licenses/by-sa/4.0/legalcode
-
-## Credits
-
-Neotron started as a project called 'Monotron', by [@thejpster]. This was based on the work of the [Rust Embedded Working Group](https://github.com/rust-embedded), and inspiration from the following (in no particular order):
-
-[@thejpster]:https://github.com/thejpster
-
-* [Colour Maximite](http://geoffg.net/maximite.html) - A modern PIC32 based single-board home computer.
-* [PE6502](http://putnamelectronics.com/products.html) - A modern 6502 based single-board home computer.
-* [Gigatron](https://gigatron.io/) - A single-board home computer, with a custom CPU built from TTL logic chips.
-* [Commander X16](http://commanderx16.com/) - A single-board home computer, with a 6502 and an FPGA based video chip.
-* [Craft](http://www.linusakesson.net/scene/craft/) - Demonstrates bit-bashing VGA from an AtMega88
-* [AVR-ISA](http://tinyvga.com/avr-isa-vga) - Demonstrates driving an ISA bus (and an ISA VGA card) driven from an AtMega128
-* The Commodore 64C - [@thejpster]'s first home computer
-* The BBC Microcomputer range (the Model B through to the Archimedes A3000) - as used in UK schools in the 1980s
-* The Amstrad range of CP/M machines, particularly the PCW9512
-
-After meeting [@IGBC](https://github.com/IGBC) at Oxidize 2019, discussions started around a next-generation system with higher performance. This led to the Neotron 1000, and then to the whole Neotron concept.

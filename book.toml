@@ -4,3 +4,5 @@ language = "en"
 multilingual = false
 src = "src"
 title = "Neotron - The Embedded Rust Home Computer Platform"
+
+[preprocessor.index]
