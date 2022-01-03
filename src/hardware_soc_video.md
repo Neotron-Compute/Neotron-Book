@@ -6,6 +6,8 @@ Video support from your SoC can vary greatly - from SoCs which basically have no
 
 First, we should discuss the concept of a _video mode_. This is a collection of parameters which describe the picture that is being generated.
 
+### Timing
+
 In this section, we generally assume that the video is VGA-like - that is, each frame is drawn line-by-line, starting with the top line and moving downwards. A line comprises pixels, which are drawn from left to right. Each pixel has a colour, which can be anywhere between 'on or off' or 'one of 16.8 million colours'. As the pixels are drawn left to right, there will be some extra non-visible 'off-screen' pixels, which are designed to give an old-fashioned cathode-ray tube (CRT) monitor time to move the scanning 'gun' back over to the left hand side of the image ready to draw the next line. In the same fashion, there will be some non-visible 'off-screen' lines which give a CRT's gun time to move back to the top of the frame. Although we almost universally use LCD monitors now, the standards still include these 'blanking periods'.
 
 The monitor is able to find the visible picture within the signal, thanks to the provision of two extra signals - *Horizontal Sync* and *Vertical Sync*. These pulse high (or low) during the middle of the relevant blanking period.
@@ -17,40 +19,50 @@ The relevant parameters are:
 * Horizontal Sync Width - the number of non-visible pixels during the sync pulse
 * Horizontal Back Porch - the number of non-visible pixels after the sync pulse
 * Horizontal Pixels - the total number of pixels on each line
-* Horizontal Frequency - the number of lines (visible or non-visible) drawn per second
+* Horizontal Scan Rate - the number of lines (visible or non-visible) drawn per second
 * Vertical Visible Lines - the number of visible lines in each frame
 * Vertical Front Porch - the number of non-visible lines before the sync pulse
 * Vertical Sync Width - the number of non-visible lines during the sync pulse
 * Vertical Back Porch - the number of non-visible lines after the sync pulse
 * Vertical Lines - the total number of lines in each frame
-* Frame rate - the number of frames drawn per second
-* Pixel or Dot Clock - the number of pixels (visible or non-visible - we'll get to that shortly) produced per second
+* Frame Rate (or Refresh Rate, or Vertical Scan Rate) - the number of complete frames drawn per second
+* Pixel Clock (or Dot Clock) - the number of pixels (visible or non-visible - we'll get to that shortly) produced per second
 
-Given this, we can say that:
+These terms are related as follows:
 
 ```
 Horizontal Pixels = Horizontal Visible Pixels + Horizontal Front Porch + Horizontal Sync Width 
 + Horizontal Back Porch
 Vertical Lines = Vertical Visible Lines + Vertical Front Porch + Vertical Sync Width 
 + Vertical Back Porch
-Horizontal Frequency = Vertical Lines x Frame rate (Hz)
-Pixel Clock = Horizontal Frequency x Horizontal Pixels
+Horizontal Scan Rate = Pixel Clock / Horizontal Pixels
+Frame Rate = Horizontal Scan Rate / Vertical Lines
 ```
+
+Your monitor will place limits on the values for Frame Rate, Horizontal Scan Rate and Vertical Lines. An analog CRT generally doesn't care about Horizontal Pixels and Pixel Clock - provided the Horizontal Scan Rate is within range - although if you push this beyond the maximum bandwidth of you display (or your cable) the signal starts to get 'smoothed' and the greater definition is lost. A digital display, like an LCD monitor, will sample the analog horizontal signal at fixed intervals and if your source doesn't match perfectly, you may get a fuzzy picture. Generally, the number of horizontal pixels your monitor is looking for is a function of the number of vertical lines, calculated from some look-up table of common video standards.
+
+### Colours
 
 The monitor generally doesn't care about the number of colours each pixel can take, as the pixels are transmitted as analog red, green and blue signals (0.7V peak). However, the SoC will care as the pixels must be stored digital and the more bits per pixel, the more bytes of framebuffer RAM we require!
 
+### Standards
+
 The original IBM standard for the _Video Graphics Array_ included the following video modes:
 
-| H. Visible | V. Visible | H. Total | V. Total | H. Freq    | Frame Rate | Pixel Clock |
-|:-----------|:-----------|:---------|:---------|:-----------|:-----------|:------------|
-| 640        | 480        | 800      | 525      | 31.469 kHz | 60 Hz      | 25.175 MHz  |
-| 720        | 400        | 900      | 450      | 31.469 kHz | 70 Hz      | 28.322 MHz  |
-| 320        | 200 (2x)   | 400      | 450      | 31.469 kHz | 70 Hz      | 25.175 MHz  |
-| 320        | 240 (2x)   | 400      | 525      | 31.469 kHz | 60 Hz      | 25.175 MHz  |
+| H. Vis | V. Vis   | H. Tot | V. Tot | H. Freq    | Frame Rate | Pixel Clock | Used for                                                   |
+|:-------|:---------|:-------|:-------|:-----------|:-----------|:------------|:-----------------------------------------------------------|
+| 720    | 400      | 900    | 449    | 31.469 kHz | 70 Hz      | 28.322 MHz  | Default 80x25 Text mode                                    |
+| 640    | 480      | 800    | 525    | 31.469 kHz | 60 Hz      | 25.175 MHz  | High-res graphics mode                                     |
+| 640    | 400      | 800    | 449    | 31.469 kHz | 70 Hz      | 25.175 MHz  | 80x25 text with mixed graphics                             |
+| 720    | 350      | 900    | 449    | 31.469 kHz | 70 Hz      | 28.322 MHz  | MDA compatible text mode (720x400 with extra blanking)     |
+| 640    | 350      | 800    | 449    | 31.469 kHz | 70 Hz      | 25.175 MHz  | EGA compatible text/graphics (640x400 with extra blanking) |
+| 640    | 200 (2x) | 800    | 449    | 31.469 kHz | 70 Hz      | 25.175 MHz  | CGA compatible text/graphics mode                          |
+| 320    | 240 (2x) | 400    | 525    | 31.469 kHz | 60 Hz      | 25.175 MHz  | Low-res, high-colour mode                                  |
+| 320    | 200 (2x) | 400    | 449    | 31.469 kHz | 70 Hz      | 25.175 MHz  | CGA compatible text/graphics graphics mode                 |
+
+We see from this table that there are only two values for the Vertical Total Lines - 525 for 480-line modes and 449 for 350/400-line modes - corresponding to frame rates of 60 Hz and 70 Hz respectively. There is also the option to increase the pixel clock up from 25.175 MHz to 28.322 MHz, increasing the number of pixels per line from 800 to 900. This, in turn, increases the number of pixels per character on an 80-column text mode display from 8 to 9. Finally, we can simply halve the pixel clock to lower the horizontal resolution, which saves video memory and allows for more colours on screen.
 
 The rates marked _(2x)_ simply have each line drawn twice by the VGA card, in order to keep the Horizontal Frequency at the standard value.
-
-We see from this table that there are two values for lines - 480 line and 400 line - corresponding to frame rates of 60 Hz and 70 Hz respectively. There is also the option to increase the pixel clock up from 25.175 MHz to 28.322 MHz, increasing the number of pixels per line from 800 to 900. This, in turn, increases the number of pixels per character on an 80-column text mode display from 8 to 9 - this is used for the classic MS-DOS text mode (which uses a 9 pixel x 16 pixel bitmap for each character on the screen).
 
 During the 1990s, the resolutions and colour depths supported by video cards increased greatly, and monitors began to support a wider range of horizontal frequencies. These various modes were standardised by the Video Electronics Standards Association (_VESA_), and there are too many to list here. However, some modes of note include:
 
@@ -97,21 +109,23 @@ Broadly, the IBM PC has two kinds of video modes - text mode and graphics mode. 
 
 ### Text Modes
 
-Text modes divide the screen into a rectangular grid of _characters_. Each _character_ is represented by a image, known as a _glyph_. All of the glyphs in a given _font_ have the same width and height in pixels, and they each use precisely two colours - _foreground_ and _background_. The specific value of _foreground_ and _background_ can be set for each character cell on the screen, meaning that each cell takes up two bytes: one for the character, and one for the colour pair. As the raster beam moves across the display, the video card will fetch the character for that cell from VRAM, then load the corresponding glyph from the font (which may be in VRAM, or it may be in the card's ROM). The appropriate horizontal slice is taken from the glyph, and then converted to a sequence of coloured pixels by applying the foreground and background colour for that cell.
+Text modes divide the screen into a rectangular grid of _cells_. Each _cell_ contains a _character_ and a set of _attributes_ (such as the _foreground_ and _background_ colour for that cel). Each _character_ is represented by a image, known as a _glyph_. All of the _glyphs_ in a given _font_ have the same width and height in pixels, and they each use precisely two colours - _foreground_ and _background_. The specific value of _foreground_ and _background_ can be set for each _cell_ on the screen, meaning that each _cell_ takes up two bytes: one for the _character_, and one for the attributes. As the raster beam moves across the display, the video card will fetch the _character_ for that _cell_ from VRAM, then load the corresponding _glyph_ from the _font_ (which may be in VRAM, or it may be in the card's ROM). The appropriate horizontal slice is taken from the _glyph_, which is then converted to a sequence of coloured pixels by applying the _foreground_ and _background_ colour for that _cell_. These coloured pixels are then transmitted to the monitor in real-time.
 
-Each character is an 8 bit value, and so there can only be 256 glyphs in a font. Merging multiple characters into a single glyph (as you might do in Unicode with a `U+0041 LATIN CAPITAL LETTER A` followed by a `U+02CA MODIFIER LETTER ACUTE ACCENT` to produce an `Á`) is generally not supported, although such canonicalisation could be performed by the OS when the string was first written to the VRAM.
+Typically (and certainly in VGA text modes), each _character_ is an 8-bit value, and so there can only be 256 _glyphs_ in a _font_. Merging multiple _characters_ into a single _glyph_ (as you might do in Unicode with a `U+0041 LATIN CAPITAL LETTER A` followed by a `U+02CA MODIFIER LETTER ACUTE ACCENT` to produce an `Á`) is generally not supported, although a swap for a single _character_ could be performed by the OS when the string was first written to the VRAM if the current font had a suitable _glyph_ available.
 
-The two main text mode resolutions for VGA are 80 columns by 25 rows, and 80 columns by 50 rows. The video output resolutions these correspond to depend on the glyph size, as follows:
+The two main text mode resolutions for VGA are 80 columns by 25 rows, and 80 columns by 50 rows (plus some others that are much less common). The video output resolutions these correspond to depend on the _glyph_ size, as follows:
 
-| Columns | Rows | Glyph Width | Glyph Height | Horizontal Pixels | Vertical Pixels | Standard      |
-|:--------|:-----|:------------|:-------------|:------------------|:----------------|:--------------|
-| 80      | 25   | 9           | 14           | 720               | 350             | MDA, Hercules |
-| 40      | 25   | 8           | 8            | 320               | 200             | CGA, EGA      |
-| 80      | 25   | 8           | 8            | 640               | 200             | CGA, EGA      |
-| 80      | 25   | 8           | 14           | 640               | 350             | EGA           |
-| 80      | 43   | 8           | 8            | 640               | 350             | EGA           |
-| 80      | 25   | 9           | 16           | 720               | 400             | VGA           |
-| 80      | 50   | 9           | 8            | 720               | 400             | VGA           |
+| Columns x Rows | Glyph Width | Glyph Height | Horizontal Pixels | Vertical Pixels | Standard      |
+|:---------------|:------------|:-------------|:------------------|:----------------|:--------------|
+| 80 x 25        | 9           | 14           | 720               | 350             | MDA, Hercules |
+| 40 x 25        | 8           | 8            | 320               | 200             | CGA, EGA      |
+| 80 x 25        | 8           | 8            | 640               | 200             | CGA, EGA      |
+| 80 x 25        | 8           | 14           | 640               | 350             | EGA           |
+| 80 x 43        | 8           | 8            | 640               | 350             | EGA           |
+| 80 x 25        | 9           | 16           | 720               | 400             | VGA           |
+| 80 x 50        | 9           | 8            | 720               | 400             | VGA           |
+| 80 x 30        | 8           | 16           | 640               | 480             | VGA           |
+| 80 x 60        | 8           | 8            | 640               | 480             | VGA           |
 
 Because a Neotron system might support other video resolutions (e.g. the native 400x300 of a Neotron 32), there is no prescriptive list of Neotron text modes. Instead, there is a BIOS API to query which modes are supported, and the width in columns and height in rows of each mode. It is assumed that each mode supports 16 foreground colours and 8 background colours, just like VGA, and that memory is arranged in a linear array of 16-bit values, where the first (lower) 8-bits identify the character and the second (higher) 8-bits identify the foreground and background colour.
 
@@ -132,3 +146,40 @@ The `Blink` bit causes the text to alternate between being drawn normally, and b
 Where the graphics are drawn by an off-chip GPU, the Neotron BIOS will need to arrange for the on-chip VRAM to be copied to the off-chip GPU during the vertical blanking interval of each frame. A text mode with 80 x 50 characters will require 4000 bytes of VRAM, which at 70 Hz needs a link of just over 41 Mbit/sec in order for the copy to complete during the blanking interval. If you are prepared to 'chase the beam' you can run a little slower. 80x25 video modes will require half that, and using run-length encoding will likely reduce it further (especially as consecutive cells are usually the same colour).
 
 ## Support in Neotron
+
+To keep things simple, Neotron has an 8-bit video mode value, four components. This means that an application can simply ask for 'Mode 25h' and doesn't have to scan through a list of modes to find out which one is closest.
+
+```
++---------+----------+-----------+-----------+
+| Vert 2x | Horiz 2x |   Timing  |   Format  |
++---------+----------+---+---+---+---+---+---+
+|    7    |     6    | 5 | 4 | 3 | 2 | 1 | 0 |
++---------+----------+---+---+---+---+---+---+
+```
+
+If `Vert 2x` is set, each output scan-line is drawn twice, which halves the number of rows in memory (of text or pixels).
+
+If `Horiz 2x` is set, each pixel is drawn twice, which halves the number of columns in memory (of text or pixels).
+
+The Timing table is:
+
+| Mode | Visible   | Total      | Pixel Clock | Horizontal Scan Rate | Frame Rate |
+|:-----|:----------|:-----------|:------------|:---------------------|:-----------|
+| 0    | 640 x 480 | 800 x 525  | 25.175 MHz  | 31.5 kHz             | 60 Hz      |
+| 1    | 640 x 400 | 800 x 449  | 25.175 MHz  | 31.5 kHz             | 70 Hz      |
+| 2    | 800 x 600 | 1056 x 628 | 40.000 MHz  | 37.9 kHz             | 60 Hz      |
+| 4..7 | TBD       | TBD        | TBD         | TBD                  | TBD        |
+
+
+The Format table is:
+
+| Mode | Text/Graphics | Font Size | Colour Depth |
+|:-----|:--------------|:----------|:-------------|
+| 0    | Text          | 8 x 16    | Native       |
+| 1    | Text          | 8 x 8     | Native       |
+| 2    | Graphics      | N/A       | 32-bpp       |
+| 3    | Graphics      | N/A       | 16-bpp       |
+| 4    | Graphics      | N/A       | 8-bpp        |
+| 5    | Graphics      | N/A       | 4-bpp        |
+| 6    | Graphics      | N/A       | 2-bpp        |
+| 7    | Graphics      | N/A       | 1-bpp        |
