@@ -147,14 +147,14 @@ Where the graphics are drawn by an off-chip GPU, the Neotron BIOS will need to a
 
 ## Support in Neotron
 
-To keep things simple, Neotron has an 8-bit video mode value, four components. This means that an application can simply ask for 'Mode 25h' and doesn't have to scan through a list of modes to find out which one is closest.
+To keep things simple, Neotron has an 8-bit video mode value, four components. This means that an application can simply ask for 'Mode 0x25' instead of having to scan through a list of obscure modes to find out which one is closest.
 
 ```
-+---------+----------+-----------+-----------+
-| Vert 2x | Horiz 2x |   Timing  |   Format  |
-+---------+----------+---+---+---+---+---+---+
-|    7    |     6    | 5 | 4 | 3 | 2 | 1 | 0 |
-+---------+----------+---+---+---+---+---+---+
++---------+-----------+----------+-----------+
+| Vert 2x |   Timing  | Horiz 2x |   Format  |
++---------+-----------+----------+---+---+---+
+|    7    | 6 | 5 | 4 |    3     | 2 | 1 | 0 |
++---------+-----------+----------+---+---+---+
 ```
 
 If `Vert 2x` is set, each output scan-line is drawn twice, which halves the number of rows in memory (of text or pixels).
@@ -173,13 +173,22 @@ The Timing table is:
 
 The Format table is:
 
-| Mode | Text/Graphics | Font Size | Colour Depth |
-|:-----|:--------------|:----------|:-------------|
-| 0    | Text          | 8 x 16    | Native       |
-| 1    | Text          | 8 x 8     | Native       |
-| 2    | Graphics      | N/A       | 32-bpp       |
-| 3    | Graphics      | N/A       | 16-bpp       |
-| 4    | Graphics      | N/A       | 8-bpp        |
-| 5    | Graphics      | N/A       | 4-bpp        |
-| 6    | Graphics      | N/A       | 2-bpp        |
-| 7    | Graphics      | N/A       | 1-bpp        |
+| Mode | Text/Graphics | Font Size | Colour Depth  |
+|:-----|:--------------|:----------|:--------------|
+| 0    | Text          | 8 x 16    | 16/8 Indexed  |
+| 1    | Text          | 8 x 8     | 16/8 Indexed  |
+| 2    | Graphics      | N/A       | 32/24-bpp     |
+| 3    | Graphics      | N/A       | 16-bpp        |
+| 4    | Graphics      | N/A       | 8-bpp Indexed |
+| 5    | Graphics      | N/A       | 4-bpp Indexed |
+| 6    | Graphics      | N/A       | 2-bpp Indexed |
+| 7    | Graphics      | N/A       | 1-bpp Indexed |
+
+The values marked `Indexed` have their colours translated with a 256-entry colour palette that converts from the indexed value up to a true-colour 24-bit value. These true-colour values may be truncated when output by the video card's DAC. The `32/24-bpp` entry stores 24-bit colours in a 32-bit memory location, for efficiency of access. We assume no Neotron system will ever have better than 24-bit video output!
+
+### Example Modes
+
+* 0x05: 640 x 480 graphics @ 60 Hz, with 16 colours (4-bpp)
+* 0x10: 80 x 25 text mode, with 400 lines at 70 Hz
+* 0x01: 80 x 60 text mode, with 480 lines at 60 Hz
+* 0x9C: 320 x 200 graphics @ 70 Hz, with 256 colours (8-bpp)
