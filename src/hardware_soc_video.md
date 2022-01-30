@@ -192,3 +192,17 @@ The values marked `Indexed` have their colours translated with a 256-entry colou
 * 0x10: 80 x 25 text mode, with 400 lines at 70 Hz
 * 0x01: 80 x 60 text mode, with 480 lines at 60 Hz
 * 0x9C: 320 x 200 graphics @ 70 Hz, with 256 colours (8-bpp)
+
+These example screen-shots were generated using https://int10h.org/oldschool-pc-fonts/fontlist/:
+
+80x25 text with an 8x8 font (640x200), like an IBM PC-compatible with CGA:
+
+![Mode 0x91](./640x200_text.png)
+
+80x25 text with an 8x16 font (640x400), like an IBM PC-compatible with MCGA (or VGA in 8x16 mode, instead of the usual 9x16):
+
+![Mode 0x10](./640x400_text.png)
+
+40x25 text with an 8x8 font (320x200), like an IBM PC-compatible with CGA in multi-colour mode:
+
+![Mode 0x99](./320x200_text.png)
