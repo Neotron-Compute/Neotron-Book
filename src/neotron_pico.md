@@ -45,3 +45,31 @@ The Neotron Pico is a micro-ATX sized board - 244mm x 170mm. It is designed to f
 * SD/MMC Slot
 * Four Expansion Slots (with SPI and I²C)
 * MCP7940N Real-Time Clock with backup battery
+
+## Supported video modes:
+
+The following [video modes](./hardware_soc_video.md) are supported:
+
+* Mode 0x00 - 80x30 text mode at 640x480
+* Mode 0x01 - 80x60 text mode at 640x480
+* Mode 0x10 - 80x25 text mode at 640x400
+* Mode 0x11 - 80x50 text mode at 640x400
+* Mode 0x91 - 80x25 text mode at 640x200
+* Mode 0x05 - 640x480 in 16 colours
+* Mode 0x06 - 640x480 in 4 colours
+* Mode 0x07 - 640x480 in 2 colours
+* Mode 0x15 - 640x400 in 16 colours
+* Mode 0x16 - 640x400 in 4 colours
+* Mode 0x17 - 640x400 in 2 colours
+* Mode 0x94 - 640x200 in 256 colours
+* Mode 0x95 - 640x200 in 16 colours
+* Mode 0x96 - 640x200 in 4 colours
+* Mode 0x97 - 640x200 in 2 colours
+* Mode 0x8C - 320x240 in 256 colours
+* Mode 0x8D - 320x240 in 16 colours
+* Mode 0x8E - 320x240 in 4 colours
+* Mode 0x8F - 320x240 in 2 colours
+* Mode 0x9C - 320x200 in 256 colours
+* Mode 0x9D - 320x200 in 16 colours
+* Mode 0x9E - 320x200 in 4 colours
+* Mode 0x9F - 320x200 in 2 colours
