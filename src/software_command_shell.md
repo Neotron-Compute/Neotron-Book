@@ -25,110 +25,148 @@ The OS supports a number of magic device filenames. The shell is unaware of this
 
 ## Shell Commands
 
-### DIR
+### `DIR [/S] [<path>]`
 
 Performs a directory listing, either for the current drive and directory or of the given absolute or relative path.
 
-### MKDIR
+The `/S` option displays directories recursively.
 
-Creates a new directory, given either an absolute path or a relative path.
+### `MKDIR [/P] <path>`
 
-### TYPE
+Creates a new directory, given either an absolute path or a relative path. Can
+optionally make all the intermediate paths too.
+
+### `TYPE <path>`
 
 Displays the contents of a file, assuming it is ASCII text.
 
-### HEXDUMP
+### `HEXDUMP <path>`
 
 Displays the contents of a file as hex encoded binary.
 
-### COPY
+### `COPY [/S] <source1> [<source2>...] <dest>`
 
-Copies a file from one location to another.
+Copies one or more files from one location to another. If one `sourceX` is
+specified `dest` can be a file or a directory. If multiple `sourceX` files are
+specified, `dest` must be a directory. The argument `/S` makes `COPY` look in
+subdirectories recursively.
 
-### RENAME
+### `RENAME <old> <new>`
 
-Changes the name of a file.
+Changes the name of a file. Cannot move files between directories or drives.
 
-### MOVE
+### `MOVE <src> <dest>`
 
-Moves a file from one directory to another.
+Moves a file from one directory to another. The `dest` path can be on a
+different drive or in a different directory.
 
-### DEL
+### `DEL <path> [<path2>...]`
 
-Deletes a file.
+Deletes one or more files.
 
-### RMDIR
+### `RMDIR <path> [<path2>...]`
 
-Deletes an empty folder.
+Deletes one or more empty directories.
 
-### DELTREE
+### `DELTREE <path> [<path2>...]`
 
-Recursively deletes a folder.
+Recursively deletes one or more directories.
 
-### PEEK
+### `PEEK <addr>`
 
 Displays the contents of ROM or RAM at the given address.
 
-### POKE
+### `POKE <addr> <value>`
 
 Writes a new value to RAM at the given address. Attempts to write to ROM are ignored.
 
-### SAVE
+### `SAVE <addr> <length> <file>`
 
 Copies RAM or ROM to a file on disk.
 
-### LOAD
+### `LOAD <path>`
 
 Copies the contents of a file on disk to RAM.
 
-### EXEC
+### `EXEC <path>`
 
-Performs a LOAD of the given file, followed by a RUN. This command is implied if a command is given which matches the name of a file in the current directory, or in the system PATH.
+Performs a LOAD of the given file, followed by a RUN. This command is implied if a command is given which matches the name of a file in the current directory, or in the system's `PATH` environment variable.
 
-### RUN
+### `RUN`
 
-Runs a program in memory.
+Runs a program already in memory (e.g. having used `LOAD`)
 
-### SET
+### `SET <var> <value>`
 
-Sets an environment variable to the given value.
+Sets an environment variable to the given value. The value `var` should not include `${` or `}`.
 
-### ECHO
+```console
+$ SET PATH 0:/BIN;0:/OS/BIN
+```
+
+### `ECHO <text>`
 
 Prints some text to the console.
 
-### LOADENV
+```console
+$ ECHO "Hello, world"
+```
+
+### `LOADENV <path>`
 
 Loads environment variables from a file.
 
-### SAVEENV
+```console
+$ LOADENV ./FILE.ENV
+```
+
+### `SAVEENV <path>`
 
 Saves environment variables to a file.
 
-### SCRIPT
+```console
+$ SAVEENV ./FILE.ENV
+```
+
+### `SCRIPT <path>`
 
 Runs the shell commands found in the given filename.
 
-### EDIT
+```console
+$ SCRIPT ./FILE.CMD
+```
 
-Starts a full-screen ASCII file editor.
+### `EDIT <path>`
 
-### DEV
+Starts a full-screen text editor.
+
+```console
+$ EDIT 1:/README.TXT
+```
+
+### `DEV`
 
 Shows the list of devices reported by the BIOS.
 
-### VOL
+### `VOL`
 
 Shows the current list of volumes, by drive. Includes their volume names, format and storage capacity.
 
-### SCAN
+### `SCAN`
 
 Re-scans the given device for volumes. Volumes which are no longer present (e.g. because the disk has been removed) are de-allocated their volume ID. New volumes are allocated new volume IDs.
 
-### CD
+### `CD [<dir>]`
 
-Change the current directory. May include a volume ID, or be relative to the current volume, or the current folder. Unlike MS-DOS, there is only one current directory for the whole system (instead of one for each drive).
+Change the current directory. May include a volume ID, or be relative to the current volume, or the current directory. Unlike MS-DOS, there is only one current directory for the whole system (instead of one for each drive).
 
-### ATTR
+### `ATTR [/A] [/A-] [/H] [/H-] [/R] [/R-] [/S] [/S-] <path>`
 
-Gets or sets a file's attributes (Read Only, Archive, System and Hidden).
+Gets or sets a file's attributes (Archive, Hidden, Read Only, and System).
+
+The `/X` flag sets a the relevant bit. The `/X-` flag unsets it.
+
+```console
+$ # Set System, Hidden and Read Only, but clear Archive
+$ ATTR /A- /S /H /R SYSTEM.DAT
+```
