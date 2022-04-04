@@ -11,6 +11,7 @@
 - [The Neotron BIOS](./software_bios.md)
 	- [API Calls](./software_bios_apicalls.md)
 - [The Neotron OS](./software_os.md)
+	- [API Calls](./software_os_apicalls.md)
 - [The Neotron Command Shell](./software_command_shell.md)
 - [The Neotron Command Menu](./software_menu_shell.md)
 - [Neotron Applications](./software_applications.md)

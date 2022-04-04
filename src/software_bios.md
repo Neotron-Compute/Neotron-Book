@@ -28,9 +28,15 @@ number of changes.
 
 ## What goes in the BIOS and what goes in the OS?
 
-As a general rule, the BIOS should contain all the drivers for the main system-on-chip (SoC) in that particular Neotron system. It should also understand which pins on the SoC have been assigned to which functions. It is therefore a function of the netlist for the main PCB, and the components fitted to it.
+As a general rule, the BIOS should contain all the drivers for the main
+system-on-chip (SoC) in that particular Neotron system. It should also
+understand which pins on the SoC have been assigned to which functions. It is
+therefore a function of the netlist for the main PCB, and the components fitted
+to it.
 
-If a particular function might apply to SoCs from different manufacturers, or to an expansion card that could be inserted into multiple different models of Neotron system, it is probably better placed in the Neotron OS.
+If a particular function might apply to SoCs from different manufacturers, or to
+an expansion card that could be inserted into multiple different models of
+Neotron system, it is probably better placed in the Neotron OS.
 
 ## Interfaces
 
@@ -63,7 +69,12 @@ higher-level APIs exposed by the Neotron OS.
 
 ## Configuration
 
-Many Neotron sytems will have an element of user configuration to them - e.g. which cards are fitted to which expansion slots, or whether an optional item has been fitted to the PCB. To handle this, it is expected that the BIOS have some kind of configuration application, and some non-volatile storage that will hold the configuration across a power cycle. Typically this will be in the battery-backed real-time clock, but it could equally be in an EEPROM.
+Many Neotron sytems will have an element of user configuration to them - e.g.
+which cards are fitted to which expansion slots, or whether an optional item has
+been fitted to the PCB. To handle this, it is expected that the BIOS have some
+kind of configuration application, and some non-volatile storage that will hold
+the configuration across a power cycle. Typically this will be in the
+battery-backed real-time clock, but it could equally be in an EEPROM.
 
 ## Calling a BIOS API
 
@@ -110,7 +121,8 @@ complete - for example, you could be writing some sectors to disk and performing
 an I²C read from the HID controller asynchronously, whilst also calculating new
 display graphics and audio in the main thread.
 
-For now however, the blocking APIs were sufficient for MS-DOS, and they will be sufficient here.
+For now however, the blocking APIs were sufficient for MS-DOS, and they will be
+sufficient here.
 
 ## Why split the OS and the BIOS?
 
