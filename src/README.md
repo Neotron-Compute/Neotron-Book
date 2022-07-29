@@ -101,7 +101,7 @@ You could build a 6502 based system, and many people do, but the Rust programmin
 
 ### 68000 based systems
 
-At the present time, there is no 68k backend in LLVM. If there was, a 68000 system would certainly make an interesting alternative to Neotron, if you can abide the mess that is CISC when compared to the cleanliness of a RISC design.
+At the present time, there is no 68k backend in LLVM. If there was, a 68000 system would certainly make an interesting alternative to Neotron, although the 68000 processors available are more expensive and less powerful than a modern commodity Arm microcontroller.
 
 ### PowerPC based systems
 
@@ -111,7 +111,7 @@ LLVM does have a PowerPC backend, but unfortunately most PowerPC based chips onl
 
 There are an increasing number of RISC-V based microcontrollers with very small SRAMs, matched by an increasing number of multi-core 64-bit SoCs designed to run Linux from a huge bank of DDR3. At the current time, however, there isn't much in the middle.
 
-A Neotron system built around an open-source RISC-V code run from an FPGA would be an interesting way to increase the openness of the system and remains a future possibility. The simplicity of the RISC-V ISA is also appealing, as compared to the historical mis-mash that is ARMv7E-M.
+A Neotron system built around an open-source RISC-V code run from an FPGA would be an interesting way to increase the openness of the system and remains a future possibility. The simplicity of the RISC-V ISA is also appealing, as compared to the, umm, _evolved_ nature of ARMv6-M.
 
 ### SPARC based systems
 
