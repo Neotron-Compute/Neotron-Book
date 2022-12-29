@@ -30,7 +30,8 @@ The Neotron Pico is a micro-ATX sized board - 244mm x 170mm. It is designed to f
 * **CPU**: Dual 133 MHz 32-bit ARM Cortex-M0+ CPU cores
 * **RAM**: 256 KiB of internal SRAM
 * **Video Output**: Super-VGA
-    * 640x400, 640x480 and 800x600
+    * 640x480 @ 60 Hz (gives a 80x30 text mode)
+    * 640x400 @ 70 Hz (gives a 80x25 text mode)
     * 256 colours from a pallette of 4,096
     * RGB video buffer for genuine 75 Ohm output
     * Has ESD protection circuit with VGA DDC level-shifter
