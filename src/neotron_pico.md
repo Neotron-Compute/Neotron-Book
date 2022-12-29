@@ -27,49 +27,21 @@ The Neotron Pico is a micro-ATX sized board - 244mm x 170mm. It is designed to f
 
 ## Features
 
-* Dual 133 MHz 32-bit ARM Cortex-M0+ CPU cores
-* 256 KiB of internal SRAM
-* Super-VGA output
+* **CPU**: Dual 133 MHz 32-bit ARM Cortex-M0+ CPU cores
+* **RAM**: 256 KiB of internal SRAM
+* **Video Output**: Super-VGA
     * 640x400, 640x480 and 800x600
     * 256 colours from a pallette of 4,096
     * RGB video buffer for genuine 75 Ohm output
     * Has ESD protection circuit with VGA DDC level-shifter
-* 16-bit 48 kHz audio input and output (line-in, mic-in, line-out and headphone-out)
-  * Uses Texas Instruments TLV320AIC23BPW audio code
+* **Audio**: 16-bit 48 kHz audio input and output (line-in, mic-in, line-out and headphone-out)
+  * Uses Texas Instruments TLV320AIC23BPW audio codec
   * Has triple 3.5mm jack, plus AC'97 header and extra four-pin line-in header
-* One USB Full-speed OTG port
-* Dedicated board management controller, supporting
-  * Two PS/2 ports (keyboard and mouse)
-  * Standby mode and PSU control
-  * System reset
-* SD/MMC Slot
-* Four Expansion Slots (with SPI and I²C)
-* MCP7940N Real-Time Clock with backup battery
-
-## Supported video modes:
-
-The following [video modes](./hardware_soc_video.md) are supported:
-
-* Mode 0x00 - 80x30 text mode at 640x480
-* Mode 0x01 - 80x60 text mode at 640x480
-* Mode 0x10 - 80x25 text mode at 640x400
-* Mode 0x11 - 80x50 text mode at 640x400
-* Mode 0x91 - 80x25 text mode at 640x200
-* Mode 0x05 - 640x480 in 16 colours
-* Mode 0x06 - 640x480 in 4 colours
-* Mode 0x07 - 640x480 in 2 colours
-* Mode 0x15 - 640x400 in 16 colours
-* Mode 0x16 - 640x400 in 4 colours
-* Mode 0x17 - 640x400 in 2 colours
-* Mode 0x94 - 640x200 in 256 colours
-* Mode 0x95 - 640x200 in 16 colours
-* Mode 0x96 - 640x200 in 4 colours
-* Mode 0x97 - 640x200 in 2 colours
-* Mode 0x8C - 320x240 in 256 colours
-* Mode 0x8D - 320x240 in 16 colours
-* Mode 0x8E - 320x240 in 4 colours
-* Mode 0x8F - 320x240 in 2 colours
-* Mode 0x9C - 320x200 in 256 colours
-* Mode 0x9D - 320x200 in 16 colours
-* Mode 0x9E - 320x200 in 4 colours
-* Mode 0x9F - 320x200 in 2 colours
+* **Storage**: SD/MMC Slot
+* **USB**: One USB Full-speed OTG port
+* Dedicated **board management controller (BMC)**, supporting
+  * **Two PS/2 ports** (keyboard and mouse)
+  * **Standby mode** and **PSU control**
+  * **System reset**
+* **Expansion**: Four Expansion Slots (with SPI and I²C)
+* **RTC**: MCP7940N Real-Time Clock with backup battery
