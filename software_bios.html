@@ -1,0 +1,422 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The Neotron BIOS - Neotron - The Embedded Rust Home Computer Platform</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> What is Neotron?</a></li><li class="chapter-item expanded "><a href="licence.html"><strong aria-hidden="true">2.</strong> Licence</a></li><li class="chapter-item expanded "><a href="credits.html"><strong aria-hidden="true">3.</strong> Credits</a></li><li class="chapter-item expanded affix "><li class="part-title">The Software</li><li class="chapter-item expanded "><a href="software.html"><strong aria-hidden="true">4.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="software_bios.html" class="active"><strong aria-hidden="true">5.</strong> The Neotron BIOS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="software_bios_apicalls.html"><strong aria-hidden="true">5.1.</strong> API Calls</a></li></ol></li><li class="chapter-item expanded "><a href="software_os.html"><strong aria-hidden="true">6.</strong> The Neotron OS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="software_os_apicalls.html"><strong aria-hidden="true">6.1.</strong> API Calls</a></li></ol></li><li class="chapter-item expanded "><a href="software_command_shell.html"><strong aria-hidden="true">7.</strong> The Neotron Command Shell</a></li><li class="chapter-item expanded "><a href="software_menu_shell.html"><strong aria-hidden="true">8.</strong> The Neotron Command Menu</a></li><li class="chapter-item expanded "><a href="software_applications.html"><strong aria-hidden="true">9.</strong> Neotron Applications</a></li><li class="chapter-item expanded affix "><li class="part-title">The Hardware</li><li class="chapter-item expanded "><a href="hardware.html"><strong aria-hidden="true">10.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="hardware_soc.html"><strong aria-hidden="true">11.</strong> The System On Chip</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="hardware_soc_video.html"><strong aria-hidden="true">11.1.</strong> Video</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.2.</strong> Audio</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.3.</strong> GPIO</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.4.</strong> SPI Bus</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.5.</strong> I²C Bus</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.6.</strong> UART/MIDI</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.7.</strong> RTC</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.8.</strong> SD Card</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.9.</strong> USB</div></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.</strong> Expanding the System</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">12.1.</strong> Video</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.2.</strong> Audio</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.3.</strong> GPIO</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.4.</strong> UART/MIDI/RS-232</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.5.</strong> RTC</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.6.</strong> SD Card</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.7.</strong> Keyboard/Mouse</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.8.</strong> Ethernet</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.9.</strong> Wi-Fi</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.10.</strong> Bluetooth</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.11.</strong> USB</div></li></ol></li><li class="chapter-item expanded "><a href="hardware_baseboards.html"><strong aria-hidden="true">13.</strong> Baseboards</a></li><li class="chapter-item expanded affix "><li class="part-title">Neotron Systems</li><li class="chapter-item expanded "><a href="systems.html"><strong aria-hidden="true">14.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="neotron_32.html"><strong aria-hidden="true">15.</strong> Neotron 32</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="neotron_32_video.html"><strong aria-hidden="true">15.1.</strong> Video</a></li><li class="chapter-item expanded "><a href="neotron_32_audio.html"><strong aria-hidden="true">15.2.</strong> Audio</a></li><li class="chapter-item expanded "><a href="neotron_32_sdmmc.html"><strong aria-hidden="true">15.3.</strong> SD Card Slot</a></li><li class="chapter-item expanded "><a href="neotron_32_ps2.html"><strong aria-hidden="true">15.4.</strong> PS/2 and Joystick</a></li><li class="chapter-item expanded "><a href="neotron_32_wifi.html"><strong aria-hidden="true">15.5.</strong> WiFi</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">15.6.</strong> Expansion</div></li><li class="chapter-item expanded "><a href="neotron_32_parallel.html"><strong aria-hidden="true">15.7.</strong> Parallel Port</a></li><li class="chapter-item expanded "><a href="neotron_32_rs232.html"><strong aria-hidden="true">15.8.</strong> RS-232</a></li><li class="chapter-item expanded "><a href="neotron_32_midi.html"><strong aria-hidden="true">15.9.</strong> MIDI</a></li><li class="chapter-item expanded "><a href="neotron_32_usb.html"><strong aria-hidden="true">15.10.</strong> USB</a></li><li class="chapter-item expanded "><a href="neotron_32_rtc.html"><strong aria-hidden="true">15.11.</strong> RTC</a></li></ol></li><li class="chapter-item expanded "><a href="neotron_pico.html"><strong aria-hidden="true">16.</strong> Neotron Pico</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="neotron_pico_video.html"><strong aria-hidden="true">16.1.</strong> Video</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.2.</strong> Audio</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.3.</strong> SD Card Slot</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.4.</strong> PS/2</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.5.</strong> Expansion</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.6.</strong> USB</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.7.</strong> RTC</div></li></ol></li><li class="chapter-item expanded "><a href="neotron_340st.html"><strong aria-hidden="true">17.</strong> Neotron 340ST</a></li><li class="chapter-item expanded "><a href="neotron_500.html"><strong aria-hidden="true">18.</strong> Neotron 500</a></li><li class="chapter-item expanded "><a href="neotron_600.html"><strong aria-hidden="true">19.</strong> Neotron 600</a></li><li class="chapter-item expanded "><a href="neotron_1000.html"><strong aria-hidden="true">20.</strong> Neotron 1000</a></li><li class="chapter-item expanded "><a href="neotron_9x.html"><strong aria-hidden="true">21.</strong> Neotron 9X</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Neotron - The Embedded Rust Home Computer Platform</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#the-neotron-bios" id="the-neotron-bios">The Neotron BIOS</a></h1>
+<h2><a class="header" href="#introduction" id="introduction">Introduction</a></h2>
+<p>The Neotron BIOS is the hardware-abstraction layer for the Neotron Operating
+System. It allows the OS to run on different hardware platforms with the minimum
+number of changes.</p>
+<pre><code>+-------+-------------+
+|       |             |
+| Shell | Application |
+|       |             |
++-------+-------------+
+|                     |
+|  Operating System   |
+|                     |
+++===================++
+||                   ||
+||       BIOS        ||
+||                   ||
+++===================++
+|                     |
+|    Raw Hardware     |
+|                     |
++---------------------+
+</code></pre>
+<h2><a class="header" href="#what-goes-in-the-bios-and-what-goes-in-the-os" id="what-goes-in-the-bios-and-what-goes-in-the-os">What goes in the BIOS and what goes in the OS?</a></h2>
+<p>As a general rule, the BIOS should contain all the drivers for the main
+system-on-chip (SoC) in that particular Neotron system. It should also
+understand which pins on the SoC have been assigned to which functions. It is
+therefore a function of the netlist for the main PCB, and the components fitted
+to it.</p>
+<p>If a particular function might apply to SoCs from different manufacturers, or to
+an expansion card that could be inserted into multiple different models of
+Neotron system, it is probably better placed in the Neotron OS.</p>
+<h2><a class="header" href="#interfaces" id="interfaces">Interfaces</a></h2>
+<p>A BIOS should offer an interface upwards to the OS so that the OS can:</p>
+<ul>
+<li>Discover the hardware in the system</li>
+<li>Select and use various video modes:
+<ul>
+<li>Text modes</li>
+<li>Bitmap graphics modes</li>
+<li>Split modes</li>
+<li>Layered Modes</li>
+<li>Hooking video scan-line interrupts</li>
+</ul>
+</li>
+<li>Read any keyboard key events</li>
+<li>Access (read from, write to and/or configure) any Serial/UART interfaces</li>
+<li>Access any I²C buses, and any devices attached to its bus</li>
+<li>Access any SPI buses, and any devices attached to its chip selects</li>
+<li>Access any USB Host Controllers, and any USB devices attached</li>
+<li>Access any block devices, via whatever interface they are connected to</li>
+<li>Read from / write from any audio FIFOs</li>
+<li>Configure a periodic 'system tick' timer</li>
+<li>Obtain / set the current calendar time</li>
+<li>Measure elapsed time since boot-up (e.g. in microseconds)</li>
+<li>Hook interrupts for the external IRQ lines</li>
+<li>Access any OS-specific non-volatile configuration</li>
+</ul>
+<p>On top of these APIs sits the Neotron OS, which should be portable with almost
+zero changes to any device with a Neotron BIOS. While you could write an
+application which uses the BIOS directly, most applications will use the
+higher-level APIs exposed by the Neotron OS.</p>
+<h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
+<p>Many Neotron sytems will have an element of user configuration to them - e.g.
+which cards are fitted to which expansion slots, or whether an optional item has
+been fitted to the PCB. To handle this, it is expected that the BIOS have some
+kind of configuration application, and some non-volatile storage that will hold
+the configuration across a power cycle. Typically this will be in the
+battery-backed real-time clock, but it could equally be in an EEPROM.</p>
+<h2><a class="header" href="#calling-a-bios-api" id="calling-a-bios-api">Calling a BIOS API</a></h2>
+<p>On ARM systems, calling a kernel API is usually done through a <code>SWI</code> or <code>SVC</code>
+machine instruction. This effectively triggers an interrupt, putting the CPU
+into interrupt mode where it starts executing the <code>SWI</code> exception handler.
+Unfortunately, calling the <code>SWI</code> instruction and passing arguments via registers
+can only be performed from assembly language, and is not supported by the
+<code>cortex-m</code> crate at this time.</p>
+<p>Monotron instead used a simple alternative - when the application was started by
+the OS, the OS passed it a pointer to a structure of function pointers. You can
+think of this as being like an old-fashioned jump table. When the application
+wanted to get the OS to do something, the application just called the
+appropriate function through the given pointer. The downside was that the
+Monotron OS functions used the same stack as the application, and it was
+impossible for an application to exit back to the OS unless it returned from
+<code>main</code> (i.e. there was no <code>exit()</code> function you could call). The Neotron BIOS
+accepts these downsides in the same of simplicity, and takes the Monotron
+approach - at least for the BIOS-OS ABI.</p>
+<p>The BIOS is responsible for starting the system and performing hardware
+initialisation. It will also search for the OS, either in Flash memory, on disk, or
+perhaps even loaded over a UART. The OS then has its initialisation function
+called, to which the structure of BIOS function calls is passed. The
+initialisation function is specified as a function pointer stored at a
+specific offset (most likely the first four bytes of the OS image). To avoid
+undefined behaviour, that initialisation function should memset the <code>.bss</code>
+section to all-zeroes and, if necessary, initialise the <code>.data</code> section using
+values stored in Flash memory.</p>
+<p>Most of the BIOS APIs will be 'blocking' - that is, the function call will not
+return until the BIOS has completed the operation (e.g. read the sector from
+disk, or written the bytes to the UART). It is possible in the future that BIOS
+APIs will be added which allows operations to be <em>asynchronous</em> - that is, to
+return immediately once the operation has been <em>queued</em> and then either call
+some function or set some marker value in memory once the operation has been
+completed. Such an API is more complex to develop, and has interesting
+challenges around ensuring the memory passed to the function remains available
+(i.e. it isn't just on the stack of the calling function). However, these APIs
+are generally more efficient in terms of CPU time, as the CPU does not have to
+waste cycles spinning in the main thread whilst it waits for the operation to
+complete - for example, you could be writing some sectors to disk and performing
+an I²C read from the HID controller asynchronously, whilst also calculating new
+display graphics and audio in the main thread.</p>
+<p>For now however, the blocking APIs were sufficient for MS-DOS, and they will be
+sufficient here.</p>
+<h2><a class="header" href="#why-split-the-os-and-the-bios" id="why-split-the-os-and-the-bios">Why split the OS and the BIOS?</a></h2>
+<p>We could take the Linux / Windows NT approach, with a boot-loader that performs
+the bare minimum required to get the kernel (or, in our case, what we call the
+'OS') into RAM and start it running. The boot-loader for a PC is usually a UEFI
+BIOS but on an older system might be an IBM PC-compatible 'legacy' BIOS. The
+operations performed typically include DRAM setup, rudimentary console setup
+(either frame-buffer or over UART) and accessing the kernel from some kind of
+block device or non-volatile memory (e.g. SD Card). The kernel then replaces
+the boot-loader, which is never used again.</p>
+<p>Because our Neotron systems generally have Flash memory, we don't actually
+need a boot-loader in that sense. Instead, we implement something more like
+the interface provided by an IBM PC-compatible 'legacy' BIOS for running
+MS-DOS, which itself was modeled on the design of CP/M's BIOS and BDOS
+components. In that case, the BIOS provides a fixed application binary
+interface (ABI) which is unchanging. This allowed development of MS-DOS (and
+CP/M) to be performed against a fixed target (or rather, multiple
+implementations of a fixed ABI), allowing the same copy of MS-DOS or CP/M to
+run on a variety of PCs from a variety of manufacturers. The alternative would
+be to require all of the drivers and board support packages to be added into
+OS kernel (as usually happens with Linux), or for the drivers to be loaded
+from disk at boot-up (as with Windows). We have seen with Linux that, for
+whatever reason, not all boards and peripherals get their driver support
+upstreamed, and because Linux does not maintain a binary ABI for drivers,
+anything that isn't upstream quickly becomes obsolete. As a case in point, try
+to update the version of Linux used on circa-2015 Android tablet - you'll
+quickly find yourself stuck on an old Kernel version with bespoke patches (or
+worse, binary blobs) that weren't upstreamed or open-sourced. Whilst Windows
+maintains a binary ABI for drivers, they are usually closed-source and of
+varying quality, leading to system instabilities that are almost impossible to
+debug.</p>
+<p>The Neotron approach allows for:</p>
+<ul>
+<li>Less centralised development: the Neotron developers do not need to look
+after (or even know about) your BIOS implementation, as long as it meets the
+ABI</li>
+<li>Easier upgrades: any system with a Neotron BIOS should be updateable to a
+newer version of the Neotron OS</li>
+<li>A smaller OS: the amount of code in the OS (e.g. for drivers) is reduced, which
+means the OS is easier to understand and review</li>
+<li>Simpler builds: everyone can run basically the same build of the OS (subject
+to some constraints about the specific Arm architecture being targeted) as
+everything board specific is in the BIOS</li>
+<li>Better portability: because anything CPU specific is in the BIOS, it should
+<ul>
+<li>in theory - be possible to port the Neotron OS to another CPU architecture
+with just a re-compile.</li>
+</ul>
+</li>
+</ul>
+<p>The downsides are:</p>
+<ul>
+<li>It's slower: there can be no optimisation across the OS / BIOS boundary.</li>
+<li>Limited support: it's harder to add new classes of peripheral bus (e.g. if
+we ever wanted to add support for I3C), as the old BIOSes won't know about
+them.</li>
+<li>Harder to design: a binary-stable ABI is harder to design in Rust than a
+plain function-call API, as you have to use <code>extern &quot;C&quot;</code> and <code>#[repr(C)]</code>,
+and therefore can't use significant portions of the Core Library in your API
+definition.</li>
+</ul>
+<h2><a class="header" href="#testing" id="testing">Testing</a></h2>
+<p>For BIOS testing, there will be a special 'cut-down' version of the OS which
+offers only a very basic console, and direct access to all the BIOS APIs via
+that console.</p>
+<h2><a class="header" href="#character-sets" id="character-sets">Character Sets</a></h2>
+<p>The video display engines on a Neotron system only support monospaced 8-bit
+fonts (that is, fonts with only 256 glyphs and where each glyph occupies the
+same horizontal space on screen), and so the mapped text buffer memory works
+exclusively in the character set defined by the font. The rest of the BIOS API
+works exclusively in UTF-8 encoded text, and mapping functions are provided by
+the BIOS to convert from a Unicode codepoint to the font-specific character set.
+Generally the first 128 glyphs will match basic ASCII (and hence the first 128
+Unicode code points) for performance reasons, although that isn't necessarily
+required.</p>
+<p>It is possible that Neotron could be adapted to support multi-byte character
+sets (e.g. for Chinese, Japanese or Korean text display where more than 256
+glyphs are required), but there is no support for that planned at this time.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="software.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="software_bios_apicalls.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="software.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="software_bios_apicalls.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

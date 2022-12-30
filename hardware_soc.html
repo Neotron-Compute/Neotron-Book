@@ -1,0 +1,311 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The System On Chip - Neotron - The Embedded Rust Home Computer Platform</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> What is Neotron?</a></li><li class="chapter-item expanded "><a href="licence.html"><strong aria-hidden="true">2.</strong> Licence</a></li><li class="chapter-item expanded "><a href="credits.html"><strong aria-hidden="true">3.</strong> Credits</a></li><li class="chapter-item expanded affix "><li class="part-title">The Software</li><li class="chapter-item expanded "><a href="software.html"><strong aria-hidden="true">4.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="software_bios.html"><strong aria-hidden="true">5.</strong> The Neotron BIOS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="software_bios_apicalls.html"><strong aria-hidden="true">5.1.</strong> API Calls</a></li></ol></li><li class="chapter-item expanded "><a href="software_os.html"><strong aria-hidden="true">6.</strong> The Neotron OS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="software_os_apicalls.html"><strong aria-hidden="true">6.1.</strong> API Calls</a></li></ol></li><li class="chapter-item expanded "><a href="software_command_shell.html"><strong aria-hidden="true">7.</strong> The Neotron Command Shell</a></li><li class="chapter-item expanded "><a href="software_menu_shell.html"><strong aria-hidden="true">8.</strong> The Neotron Command Menu</a></li><li class="chapter-item expanded "><a href="software_applications.html"><strong aria-hidden="true">9.</strong> Neotron Applications</a></li><li class="chapter-item expanded affix "><li class="part-title">The Hardware</li><li class="chapter-item expanded "><a href="hardware.html"><strong aria-hidden="true">10.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="hardware_soc.html" class="active"><strong aria-hidden="true">11.</strong> The System On Chip</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="hardware_soc_video.html"><strong aria-hidden="true">11.1.</strong> Video</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.2.</strong> Audio</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.3.</strong> GPIO</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.4.</strong> SPI Bus</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.5.</strong> I²C Bus</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.6.</strong> UART/MIDI</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.7.</strong> RTC</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.8.</strong> SD Card</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.9.</strong> USB</div></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.</strong> Expanding the System</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">12.1.</strong> Video</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.2.</strong> Audio</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.3.</strong> GPIO</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.4.</strong> UART/MIDI/RS-232</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.5.</strong> RTC</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.6.</strong> SD Card</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.7.</strong> Keyboard/Mouse</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.8.</strong> Ethernet</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.9.</strong> Wi-Fi</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.10.</strong> Bluetooth</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.11.</strong> USB</div></li></ol></li><li class="chapter-item expanded "><a href="hardware_baseboards.html"><strong aria-hidden="true">13.</strong> Baseboards</a></li><li class="chapter-item expanded affix "><li class="part-title">Neotron Systems</li><li class="chapter-item expanded "><a href="systems.html"><strong aria-hidden="true">14.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="neotron_32.html"><strong aria-hidden="true">15.</strong> Neotron 32</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="neotron_32_video.html"><strong aria-hidden="true">15.1.</strong> Video</a></li><li class="chapter-item expanded "><a href="neotron_32_audio.html"><strong aria-hidden="true">15.2.</strong> Audio</a></li><li class="chapter-item expanded "><a href="neotron_32_sdmmc.html"><strong aria-hidden="true">15.3.</strong> SD Card Slot</a></li><li class="chapter-item expanded "><a href="neotron_32_ps2.html"><strong aria-hidden="true">15.4.</strong> PS/2 and Joystick</a></li><li class="chapter-item expanded "><a href="neotron_32_wifi.html"><strong aria-hidden="true">15.5.</strong> WiFi</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">15.6.</strong> Expansion</div></li><li class="chapter-item expanded "><a href="neotron_32_parallel.html"><strong aria-hidden="true">15.7.</strong> Parallel Port</a></li><li class="chapter-item expanded "><a href="neotron_32_rs232.html"><strong aria-hidden="true">15.8.</strong> RS-232</a></li><li class="chapter-item expanded "><a href="neotron_32_midi.html"><strong aria-hidden="true">15.9.</strong> MIDI</a></li><li class="chapter-item expanded "><a href="neotron_32_usb.html"><strong aria-hidden="true">15.10.</strong> USB</a></li><li class="chapter-item expanded "><a href="neotron_32_rtc.html"><strong aria-hidden="true">15.11.</strong> RTC</a></li></ol></li><li class="chapter-item expanded "><a href="neotron_pico.html"><strong aria-hidden="true">16.</strong> Neotron Pico</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="neotron_pico_video.html"><strong aria-hidden="true">16.1.</strong> Video</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.2.</strong> Audio</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.3.</strong> SD Card Slot</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.4.</strong> PS/2</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.5.</strong> Expansion</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.6.</strong> USB</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.7.</strong> RTC</div></li></ol></li><li class="chapter-item expanded "><a href="neotron_340st.html"><strong aria-hidden="true">17.</strong> Neotron 340ST</a></li><li class="chapter-item expanded "><a href="neotron_500.html"><strong aria-hidden="true">18.</strong> Neotron 500</a></li><li class="chapter-item expanded "><a href="neotron_600.html"><strong aria-hidden="true">19.</strong> Neotron 600</a></li><li class="chapter-item expanded "><a href="neotron_1000.html"><strong aria-hidden="true">20.</strong> Neotron 1000</a></li><li class="chapter-item expanded "><a href="neotron_9x.html"><strong aria-hidden="true">21.</strong> Neotron 9X</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Neotron - The Embedded Rust Home Computer Platform</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#the-system-on-chip" id="the-system-on-chip">The System On Chip</a></h1>
+<h2><a class="header" href="#picking-a-soc" id="picking-a-soc">Picking a SoC</a></h2>
+<p>When it comes to picking an SoC for a new Neotron model, the following are important criteria:</p>
+<h3><a class="header" href="#mandatory-must" id="mandatory-must">Mandatory (MUST):</a></h3>
+<ul>
+<li>Use an ARMv6-M compatible core (i.e. any Arm Cortex-M)</li>
+<li>Generate digital RGB video at 25.175 MHz or 40 MHz, or some integer fraction thereof
+<ul>
+<li>Anything between 1-bit and 24-bits per pixel is acceptable.</li>
+<li>VESA specify a 0.5% clock tolerance, so between 25.05 MHz and 25.3 MHz is OK</li>
+<li>40 MHz gives you 800x600 (and hence 400x600, 200x600, etc)</li>
+<li>25.175 MHz gives you 640x480 (and hence 320x480, 160x480, etc)</li>
+<li>If you aren't performance sensitive (i.e. playing games), you could have off-chip video support implemented on a second processor, with a fast communications link (e.g. Quad SPI) between them</li>
+<li>You can easily scan-double the output just by playing each line twice (or three times...)</li>
+</ul>
+</li>
+<li>Have a four-wire UART, or an ARM Serial Wire Debug interface, for debug logging</li>
+<li>Have at least 256 KiB of memory for BIOS / OS code (in Flash or RAM) </li>
+<li>Have enough RAM to support the desired video modes (80x25 text mode is 4,000 bytes, while 800x600 @ 8bpp needs around 470 KiB)</li>
+<li>Have at least 64 KiB of free application RAM (ideally 256 KiB or more)</li>
+<li>Have an SPI Controller interface which can run at least 25 MHz</li>
+<li>Have 7 or more chip-select output pins
+<ul>
+<li>If you are limited on pins, you can use a <code>74LS138</code> 3:8 decoder for the chip-selects</li>
+</ul>
+</li>
+<li>Have 8 interrupt input pins
+<ul>
+<li>If you are limited on pins, you can use an <code>MCP23S17</code> to mux 16 interrupts inputs down to 1</li>
+</ul>
+</li>
+<li>Have an I²C Controller interface which can run at 400 kHz</li>
+<li>Have either an I²S audio codec interface, or stereo PWM audio output pins</li>
+<li>Have a ROM bootloader which can boot from UART, USB or SD Card
+<ul>
+<li>This is so home-made systems do not require an ARM debug probe for initial programming</li>
+</ul>
+</li>
+<li>Have a footprint that is easy to professionally assemble on a simple 4-layer PCB without micro-vias, i.e. one of
+<ul>
+<li>0.8mm+ pitch ball grid array (BGA) package</li>
+<li>0.5mm+ pitch quad flip-chip package (QFP), shrink small-outline package (SSOP) or small-outline IC (SOIC)</li>
+</ul>
+</li>
+<li>Have 3.3V I/O</li>
+<li>Cost under $20 in one-off quantities</li>
+<li>Be available from mainstream catalog vendors (e.g. Digikey)</li>
+</ul>
+<h3><a class="header" href="#desirable-should" id="desirable-should">Desirable (SHOULD)</a></h3>
+<ul>
+<li>Use an ARMv7-M compatible core (i.e. Arm Cortex-M3, Cortex-M4, Cortex-M7 or Cortex-M33)</li>
+<li>Have at least one USB 2.0 Host or OTG port (High-Speed or Full-Speed)</li>
+<li>Has a footprint that is easy (or at least possible) to hand-assemble at home:
+<ul>
+<li>0.8mm pitch QFP (e.g. 7x7mm QFP32)</li>
+<li>1.27mm pitch SOIC</li>
+</ul>
+</li>
+<li>Takes a 3.3V power input which is internally regulated down to the desired core voltage
+<ul>
+<li>Where multiple rails are required, we either need relaxed requirements in sequencing, or an available PMIC chip which brings the rails up in the right order</li>
+</ul>
+</li>
+<li>Be available from the JLCPCB Parts Catalog</li>
+<li>Supports additional external RAM (either SRAM, SDRAM or QSPI HyperRAM)</li>
+</ul>
+<p>We've identified the following parts as meeting some or more of the above criteria:</p>
+<table><thead><tr><th align="left">Manuf.</th><th align="left">Part Number</th><th align="left">Core</th><th align="left">Clock (MHz)</th><th align="left">Package</th><th align="left">RAM (K)</th><th align="left">Flash (K)</th><th align="left">Price (10 off)</th><th align="left">Notes</th></tr></thead><tbody>
+<tr><td align="left">ST</td><td align="left">STM32L552ZET6</td><td align="left">Cortex-M33</td><td align="left">110</td><td align="left">LQFP 144</td><td align="left">256</td><td align="left">512</td><td align="left">£6.65</td><td align="left">Supports HyperRAM, and TrustZone, and is low-cost</td></tr>
+<tr><td align="left">ST</td><td align="left">STM32H730ZBT6</td><td align="left">Cortex-M7</td><td align="left">550</td><td align="left">LQFP 144</td><td align="left">564</td><td align="left">128</td><td align="left">£6.97</td><td align="left">Great value due to small Flash. SPI SRAM support.</td></tr>
+<tr><td align="left">ST</td><td align="left">STM32H7A3ZIT6</td><td align="left">Cortex-M7</td><td align="left">280</td><td align="left">LQFP 144</td><td align="left">1344</td><td align="left">2048</td><td align="left">£11.00</td><td align="left">Big SRAM - might not need external RAM?</td></tr>
+<tr><td align="left">ST</td><td align="left">STM32H743ZGT6</td><td align="left">Cortex-M7</td><td align="left">480</td><td align="left">LQFP 144</td><td align="left">1024</td><td align="left">1024</td><td align="left">£13.75</td><td align="left">Cheapest H7 with 1 MiB SARM. No SPI SRAM support - will require SDRAM</td></tr>
+<tr><td align="left">TI</td><td align="left">TM4C1299KCZADI3</td><td align="left">Cortex-M4</td><td align="left">120</td><td align="left">VFBGA 212</td><td align="left">256</td><td align="left">512</td><td align="left">£11.78</td><td align="left">Poor value, but same family as Neotron-32</td></tr>
+<tr><td align="left">NXP</td><td align="left">IMXRT1062DVJ6A</td><td align="left">Cortex-M7</td><td align="left">600</td><td align="left">BGA 196</td><td align="left">1024</td><td align="left">External</td><td align="left">£10.41</td><td align="left">As used on Teensy 4.1. HyperRAM support.</td></tr>
+<tr><td align="left">Raspberry Pi</td><td align="left">RP2040</td><td align="left">2x Cortex-M0+</td><td align="left">133 MHz</td><td align="left">QFN 56</td><td align="left">256</td><td align="left">External</td><td align="left">£0.85</td><td align="left">Incredibly cheap. Cortex-M0 only supports ARMv6-M. No RAM upgrades</td></tr>
+</tbody></table>
+<p>It is worth also considering the Lattice range of small, low-cost FPGAs, and loading an RISC-V soft-core like the VexRiscv.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="hardware.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="hardware_soc_video.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="hardware.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="hardware_soc_video.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

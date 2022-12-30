@@ -1,0 +1,476 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Video - Neotron - The Embedded Rust Home Computer Platform</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> What is Neotron?</a></li><li class="chapter-item expanded "><a href="licence.html"><strong aria-hidden="true">2.</strong> Licence</a></li><li class="chapter-item expanded "><a href="credits.html"><strong aria-hidden="true">3.</strong> Credits</a></li><li class="chapter-item expanded affix "><li class="part-title">The Software</li><li class="chapter-item expanded "><a href="software.html"><strong aria-hidden="true">4.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="software_bios.html"><strong aria-hidden="true">5.</strong> The Neotron BIOS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="software_bios_apicalls.html"><strong aria-hidden="true">5.1.</strong> API Calls</a></li></ol></li><li class="chapter-item expanded "><a href="software_os.html"><strong aria-hidden="true">6.</strong> The Neotron OS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="software_os_apicalls.html"><strong aria-hidden="true">6.1.</strong> API Calls</a></li></ol></li><li class="chapter-item expanded "><a href="software_command_shell.html"><strong aria-hidden="true">7.</strong> The Neotron Command Shell</a></li><li class="chapter-item expanded "><a href="software_menu_shell.html"><strong aria-hidden="true">8.</strong> The Neotron Command Menu</a></li><li class="chapter-item expanded "><a href="software_applications.html"><strong aria-hidden="true">9.</strong> Neotron Applications</a></li><li class="chapter-item expanded affix "><li class="part-title">The Hardware</li><li class="chapter-item expanded "><a href="hardware.html"><strong aria-hidden="true">10.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="hardware_soc.html"><strong aria-hidden="true">11.</strong> The System On Chip</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="hardware_soc_video.html" class="active"><strong aria-hidden="true">11.1.</strong> Video</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.2.</strong> Audio</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.3.</strong> GPIO</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.4.</strong> SPI Bus</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.5.</strong> I²C Bus</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.6.</strong> UART/MIDI</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.7.</strong> RTC</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.8.</strong> SD Card</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.9.</strong> USB</div></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.</strong> Expanding the System</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">12.1.</strong> Video</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.2.</strong> Audio</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.3.</strong> GPIO</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.4.</strong> UART/MIDI/RS-232</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.5.</strong> RTC</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.6.</strong> SD Card</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.7.</strong> Keyboard/Mouse</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.8.</strong> Ethernet</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.9.</strong> Wi-Fi</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.10.</strong> Bluetooth</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.11.</strong> USB</div></li></ol></li><li class="chapter-item expanded "><a href="hardware_baseboards.html"><strong aria-hidden="true">13.</strong> Baseboards</a></li><li class="chapter-item expanded affix "><li class="part-title">Neotron Systems</li><li class="chapter-item expanded "><a href="systems.html"><strong aria-hidden="true">14.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="neotron_32.html"><strong aria-hidden="true">15.</strong> Neotron 32</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="neotron_32_video.html"><strong aria-hidden="true">15.1.</strong> Video</a></li><li class="chapter-item expanded "><a href="neotron_32_audio.html"><strong aria-hidden="true">15.2.</strong> Audio</a></li><li class="chapter-item expanded "><a href="neotron_32_sdmmc.html"><strong aria-hidden="true">15.3.</strong> SD Card Slot</a></li><li class="chapter-item expanded "><a href="neotron_32_ps2.html"><strong aria-hidden="true">15.4.</strong> PS/2 and Joystick</a></li><li class="chapter-item expanded "><a href="neotron_32_wifi.html"><strong aria-hidden="true">15.5.</strong> WiFi</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">15.6.</strong> Expansion</div></li><li class="chapter-item expanded "><a href="neotron_32_parallel.html"><strong aria-hidden="true">15.7.</strong> Parallel Port</a></li><li class="chapter-item expanded "><a href="neotron_32_rs232.html"><strong aria-hidden="true">15.8.</strong> RS-232</a></li><li class="chapter-item expanded "><a href="neotron_32_midi.html"><strong aria-hidden="true">15.9.</strong> MIDI</a></li><li class="chapter-item expanded "><a href="neotron_32_usb.html"><strong aria-hidden="true">15.10.</strong> USB</a></li><li class="chapter-item expanded "><a href="neotron_32_rtc.html"><strong aria-hidden="true">15.11.</strong> RTC</a></li></ol></li><li class="chapter-item expanded "><a href="neotron_pico.html"><strong aria-hidden="true">16.</strong> Neotron Pico</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="neotron_pico_video.html"><strong aria-hidden="true">16.1.</strong> Video</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.2.</strong> Audio</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.3.</strong> SD Card Slot</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.4.</strong> PS/2</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.5.</strong> Expansion</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.6.</strong> USB</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.7.</strong> RTC</div></li></ol></li><li class="chapter-item expanded "><a href="neotron_340st.html"><strong aria-hidden="true">17.</strong> Neotron 340ST</a></li><li class="chapter-item expanded "><a href="neotron_500.html"><strong aria-hidden="true">18.</strong> Neotron 500</a></li><li class="chapter-item expanded "><a href="neotron_600.html"><strong aria-hidden="true">19.</strong> Neotron 600</a></li><li class="chapter-item expanded "><a href="neotron_1000.html"><strong aria-hidden="true">20.</strong> Neotron 1000</a></li><li class="chapter-item expanded "><a href="neotron_9x.html"><strong aria-hidden="true">21.</strong> Neotron 9X</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Neotron - The Embedded Rust Home Computer Platform</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#video-from-a-system-on-chip" id="video-from-a-system-on-chip">Video from a System On Chip</a></h1>
+<p>Video support from your SoC can vary greatly - from SoCs which basically have no video support but can be 'tricked' into generating a signal that's sort-of VGA compatible, to SoCs which have on-board graphics accelerators that can render multiple semi-transparent planes together.</p>
+<h2><a class="header" href="#video-modes" id="video-modes">Video Modes</a></h2>
+<p>First, we should discuss the concept of a <em>video mode</em>. This is a collection of parameters which describe the picture that is being generated.</p>
+<h3><a class="header" href="#timing" id="timing">Timing</a></h3>
+<p>In this section, we generally assume that the video is VGA-like - that is, each frame is drawn line-by-line, starting with the top line and moving downwards. A line comprises pixels, which are drawn from left to right. Each pixel has a colour, which can be anywhere between 'on or off' or 'one of 16.8 million colours'. As the pixels are drawn left to right, there will be some extra non-visible 'off-screen' pixels, which are designed to give an old-fashioned cathode-ray tube (CRT) monitor time to move the scanning 'gun' back over to the left hand side of the image ready to draw the next line. In the same fashion, there will be some non-visible 'off-screen' lines which give a CRT's gun time to move back to the top of the frame. Although we almost universally use LCD monitors now, the standards still include these 'blanking periods'.</p>
+<p>The monitor is able to find the visible picture within the signal, thanks to the provision of two extra signals - <em>Horizontal Sync</em> and <em>Vertical Sync</em>. These pulse high (or low) during the middle of the relevant blanking period.</p>
+<p>The relevant parameters are:</p>
+<ul>
+<li>Horizontal Visible Pixels - the number of visible pixels on each line</li>
+<li>Horizontal Front Porch - the number of non-visible pixels before the sync pulse</li>
+<li>Horizontal Sync Width - the number of non-visible pixels during the sync pulse</li>
+<li>Horizontal Back Porch - the number of non-visible pixels after the sync pulse</li>
+<li>Horizontal Pixels - the total number of pixels on each line</li>
+<li>Horizontal Scan Rate - the number of lines (visible or non-visible) drawn per second</li>
+<li>Vertical Visible Lines - the number of visible lines in each frame</li>
+<li>Vertical Front Porch - the number of non-visible lines before the sync pulse</li>
+<li>Vertical Sync Width - the number of non-visible lines during the sync pulse</li>
+<li>Vertical Back Porch - the number of non-visible lines after the sync pulse</li>
+<li>Vertical Lines - the total number of lines in each frame</li>
+<li>Frame Rate (or Refresh Rate, or Vertical Scan Rate) - the number of complete frames drawn per second</li>
+<li>Pixel Clock (or Dot Clock) - the number of pixels (visible or non-visible - we'll get to that shortly) produced per second</li>
+</ul>
+<p>These terms are related as follows:</p>
+<pre><code>Horizontal Pixels = Horizontal Visible Pixels + Horizontal Front Porch + Horizontal Sync Width 
++ Horizontal Back Porch
+Vertical Lines = Vertical Visible Lines + Vertical Front Porch + Vertical Sync Width 
++ Vertical Back Porch
+Horizontal Scan Rate = Pixel Clock / Horizontal Pixels
+Frame Rate = Horizontal Scan Rate / Vertical Lines
+</code></pre>
+<p>Your monitor will place limits on the values for Frame Rate, Horizontal Scan Rate and Vertical Lines. An analog CRT generally doesn't care about Horizontal Pixels and Pixel Clock - provided the Horizontal Scan Rate is within range - although if you push this beyond the maximum bandwidth of you display (or your cable) the signal starts to get 'smoothed' and the greater definition is lost. A digital display, like an LCD monitor, will sample the analog horizontal signal at fixed intervals and if your source doesn't match perfectly, you may get a fuzzy picture. Generally, the number of horizontal pixels your monitor is looking for is a function of the number of vertical lines, calculated from some look-up table of common video standards.</p>
+<h3><a class="header" href="#colours" id="colours">Colours</a></h3>
+<p>The monitor generally doesn't care about the number of colours each pixel can take, as the pixels are transmitted as analog red, green and blue signals (0.7V peak). However, the SoC will care as the pixels must be stored digital and the more bits per pixel, the more bytes of framebuffer RAM we require!</p>
+<h3><a class="header" href="#standards" id="standards">Standards</a></h3>
+<p>The original IBM standard for the <em>Video Graphics Array</em> included the following video modes:</p>
+<table><thead><tr><th align="left">H. Vis</th><th align="left">V. Vis</th><th align="left">H. Tot</th><th align="left">V. Tot</th><th align="left">H. Freq</th><th align="left">Frame Rate</th><th align="left">Pixel Clock</th><th align="left">Used for</th></tr></thead><tbody>
+<tr><td align="left">720</td><td align="left">400</td><td align="left">900</td><td align="left">449</td><td align="left">31.469 kHz</td><td align="left">70 Hz</td><td align="left">28.322 MHz</td><td align="left">Default 80x25 Text mode</td></tr>
+<tr><td align="left">640</td><td align="left">480</td><td align="left">800</td><td align="left">525</td><td align="left">31.469 kHz</td><td align="left">60 Hz</td><td align="left">25.175 MHz</td><td align="left">High-res graphics mode</td></tr>
+<tr><td align="left">640</td><td align="left">400</td><td align="left">800</td><td align="left">449</td><td align="left">31.469 kHz</td><td align="left">70 Hz</td><td align="left">25.175 MHz</td><td align="left">80x25 text with mixed graphics</td></tr>
+<tr><td align="left">720</td><td align="left">350</td><td align="left">900</td><td align="left">449</td><td align="left">31.469 kHz</td><td align="left">70 Hz</td><td align="left">28.322 MHz</td><td align="left">MDA compatible text mode (720x400 with extra blanking)</td></tr>
+<tr><td align="left">640</td><td align="left">350</td><td align="left">800</td><td align="left">449</td><td align="left">31.469 kHz</td><td align="left">70 Hz</td><td align="left">25.175 MHz</td><td align="left">EGA compatible text/graphics (640x400 with extra blanking)</td></tr>
+<tr><td align="left">640</td><td align="left">200 (2x)</td><td align="left">800</td><td align="left">449</td><td align="left">31.469 kHz</td><td align="left">70 Hz</td><td align="left">25.175 MHz</td><td align="left">CGA compatible text/graphics mode</td></tr>
+<tr><td align="left">320</td><td align="left">240 (2x)</td><td align="left">400</td><td align="left">525</td><td align="left">31.469 kHz</td><td align="left">60 Hz</td><td align="left">25.175 MHz</td><td align="left">Low-res, high-colour mode</td></tr>
+<tr><td align="left">320</td><td align="left">200 (2x)</td><td align="left">400</td><td align="left">449</td><td align="left">31.469 kHz</td><td align="left">70 Hz</td><td align="left">25.175 MHz</td><td align="left">CGA compatible text/graphics graphics mode</td></tr>
+</tbody></table>
+<p>We see from this table that there are only two values for the Vertical Total Lines - 525 for 480-line modes and 449 for 350/400-line modes - corresponding to frame rates of 60 Hz and 70 Hz respectively. There is also the option to increase the pixel clock up from 25.175 MHz to 28.322 MHz, increasing the number of pixels per line from 800 to 900. This, in turn, increases the number of pixels per character on an 80-column text mode display from 8 to 9. Finally, we can simply halve the pixel clock to lower the horizontal resolution, which saves video memory and allows for more colours on screen.</p>
+<p>The rates marked <em>(2x)</em> simply have each line drawn twice by the VGA card, in order to keep the Horizontal Frequency at the standard value.</p>
+<p>During the 1990s, the resolutions and colour depths supported by video cards increased greatly, and monitors began to support a wider range of horizontal frequencies. These various modes were standardised by the Video Electronics Standards Association (<em>VESA</em>), and there are too many to list here. However, some modes of note include:</p>
+<table><thead><tr><th align="left">H. Visible</th><th align="left">V. Visible</th><th align="left">H. Total</th><th align="left">V. Total</th><th align="left">H. Freq</th><th align="left">Frame Rate</th><th align="left">Pixel Clock</th></tr></thead><tbody>
+<tr><td align="left">800</td><td align="left">600</td><td align="left">1056</td><td align="left">628</td><td align="left">37.9 kHz</td><td align="left">60 Hz</td><td align="left">40.0 MHz</td></tr>
+<tr><td align="left">1024</td><td align="left">768</td><td align="left">1344</td><td align="left">806</td><td align="left">48.4 kHz</td><td align="left">60 Hz</td><td align="left">65.0 MHz</td></tr>
+<tr><td align="left">1280</td><td align="left">720</td><td align="left">1664</td><td align="left">748</td><td align="left">44.8 kHz</td><td align="left">60 Hz</td><td align="left">74.5 MHz</td></tr>
+<tr><td align="left">1920</td><td align="left">1080</td><td align="left">2576</td><td align="left">1120</td><td align="left">67.2 kHz</td><td align="left">60 Hz</td><td align="left">173.000 MHz</td></tr>
+</tbody></table>
+<p>We don't really think much of 1080p (1920x1080) video these days - often preferring QuadHD (2560x1440) or 4K (3840x2880) for our desktop PC monitors. These tables show, however, that even 1080p is a staggering amount of data for an SoC to generate - especially without any built-in hardware acceleration. The higher resolution modes also consume vast amounts of framebuffer RAM - 1080p in 24-bit True Colour (usually stored as 32-bits per pixel) needs 8100 KiB of RAM, just for a single frame!</p>
+<h2><a class="header" href="#video-hardware" id="video-hardware">Video Hardware</a></h2>
+<p>If we want to generate a VGA compatible signal, we have several options:</p>
+<h3><a class="header" href="#misuse-the-wrong-peripheral" id="misuse-the-wrong-peripheral">Misuse the wrong peripheral</a></h3>
+<p>We can generate pixels on basically any SoC peripheral which has a synchronous (clock-driven) output. Even a basic SPI peripheral can be used, which will generate a 1 bit-per-pixel (black and white) video signal. The Monotron project used three SPI periperals on a TM4C to produce a 3-bit-per-pixel (8 colour) signal, and with a 20 MHz pixel clock to generate a 400x600 image (like 800x600 but with half as many pixels across, and each pixel twice as wide). Various projects for the Espressif ESP32 have used the I²S interface to push out up to 14 pixels per clock cycle (16,384 colour).</p>
+<p>The Raspberry Pi Pico takes peripheral abuse even further, by driving a DC-balanced 251.75 MHz TMDS (transition minimised differential signallling) signal out of some standard GPIO pins using a high-speed FIFO, some pre-calculation and some serious over-clocking. This signal is almost exactly like DVI-D video, which thanks to backwards compatibility, can be sent over an HDMI cable to any HDMI or DVI-D compatible display.</p>
+<h3><a class="header" href="#use-a-tft-lcd-controller-peripheral" id="use-a-tft-lcd-controller-peripheral">Use a TFT-LCD Controller Peripheral</a></h3>
+<p>Many SoCs include hardware for driving an RGB TFT LCD panel. The good news is that these RGB panels are designed to look just like a VGA monitor (but with digital bits for each pixel rather than three analog signals), and these controllers can often be programmed to generate VGA compatible signals.</p>
+<p>Look for the LTDC (LCD TFT Display Controller) on the STM32 line, for example.</p>
+<h3><a class="header" href="#use-an-mipi-dsi-controller-peripheral" id="use-an-mipi-dsi-controller-peripheral">Use an MIPI DSI Controller Peripheral</a></h3>
+<p>MIPI DSI (Mobile Industry Processor Interface Display Serial Interface) is a standard for pushing pixels into a display using a high-speed serial interface. This reduces pin-count and electronic magnetic interference, compared to waggling the 26 individual signal lines required to send 24-bit-per-pixel digital video. DSI is often sent over flexible ribbon cable, you can see a DSI port on most Raspberry Pi boards.</p>
+<p>You can get chips which will take in a DSI signal and output HDMI, such as the <a href="https://www.analog.com/en/products/adv7533.html">Analog Devices ADV7533</a> but implementing an proper 'HDMI' output will require licensing and for this reason the chips are often only available under NDA.</p>
+<h3><a class="header" href="#use-an-off-chip-video-controller" id="use-an-off-chip-video-controller">Use an off-chip video controller</a></h3>
+<p>If there really is nothing suitable, you can always get a second SoC or dedicated video controller to drive your display. Such chips are popular for driving LCD panels (e.g. the ILI9341 or the ST7920) but can sometimes be configured to generate VGA compatible signals.</p>
+<h2><a class="header" href="#text-vs-graphics" id="text-vs-graphics">Text vs Graphics</a></h2>
+<p>Neotron's video support is based broadly on that of the IBM PC <em>Video Graphics Array</em>. In the previous section, we discussed the physical attributes of the analog video signal generated by a <em>VGA</em> card. What we didn't cover, is how we generate that signal based on the contents of Video RAM (VRAM).</p>
+<p>Broadly, the IBM PC has two kinds of video modes - text mode and graphics mode. Text mode is what MS-DOS would boot up in, and Graphics mode (also known in Linux as <em>framebuffer mode</em>) is what Windows 3.1 or a game like Doom would switch to. Whilst some systems (in particular 1990s RISC workstations, and modern ARM systems) have no concept of a 'text mode' and instead draw text to a graphical framebuffer, we retain the two distinct types of mode in Neotron in order to save on VRAM.</p>
+<h3><a class="header" href="#text-modes" id="text-modes">Text Modes</a></h3>
+<p>Text modes divide the screen into a rectangular grid of <em>cells</em>. Each <em>cell</em> contains a <em>character</em> and a set of <em>attributes</em> (such as the <em>foreground</em> and <em>background</em> colour for that cel). Each <em>character</em> is represented by a image, known as a <em>glyph</em>. All of the <em>glyphs</em> in a given <em>font</em> have the same width and height in pixels, and they each use precisely two colours - <em>foreground</em> and <em>background</em>. The specific value of <em>foreground</em> and <em>background</em> can be set for each <em>cell</em> on the screen, meaning that each <em>cell</em> takes up two bytes: one for the <em>character</em>, and one for the attributes. As the raster beam moves across the display, the video card will fetch the <em>character</em> for that <em>cell</em> from VRAM, then load the corresponding <em>glyph</em> from the <em>font</em> (which may be in VRAM, or it may be in the card's ROM). The appropriate horizontal slice is taken from the <em>glyph</em>, which is then converted to a sequence of coloured pixels by applying the <em>foreground</em> and <em>background</em> colour for that <em>cell</em>. These coloured pixels are then transmitted to the monitor in real-time.</p>
+<p>Typically (and certainly in VGA text modes), each <em>character</em> is an 8-bit value, and so there can only be 256 <em>glyphs</em> in a <em>font</em>. Merging multiple <em>characters</em> into a single <em>glyph</em> (as you might do in Unicode with a <code>U+0041 LATIN CAPITAL LETTER A</code> followed by a <code>U+02CA MODIFIER LETTER ACUTE ACCENT</code> to produce an <code>Á</code>) is generally not supported, although a swap for a single <em>character</em> could be performed by the OS when the string was first written to the VRAM if the current font had a suitable <em>glyph</em> available.</p>
+<p>The two main text mode resolutions for VGA are 80 columns by 25 rows, and 80 columns by 50 rows (plus some others that are much less common). The video output resolutions these correspond to depend on the <em>glyph</em> size, as follows:</p>
+<table><thead><tr><th align="left">Columns x Rows</th><th align="left">Glyph Width</th><th align="left">Glyph Height</th><th align="left">Horizontal Pixels</th><th align="left">Vertical Pixels</th><th align="left">Standard</th></tr></thead><tbody>
+<tr><td align="left">80 x 25</td><td align="left">9</td><td align="left">14</td><td align="left">720</td><td align="left">350</td><td align="left">MDA, Hercules</td></tr>
+<tr><td align="left">40 x 25</td><td align="left">8</td><td align="left">8</td><td align="left">320</td><td align="left">200</td><td align="left">CGA, EGA</td></tr>
+<tr><td align="left">80 x 25</td><td align="left">8</td><td align="left">8</td><td align="left">640</td><td align="left">200</td><td align="left">CGA, EGA</td></tr>
+<tr><td align="left">80 x 25</td><td align="left">8</td><td align="left">14</td><td align="left">640</td><td align="left">350</td><td align="left">EGA</td></tr>
+<tr><td align="left">80 x 43</td><td align="left">8</td><td align="left">8</td><td align="left">640</td><td align="left">350</td><td align="left">EGA</td></tr>
+<tr><td align="left">80 x 25</td><td align="left">9</td><td align="left">16</td><td align="left">720</td><td align="left">400</td><td align="left">VGA</td></tr>
+<tr><td align="left">80 x 50</td><td align="left">9</td><td align="left">8</td><td align="left">720</td><td align="left">400</td><td align="left">VGA</td></tr>
+<tr><td align="left">80 x 30</td><td align="left">8</td><td align="left">16</td><td align="left">640</td><td align="left">480</td><td align="left">VGA</td></tr>
+<tr><td align="left">80 x 60</td><td align="left">8</td><td align="left">8</td><td align="left">640</td><td align="left">480</td><td align="left">VGA</td></tr>
+</tbody></table>
+<p>Because a Neotron system might support other video resolutions (e.g. the native 400x300 of a Neotron 32), there is no prescriptive list of Neotron text modes. Instead, there is a BIOS API to query which modes are supported, and the width in columns and height in rows of each mode. It is assumed that each mode supports 16 foreground colours and 8 background colours, just like VGA, and that memory is arranged in a linear array of 16-bit values, where the first (lower) 8-bits identify the character and the second (higher) 8-bits identify the foreground and background colour.</p>
+<pre><code>+-----+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+|             Attribute           |           Character           |
++-----+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+|  7  | 6 | 5 | 4 | 3 | 2 | 1 | 0 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
++-----+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+|Blink| Backgr'nd |  Foreground   |           Code Point          |
++-----+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+</code></pre>
+<p>(Diagram courtesy <a href="https://en.wikipedia.org/wiki/VGA_text_mode">https://en.wikipedia.org/wiki/VGA_text_mode</a>)</p>
+<p>The <code>Blink</code> bit causes the text to alternate between being drawn normally, and being drawn entirely in the background colour (thus rendering it invisible).</p>
+<p>Where the graphics are drawn by an off-chip GPU, the Neotron BIOS will need to arrange for the on-chip VRAM to be copied to the off-chip GPU during the vertical blanking interval of each frame. A text mode with 80 x 50 characters will require 4000 bytes of VRAM, which at 70 Hz needs a link of just over 41 Mbit/sec in order for the copy to complete during the blanking interval. If you are prepared to 'chase the beam' you can run a little slower. 80x25 video modes will require half that, and using run-length encoding will likely reduce it further (especially as consecutive cells are usually the same colour).</p>
+<h2><a class="header" href="#support-in-neotron" id="support-in-neotron">Support in Neotron</a></h2>
+<p>To keep things simple, Neotron has an 8-bit video mode value, four components. This means that an application can simply ask for 'Mode 0x25' instead of having to scan through a list of obscure modes to find out which one is closest.</p>
+<pre><code>+---------+-----------+----------+-----------+
+| Vert 2x |   Timing  | Horiz 2x |   Format  |
++---------+-----------+----------+---+---+---+
+|    7    | 6 | 5 | 4 |    3     | 2 | 1 | 0 |
++---------+-----------+----------+---+---+---+
+</code></pre>
+<p>If <code>Vert 2x</code> is set, each output scan-line is drawn twice, which halves the number of rows in memory (of text or pixels).</p>
+<p>If <code>Horiz 2x</code> is set, each pixel is drawn twice, which halves the number of columns in memory (of text or pixels).</p>
+<p>The Timing table is:</p>
+<table><thead><tr><th align="left">Mode</th><th align="left">Visible</th><th align="left">Total</th><th align="left">Pixel Clock</th><th align="left">Horizontal Scan Rate</th><th align="left">Frame Rate</th></tr></thead><tbody>
+<tr><td align="left">0</td><td align="left">640 x 480</td><td align="left">800 x 525</td><td align="left">25.175 MHz</td><td align="left">31.5 kHz</td><td align="left">60 Hz</td></tr>
+<tr><td align="left">1</td><td align="left">640 x 400</td><td align="left">800 x 449</td><td align="left">25.175 MHz</td><td align="left">31.5 kHz</td><td align="left">70 Hz</td></tr>
+<tr><td align="left">2</td><td align="left">800 x 600</td><td align="left">1056 x 628</td><td align="left">40.000 MHz</td><td align="left">37.9 kHz</td><td align="left">60 Hz</td></tr>
+<tr><td align="left">4..7</td><td align="left">TBD</td><td align="left">TBD</td><td align="left">TBD</td><td align="left">TBD</td><td align="left">TBD</td></tr>
+</tbody></table>
+<p>The Format table is:</p>
+<table><thead><tr><th align="left">Mode</th><th align="left">Text/Graphics</th><th align="left">Font Size</th><th align="left">Colour Depth</th></tr></thead><tbody>
+<tr><td align="left">0</td><td align="left">Text</td><td align="left">8 x 16</td><td align="left">16/8 Indexed</td></tr>
+<tr><td align="left">1</td><td align="left">Text</td><td align="left">8 x 8</td><td align="left">16/8 Indexed</td></tr>
+<tr><td align="left">2</td><td align="left">Graphics</td><td align="left">N/A</td><td align="left">32/24-bpp</td></tr>
+<tr><td align="left">3</td><td align="left">Graphics</td><td align="left">N/A</td><td align="left">16-bpp</td></tr>
+<tr><td align="left">4</td><td align="left">Graphics</td><td align="left">N/A</td><td align="left">8-bpp Indexed</td></tr>
+<tr><td align="left">5</td><td align="left">Graphics</td><td align="left">N/A</td><td align="left">4-bpp Indexed</td></tr>
+<tr><td align="left">6</td><td align="left">Graphics</td><td align="left">N/A</td><td align="left">2-bpp Indexed</td></tr>
+<tr><td align="left">7</td><td align="left">Graphics</td><td align="left">N/A</td><td align="left">1-bpp Indexed</td></tr>
+</tbody></table>
+<p>The values marked <code>Indexed</code> have their colours translated with a 256-entry colour palette that converts from the indexed value up to a true-colour 24-bit value. These true-colour values may be truncated when output by the video card's DAC. The <code>32/24-bpp</code> entry stores 24-bit colours in a 32-bit memory location, for efficiency of access. We assume no Neotron system will ever have better than 24-bit video output!</p>
+<h3><a class="header" href="#example-modes" id="example-modes">Example Modes</a></h3>
+<ul>
+<li>0x05: 640 x 480 graphics @ 60 Hz, with 16 colours (4-bpp)</li>
+<li>0x10: 80 x 25 text mode, with 400 lines at 70 Hz</li>
+<li>0x01: 80 x 60 text mode, with 480 lines at 60 Hz</li>
+<li>0x9C: 320 x 200 graphics @ 70 Hz, with 256 colours (8-bpp)</li>
+</ul>
+<p>These example screen-shots were generated using https://int10h.org/oldschool-pc-fonts/fontlist/:</p>
+<p>80x25 text with an 8x8 font (640x200), like an IBM PC-compatible with CGA:</p>
+<p><img src="./640x200_text.png" alt="Mode 0x91" /></p>
+<p>80x25 text with an 8x16 font (640x400), like an IBM PC-compatible with MCGA (or VGA in 8x16 mode, instead of the usual 9x16):</p>
+<p><img src="./640x400_text.png" alt="Mode 0x10" /></p>
+<p>40x25 text with an 8x8 font (320x200), like an IBM PC-compatible with CGA in multi-colour mode:</p>
+<p><img src="./320x200_text.png" alt="Mode 0x99" /></p>
+<h3><a class="header" href="#complete-mode-list" id="complete-mode-list">Complete Mode List</a></h3>
+<p>For completeness, here is every one of the currently defined video modes. More will be added as further <em>Timing Mode</em> values are defined.</p>
+<table><thead><tr><th align="left">Mode</th><th align="left">Timing</th><th align="left">V2x</th><th align="left">H2x</th><th align="left">Description</th><th align="right">VRAM (bytes)</th></tr></thead><tbody>
+<tr><td align="left">0x00</td><td align="left">0 (640x480@60)</td><td align="left">0</td><td align="left">0</td><td align="left">80x30 text</td><td align="right">4,800</td></tr>
+<tr><td align="left">0x01</td><td align="left">0 (640x480@60)</td><td align="left">0</td><td align="left">0</td><td align="left">80x60 text</td><td align="right">9,600</td></tr>
+<tr><td align="left">0x02</td><td align="left">0 (640x480@60)</td><td align="left">0</td><td align="left">0</td><td align="left">640x480 True-colour</td><td align="right">1,228,800</td></tr>
+<tr><td align="left">0x03</td><td align="left">0 (640x480@60)</td><td align="left">0</td><td align="left">0</td><td align="left">640x480 High-colour</td><td align="right">614,400</td></tr>
+<tr><td align="left">0x04</td><td align="left">0 (640x480@60)</td><td align="left">0</td><td align="left">0</td><td align="left">640x480 256-colour</td><td align="right">307,200</td></tr>
+<tr><td align="left">0x05</td><td align="left">0 (640x480@60)</td><td align="left">0</td><td align="left">0</td><td align="left">640x480 16-colour</td><td align="right">153,600</td></tr>
+<tr><td align="left">0x06</td><td align="left">0 (640x480@60)</td><td align="left">0</td><td align="left">0</td><td align="left">640x480 4-colour</td><td align="right">76,800</td></tr>
+<tr><td align="left">0x07</td><td align="left">0 (640x480@60)</td><td align="left">0</td><td align="left">0</td><td align="left">640x480 2-colour</td><td align="right">38,400</td></tr>
+<tr><td align="left">0x10</td><td align="left">1 (640x400@70)</td><td align="left">0</td><td align="left">0</td><td align="left">80x25 text</td><td align="right">4,000</td></tr>
+<tr><td align="left">0x11</td><td align="left">1 (640x400@70)</td><td align="left">0</td><td align="left">0</td><td align="left">80x50 text</td><td align="right">8,000</td></tr>
+<tr><td align="left">0x12</td><td align="left">1 (640x400@70)</td><td align="left">0</td><td align="left">0</td><td align="left">640x400 True-colour</td><td align="right">1,024,000</td></tr>
+<tr><td align="left">0x13</td><td align="left">1 (640x400@70)</td><td align="left">0</td><td align="left">0</td><td align="left">640x400 High-colour</td><td align="right">512,000</td></tr>
+<tr><td align="left">0x14</td><td align="left">1 (640x400@70)</td><td align="left">0</td><td align="left">0</td><td align="left">640x400 256-colour</td><td align="right">256,000</td></tr>
+<tr><td align="left">0x15</td><td align="left">1 (640x400@70)</td><td align="left">0</td><td align="left">0</td><td align="left">640x400 16-colour</td><td align="right">128,000</td></tr>
+<tr><td align="left">0x16</td><td align="left">1 (640x400@70)</td><td align="left">0</td><td align="left">0</td><td align="left">640x400 4-colour</td><td align="right">64,000</td></tr>
+<tr><td align="left">0x17</td><td align="left">1 (640x400@70)</td><td align="left">0</td><td align="left">0</td><td align="left">640x400 2-colour</td><td align="right">32,000</td></tr>
+<tr><td align="left">0x20</td><td align="left">2 (800x600@60)</td><td align="left">0</td><td align="left">0</td><td align="left">100x37 text</td><td align="right">7,400</td></tr>
+<tr><td align="left">0x21</td><td align="left">2 (800x600@60)</td><td align="left">0</td><td align="left">0</td><td align="left">100x75 text</td><td align="right">15,000</td></tr>
+<tr><td align="left">0x22</td><td align="left">2 (800x600@60)</td><td align="left">0</td><td align="left">0</td><td align="left">800x600 True-colour</td><td align="right">1,920,000</td></tr>
+<tr><td align="left">0x23</td><td align="left">2 (800x600@60)</td><td align="left">0</td><td align="left">0</td><td align="left">800x600 High-colour</td><td align="right">960,000</td></tr>
+<tr><td align="left">0x24</td><td align="left">2 (800x600@60)</td><td align="left">0</td><td align="left">0</td><td align="left">800x600 256-colour</td><td align="right">480,000</td></tr>
+<tr><td align="left">0x25</td><td align="left">2 (800x600@60)</td><td align="left">0</td><td align="left">0</td><td align="left">800x600 16-colour</td><td align="right">240,000</td></tr>
+<tr><td align="left">0x26</td><td align="left">2 (800x600@60)</td><td align="left">0</td><td align="left">0</td><td align="left">800x600 4-colour</td><td align="right">120,000</td></tr>
+<tr><td align="left">0x27</td><td align="left">2 (800x600@60)</td><td align="left">0</td><td align="left">0</td><td align="left">800x600 2-colour</td><td align="right">60,000</td></tr>
+<tr><td align="left">0x80</td><td align="left">0 (640x480@60)</td><td align="left">1</td><td align="left">0</td><td align="left">80x15 text</td><td align="right">2,400</td></tr>
+<tr><td align="left">0x81</td><td align="left">0 (640x480@60)</td><td align="left">1</td><td align="left">0</td><td align="left">80x30 text</td><td align="right">4,800</td></tr>
+<tr><td align="left">0x82</td><td align="left">0 (640x480@60)</td><td align="left">1</td><td align="left">0</td><td align="left">640x240 True-colour</td><td align="right">614,400</td></tr>
+<tr><td align="left">0x83</td><td align="left">0 (640x480@60)</td><td align="left">1</td><td align="left">0</td><td align="left">640x240 High-colour</td><td align="right">307,200</td></tr>
+<tr><td align="left">0x84</td><td align="left">0 (640x480@60)</td><td align="left">1</td><td align="left">0</td><td align="left">640x240 256-colour</td><td align="right">153,600</td></tr>
+<tr><td align="left">0x85</td><td align="left">0 (640x480@60)</td><td align="left">1</td><td align="left">0</td><td align="left">640x240 16-colour</td><td align="right">76,800</td></tr>
+<tr><td align="left">0x86</td><td align="left">0 (640x480@60)</td><td align="left">1</td><td align="left">0</td><td align="left">640x240 4-colour</td><td align="right">38,400</td></tr>
+<tr><td align="left">0x87</td><td align="left">0 (640x480@60)</td><td align="left">1</td><td align="left">0</td><td align="left">640x240 2-colour</td><td align="right">19,200</td></tr>
+<tr><td align="left">0x90</td><td align="left">1 (640x400@70)</td><td align="left">1</td><td align="left">0</td><td align="left">80x12 text</td><td align="right">1,920</td></tr>
+<tr><td align="left">0x91</td><td align="left">1 (640x400@70)</td><td align="left">1</td><td align="left">0</td><td align="left">80x25 text</td><td align="right">4,000</td></tr>
+<tr><td align="left">0x92</td><td align="left">1 (640x400@70)</td><td align="left">1</td><td align="left">0</td><td align="left">640x200 True-colour</td><td align="right">512,000</td></tr>
+<tr><td align="left">0x93</td><td align="left">1 (640x400@70)</td><td align="left">1</td><td align="left">0</td><td align="left">640x200 High-colour</td><td align="right">256,000</td></tr>
+<tr><td align="left">0x94</td><td align="left">1 (640x400@70)</td><td align="left">1</td><td align="left">0</td><td align="left">640x200 256-colour</td><td align="right">128,000</td></tr>
+<tr><td align="left">0x95</td><td align="left">1 (640x400@70)</td><td align="left">1</td><td align="left">0</td><td align="left">640x200 16-colour</td><td align="right">64,000</td></tr>
+<tr><td align="left">0x96</td><td align="left">1 (640x400@70)</td><td align="left">1</td><td align="left">0</td><td align="left">640x200 4-colour</td><td align="right">32,000</td></tr>
+<tr><td align="left">0x97</td><td align="left">1 (640x400@70)</td><td align="left">1</td><td align="left">0</td><td align="left">640x200 2-colour</td><td align="right">16,000</td></tr>
+<tr><td align="left">0xA0</td><td align="left">2 (800x600@60)</td><td align="left">1</td><td align="left">0</td><td align="left">100x18 text</td><td align="right">3,600</td></tr>
+<tr><td align="left">0xA1</td><td align="left">2 (800x600@60)</td><td align="left">1</td><td align="left">0</td><td align="left">100x37 text</td><td align="right">7,400</td></tr>
+<tr><td align="left">0xA2</td><td align="left">2 (800x600@60)</td><td align="left">1</td><td align="left">0</td><td align="left">800x300 True-colour</td><td align="right">960,000</td></tr>
+<tr><td align="left">0xA3</td><td align="left">2 (800x600@60)</td><td align="left">1</td><td align="left">0</td><td align="left">800x300 High-colour</td><td align="right">480,000</td></tr>
+<tr><td align="left">0xA4</td><td align="left">2 (800x600@60)</td><td align="left">1</td><td align="left">0</td><td align="left">800x300 256-colour</td><td align="right">240,000</td></tr>
+<tr><td align="left">0xA5</td><td align="left">2 (800x600@60)</td><td align="left">1</td><td align="left">0</td><td align="left">800x300 16-colour</td><td align="right">120,000</td></tr>
+<tr><td align="left">0xA6</td><td align="left">2 (800x600@60)</td><td align="left">1</td><td align="left">0</td><td align="left">800x300 4-colour</td><td align="right">60,000</td></tr>
+<tr><td align="left">0xA7</td><td align="left">2 (800x600@60)</td><td align="left">1</td><td align="left">0</td><td align="left">800x300 2-colour</td><td align="right">30,000</td></tr>
+<tr><td align="left">0x08</td><td align="left">0 (640x480@60)</td><td align="left">0</td><td align="left">1</td><td align="left">40x30 text</td><td align="right">2,400</td></tr>
+<tr><td align="left">0x09</td><td align="left">0 (640x480@60)</td><td align="left">0</td><td align="left">1</td><td align="left">40x60 text</td><td align="right">4,800</td></tr>
+<tr><td align="left">0x0A</td><td align="left">0 (640x480@60)</td><td align="left">0</td><td align="left">1</td><td align="left">320x480 True-colour</td><td align="right">614,400</td></tr>
+<tr><td align="left">0x0B</td><td align="left">0 (640x480@60)</td><td align="left">0</td><td align="left">1</td><td align="left">320x480 High-colour</td><td align="right">307,200</td></tr>
+<tr><td align="left">0x0C</td><td align="left">0 (640x480@60)</td><td align="left">0</td><td align="left">1</td><td align="left">320x480 256-colour</td><td align="right">153,600</td></tr>
+<tr><td align="left">0x0D</td><td align="left">0 (640x480@60)</td><td align="left">0</td><td align="left">1</td><td align="left">320x480 16-colour</td><td align="right">76,800</td></tr>
+<tr><td align="left">0x0E</td><td align="left">0 (640x480@60)</td><td align="left">0</td><td align="left">1</td><td align="left">320x480 4-colour</td><td align="right">38,400</td></tr>
+<tr><td align="left">0x0F</td><td align="left">0 (640x480@60)</td><td align="left">0</td><td align="left">1</td><td align="left">320x480 2-colour</td><td align="right">19,200</td></tr>
+<tr><td align="left">0x18</td><td align="left">1 (640x400@70)</td><td align="left">0</td><td align="left">1</td><td align="left">40x25 text</td><td align="right">2,000</td></tr>
+<tr><td align="left">0x19</td><td align="left">1 (640x400@70)</td><td align="left">0</td><td align="left">1</td><td align="left">40x50 text</td><td align="right">4,000</td></tr>
+<tr><td align="left">0x1A</td><td align="left">1 (640x400@70)</td><td align="left">0</td><td align="left">1</td><td align="left">320x400 True-colour</td><td align="right">512,000</td></tr>
+<tr><td align="left">0x1B</td><td align="left">1 (640x400@70)</td><td align="left">0</td><td align="left">1</td><td align="left">320x400 High-colour</td><td align="right">256,000</td></tr>
+<tr><td align="left">0x1C</td><td align="left">1 (640x400@70)</td><td align="left">0</td><td align="left">1</td><td align="left">320x400 256-colour</td><td align="right">128,000</td></tr>
+<tr><td align="left">0x1D</td><td align="left">1 (640x400@70)</td><td align="left">0</td><td align="left">1</td><td align="left">320x400 16-colour</td><td align="right">64,000</td></tr>
+<tr><td align="left">0x1E</td><td align="left">1 (640x400@70)</td><td align="left">0</td><td align="left">1</td><td align="left">320x400 4-colour</td><td align="right">32,000</td></tr>
+<tr><td align="left">0x1F</td><td align="left">1 (640x400@70)</td><td align="left">0</td><td align="left">1</td><td align="left">320x400 2-colour</td><td align="right">16,000</td></tr>
+<tr><td align="left">0x28</td><td align="left">2 (800x600@60)</td><td align="left">0</td><td align="left">1</td><td align="left">50x37 text</td><td align="right">3,700</td></tr>
+<tr><td align="left">0x29</td><td align="left">2 (800x600@60)</td><td align="left">0</td><td align="left">1</td><td align="left">50x75 text</td><td align="right">7,500</td></tr>
+<tr><td align="left">0x2A</td><td align="left">2 (800x600@60)</td><td align="left">0</td><td align="left">1</td><td align="left">400x600 True-colour</td><td align="right">960,000</td></tr>
+<tr><td align="left">0x2B</td><td align="left">2 (800x600@60)</td><td align="left">0</td><td align="left">1</td><td align="left">400x600 High-colour</td><td align="right">480,000</td></tr>
+<tr><td align="left">0x2C</td><td align="left">2 (800x600@60)</td><td align="left">0</td><td align="left">1</td><td align="left">400x600 256-colour</td><td align="right">240,000</td></tr>
+<tr><td align="left">0x2D</td><td align="left">2 (800x600@60)</td><td align="left">0</td><td align="left">1</td><td align="left">400x600 16-colour</td><td align="right">120,000</td></tr>
+<tr><td align="left">0x2E</td><td align="left">2 (800x600@60)</td><td align="left">0</td><td align="left">1</td><td align="left">400x600 4-colour</td><td align="right">60,000</td></tr>
+<tr><td align="left">0x2F</td><td align="left">2 (800x600@60)</td><td align="left">0</td><td align="left">1</td><td align="left">400x600 2-colour</td><td align="right">30,000</td></tr>
+<tr><td align="left">0x88</td><td align="left">0 (640x480@60)</td><td align="left">1</td><td align="left">1</td><td align="left">40x15 text</td><td align="right">1,200</td></tr>
+<tr><td align="left">0x89</td><td align="left">0 (640x480@60)</td><td align="left">1</td><td align="left">1</td><td align="left">40x30 text</td><td align="right">2,400</td></tr>
+<tr><td align="left">0x8A</td><td align="left">0 (640x480@60)</td><td align="left">1</td><td align="left">1</td><td align="left">320x240 True-colour</td><td align="right">307,200</td></tr>
+<tr><td align="left">0x8B</td><td align="left">0 (640x480@60)</td><td align="left">1</td><td align="left">1</td><td align="left">320x240 High-colour</td><td align="right">153,600</td></tr>
+<tr><td align="left">0x8C</td><td align="left">0 (640x480@60)</td><td align="left">1</td><td align="left">1</td><td align="left">320x240 256-colour</td><td align="right">76,800</td></tr>
+<tr><td align="left">0x8D</td><td align="left">0 (640x480@60)</td><td align="left">1</td><td align="left">1</td><td align="left">320x240 16-colour</td><td align="right">38,400</td></tr>
+<tr><td align="left">0x8E</td><td align="left">0 (640x480@60)</td><td align="left">1</td><td align="left">1</td><td align="left">320x240 4-colour</td><td align="right">19,200</td></tr>
+<tr><td align="left">0x8F</td><td align="left">0 (640x480@60)</td><td align="left">1</td><td align="left">1</td><td align="left">320x240 2-colour</td><td align="right">9,600</td></tr>
+<tr><td align="left">0x98</td><td align="left">1 (640x400@70)</td><td align="left">1</td><td align="left">1</td><td align="left">40x12 text</td><td align="right">960</td></tr>
+<tr><td align="left">0x99</td><td align="left">1 (640x400@70)</td><td align="left">1</td><td align="left">1</td><td align="left">40x25 text</td><td align="right">2,000</td></tr>
+<tr><td align="left">0x9A</td><td align="left">1 (640x400@70)</td><td align="left">1</td><td align="left">1</td><td align="left">320x200 True-colour</td><td align="right">256,000</td></tr>
+<tr><td align="left">0x9B</td><td align="left">1 (640x400@70)</td><td align="left">1</td><td align="left">1</td><td align="left">320x200 High-colour</td><td align="right">128,000</td></tr>
+<tr><td align="left">0x9C</td><td align="left">1 (640x400@70)</td><td align="left">1</td><td align="left">1</td><td align="left">320x200 256-colour</td><td align="right">64,000</td></tr>
+<tr><td align="left">0x9D</td><td align="left">1 (640x400@70)</td><td align="left">1</td><td align="left">1</td><td align="left">320x200 16-colour</td><td align="right">32,000</td></tr>
+<tr><td align="left">0x9E</td><td align="left">1 (640x400@70)</td><td align="left">1</td><td align="left">1</td><td align="left">320x200 4-colour</td><td align="right">16,000</td></tr>
+<tr><td align="left">0x9F</td><td align="left">1 (640x400@70)</td><td align="left">1</td><td align="left">1</td><td align="left">320x200 2-colour</td><td align="right">8,000</td></tr>
+<tr><td align="left">0xA8</td><td align="left">2 (800x600@60)</td><td align="left">1</td><td align="left">1</td><td align="left">50x18 text</td><td align="right">1,800</td></tr>
+<tr><td align="left">0xA9</td><td align="left">2 (800x600@60)</td><td align="left">1</td><td align="left">1</td><td align="left">50x37 text</td><td align="right">3,700</td></tr>
+<tr><td align="left">0xAA</td><td align="left">2 (800x600@60)</td><td align="left">1</td><td align="left">1</td><td align="left">400x300 True-colour</td><td align="right">480,000</td></tr>
+<tr><td align="left">0xAB</td><td align="left">2 (800x600@60)</td><td align="left">1</td><td align="left">1</td><td align="left">400x300 High-colour</td><td align="right">240,000</td></tr>
+<tr><td align="left">0xAC</td><td align="left">2 (800x600@60)</td><td align="left">1</td><td align="left">1</td><td align="left">400x300 256-colour</td><td align="right">120,000</td></tr>
+<tr><td align="left">0xAD</td><td align="left">2 (800x600@60)</td><td align="left">1</td><td align="left">1</td><td align="left">400x300 16-colour</td><td align="right">60,000</td></tr>
+<tr><td align="left">0xAE</td><td align="left">2 (800x600@60)</td><td align="left">1</td><td align="left">1</td><td align="left">400x300 4-colour</td><td align="right">30,000</td></tr>
+<tr><td align="left">0xAF</td><td align="left">2 (800x600@60)</td><td align="left">1</td><td align="left">1</td><td align="left">400x300 2-colour</td><td align="right">15,000</td></tr>
+</tbody></table>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="hardware_soc.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="hardware_baseboards.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="hardware_soc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="hardware_baseboards.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

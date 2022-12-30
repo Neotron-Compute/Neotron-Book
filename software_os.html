@@ -1,0 +1,608 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The Neotron OS - Neotron - The Embedded Rust Home Computer Platform</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> What is Neotron?</a></li><li class="chapter-item expanded "><a href="licence.html"><strong aria-hidden="true">2.</strong> Licence</a></li><li class="chapter-item expanded "><a href="credits.html"><strong aria-hidden="true">3.</strong> Credits</a></li><li class="chapter-item expanded affix "><li class="part-title">The Software</li><li class="chapter-item expanded "><a href="software.html"><strong aria-hidden="true">4.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="software_bios.html"><strong aria-hidden="true">5.</strong> The Neotron BIOS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="software_bios_apicalls.html"><strong aria-hidden="true">5.1.</strong> API Calls</a></li></ol></li><li class="chapter-item expanded "><a href="software_os.html" class="active"><strong aria-hidden="true">6.</strong> The Neotron OS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="software_os_apicalls.html"><strong aria-hidden="true">6.1.</strong> API Calls</a></li></ol></li><li class="chapter-item expanded "><a href="software_command_shell.html"><strong aria-hidden="true">7.</strong> The Neotron Command Shell</a></li><li class="chapter-item expanded "><a href="software_menu_shell.html"><strong aria-hidden="true">8.</strong> The Neotron Command Menu</a></li><li class="chapter-item expanded "><a href="software_applications.html"><strong aria-hidden="true">9.</strong> Neotron Applications</a></li><li class="chapter-item expanded affix "><li class="part-title">The Hardware</li><li class="chapter-item expanded "><a href="hardware.html"><strong aria-hidden="true">10.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="hardware_soc.html"><strong aria-hidden="true">11.</strong> The System On Chip</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="hardware_soc_video.html"><strong aria-hidden="true">11.1.</strong> Video</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.2.</strong> Audio</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.3.</strong> GPIO</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.4.</strong> SPI Bus</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.5.</strong> I²C Bus</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.6.</strong> UART/MIDI</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.7.</strong> RTC</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.8.</strong> SD Card</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.9.</strong> USB</div></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.</strong> Expanding the System</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">12.1.</strong> Video</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.2.</strong> Audio</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.3.</strong> GPIO</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.4.</strong> UART/MIDI/RS-232</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.5.</strong> RTC</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.6.</strong> SD Card</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.7.</strong> Keyboard/Mouse</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.8.</strong> Ethernet</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.9.</strong> Wi-Fi</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.10.</strong> Bluetooth</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.11.</strong> USB</div></li></ol></li><li class="chapter-item expanded "><a href="hardware_baseboards.html"><strong aria-hidden="true">13.</strong> Baseboards</a></li><li class="chapter-item expanded affix "><li class="part-title">Neotron Systems</li><li class="chapter-item expanded "><a href="systems.html"><strong aria-hidden="true">14.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="neotron_32.html"><strong aria-hidden="true">15.</strong> Neotron 32</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="neotron_32_video.html"><strong aria-hidden="true">15.1.</strong> Video</a></li><li class="chapter-item expanded "><a href="neotron_32_audio.html"><strong aria-hidden="true">15.2.</strong> Audio</a></li><li class="chapter-item expanded "><a href="neotron_32_sdmmc.html"><strong aria-hidden="true">15.3.</strong> SD Card Slot</a></li><li class="chapter-item expanded "><a href="neotron_32_ps2.html"><strong aria-hidden="true">15.4.</strong> PS/2 and Joystick</a></li><li class="chapter-item expanded "><a href="neotron_32_wifi.html"><strong aria-hidden="true">15.5.</strong> WiFi</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">15.6.</strong> Expansion</div></li><li class="chapter-item expanded "><a href="neotron_32_parallel.html"><strong aria-hidden="true">15.7.</strong> Parallel Port</a></li><li class="chapter-item expanded "><a href="neotron_32_rs232.html"><strong aria-hidden="true">15.8.</strong> RS-232</a></li><li class="chapter-item expanded "><a href="neotron_32_midi.html"><strong aria-hidden="true">15.9.</strong> MIDI</a></li><li class="chapter-item expanded "><a href="neotron_32_usb.html"><strong aria-hidden="true">15.10.</strong> USB</a></li><li class="chapter-item expanded "><a href="neotron_32_rtc.html"><strong aria-hidden="true">15.11.</strong> RTC</a></li></ol></li><li class="chapter-item expanded "><a href="neotron_pico.html"><strong aria-hidden="true">16.</strong> Neotron Pico</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="neotron_pico_video.html"><strong aria-hidden="true">16.1.</strong> Video</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.2.</strong> Audio</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.3.</strong> SD Card Slot</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.4.</strong> PS/2</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.5.</strong> Expansion</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.6.</strong> USB</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.7.</strong> RTC</div></li></ol></li><li class="chapter-item expanded "><a href="neotron_340st.html"><strong aria-hidden="true">17.</strong> Neotron 340ST</a></li><li class="chapter-item expanded "><a href="neotron_500.html"><strong aria-hidden="true">18.</strong> Neotron 500</a></li><li class="chapter-item expanded "><a href="neotron_600.html"><strong aria-hidden="true">19.</strong> Neotron 600</a></li><li class="chapter-item expanded "><a href="neotron_1000.html"><strong aria-hidden="true">20.</strong> Neotron 1000</a></li><li class="chapter-item expanded "><a href="neotron_9x.html"><strong aria-hidden="true">21.</strong> Neotron 9X</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Neotron - The Embedded Rust Home Computer Platform</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#the-neotron-os" id="the-neotron-os">The Neotron OS</a></h1>
+<p>The Neotron OS is the hardware-agnosting implementation of the Neotron API. It uses the BIOS to interact with the hardware, allowing it to run on different hardware platforms with the minimum number of changes.</p>
+<pre><code>+-------+-------------+
+|       |             |
+| Shell | Application |
+|       |             |
++=======+=============+
+|                     |
+|  Operating System   |
+|                     |
++=====================+
+|                     |
+|        BIOS         |
+|                     |
++---------------------+
+|                     |
+|    Raw Hardware     |
+|                     |
++---------------------+
+</code></pre>
+<p>It should implement:</p>
+<ul>
+<li>File/Device handling (open, read, write, seek, etc)</li>
+<li>A FAT16/32 compatible filesystem with MS-DOS MBR partitions (max 2 TiB disk size - 2<sup>32</sup> sectors of 512 bytes)</li>
+<li>A text-mode console, with cursor</li>
+<li>Basic line-based input and character based raw input</li>
+<li>Simple bitmap graphics primitives (lines, rectangles, fill, etc)</li>
+<li>An audio synthesiser</li>
+<li>Input/output stream handling</li>
+<li>Digital (Atari) joystick support</li>
+<li>A TCP/IP networking stack</li>
+<li>MIDI support</li>
+<li>Jumping to applications located in RAM or ROM, giving them access to the OS</li>
+<li>Supporting special 'shell' applications which can chain-load small programs (e.g. command-line utilities) without being unloaded</li>
+<li>Memory allocation/deallocation routines</li>
+<li>Run-time volume mounting/unmounting</li>
+</ul>
+<p>Selected non-goals (i.e. things we aren't going to support) include:</p>
+<ul>
+<li>Co-operative multi-tasking</li>
+<li>Pre-emptive multi-threading</li>
+<li>Virtual Memory (although we might support a special API for paging to and from disk)</li>
+<li>Processes / process isolation</li>
+</ul>
+<p>Our ultimate goal is that one day we could offer a version of the Rust Standard Library (<code>std</code>) which uses the Neotron OS API - albeit without the sub-process and thread support.</p>
+<p>Programming on the Neotron usually involves first loading the specific interpreter for that language - unless you've swapped out the standard shell for something like a BASIC interpreter.</p>
+<h2><a class="header" href="#filename-convention" id="filename-convention">Filename Convention</a></h2>
+<p>Files live in volumes. Volumes on fixed or removable disks must be formatted with the FAT12, FAT16 or FAT32 filesystem and live either live in a disk partition identified by a PC Master Boot Record (with a suitable Filesystem Type), or live at the start of the drive. Volumes are allocated a volume number, starting with <code>0:</code>, then <code>1:</code> etc. File paths are relative to a volume number. Paths are separated with a <code>/</code> character. The root directory is called <code>/</code>.</p>
+<p>When a volume has a name, you can refer to it as <code>&lt;name&gt;:</code> instead of <code>&lt;id&gt;:</code>. For example <code>work:/Documents/hello.txt</code> refers to a file called <code>hello.txt</code> inside a folder called <code>Documents</code> which lives on a volume called <code>work</code>.</p>
+<p>It is an error to try and create a file containing a <code>:</code> character. Any files or directories which do contain invalid characters are as if the character was replaced with <code>_</code>. When a directory contains multiple files with the same name, any attempt to read the file will only be able to access the one that is found first. Any attempt to create a new file will cause any existing files of the same name in the same folder to be deleted.</p>
+<p>For example:</p>
+<pre><code class="language-console">0:/&gt; dir 1:
+Listing files in 1:/
+FOO.TXT      1234  2019-10-17 23:20:01 A--
+COMMANDS.SH    34  2019-10-17 23:20:11 AR-
+FOLDER       &lt;DIR&gt; 2019-09-13 20:20:11 D--
+
+0:/&gt; dir 1:/FOLDER
+Listing files in 1:/FOLDER
+BAR.TXT      1234  2019-10-18 10:11:13 ---
+
+0:/&gt; cd 1:/FOLDER
+
+1:/FOLDER&gt; dir
+Listing files in 1:/FOLDER
+BAR.TXT      1234  2019-10-18 10:11:13 ---
+
+1:/&gt;
+</code></pre>
+<p>Unlike MS-DOS, which has a separate <em>current directory</em> for each volume (i.e. drive letter), Neotron maintains a UNIX-like single <em>current directory</em> which includes the name of the current volume. Where a volume is given without a directory path, the root directory (<code>/</code>) is presumed.</p>
+<h2><a class="header" href="#file-permissions" id="file-permissions">File Permissions</a></h2>
+<p>Files can be opened as read-only (write-none), write-truncate or write-append. Because Neotron is single-tasking and non-re-entrant, there is no support for lock files or exclusive file creation, but files are locked when they are opened so they can only be opened once at any one time. Files on disk support the standard FAT16/FAT32 attributes - Archive, Read-Only, Hidden and System. Seeking uses 64-bit byte offsets, although note that FAT32 limits files to 4 GiB in size.</p>
+<h2><a class="header" href="#file-operations" id="file-operations">File Operations</a></h2>
+<p>A file handle, whether pointing to a file on a volume, or to a <a href="#special-devices">Special Device</a>, generally has the following functions available. These functions broadly follow the POSIX model.</p>
+<ul>
+<li>
+<p><code>read</code> - obtain some bytes from this handle. A <code>&amp;mut [u8]</code> is supplied, and either an integer is returned which reports how many bytes in that buffer were filled by the function call, or an error is returned. The call will wait until the buffer is full, or the timeout has been met - the timeout may be zero, some finite value, or infinite. Some files (e.g. block devices) only support reading fixed size blocks and attempts to read any other size block will give an error.</p>
+</li>
+<li>
+<p><code>write</code> - sent some bytes to this handle. A <code>&amp;[u8]</code> is supplied, and either an integer is returned which reports how many bytes from that buffer were sent by the function call, or an error is returned. The call will wait until all the bytes have been sent, or the timeout has been met - the timeout may be zero, some finite value, or infinite.  Some files (e.g. block devices) only support writing fixed size blocks and attempts to write any other size block will give an error.</p>
+</li>
+<li>
+<p><code>seek</code> - adjust the current pointer in the file. Files opened for reading start with the pointer at the beginning. Files opened for writing start with the pointer at the end. Some special devices are not seekable and this function will return an error. The pointer can be adjusted with a number of bytes relative to a) the current position, b) the start of the file, or c) the end of the file. Seeking beyond the end of a file on disk is not supported.  Some files (e.g. block devices) only support seeking to particular offsets (e.g. a multiple of the block size) and attempting to seek to any other offset will give an error.</p>
+</li>
+</ul>
+<h2><a class="header" href="#special-devices" id="special-devices">Special Devices</a></h2>
+<p>There are special devices which look like files, but are not. They have names which are like volumes, but contain a '$' character. It is an error to try and use a regular volume with <code>$</code> in the name. Where the device name contains an <code>x</code>, the <code>x</code> should be replaced with a single digit (e.g. 0 or 1) to identify a specific device.</p>
+<ul>
+<li><code>CON$:</code> - The console. You can read from here to get line-buffered text input and write here to put UTF-8 text on the screen (with ANSI code sequence support).</li>
+<li><code>KBD$:</code> - The raw keyboard. You can read from here to get raw keyboard events (such as Up Arrow key, or Page Down).</li>
+<li><code>TIME$:</code> - Gets/sets the system time (read/write).</li>
+<li><code>GFX$:</code> - A bitmap framebuffer device.</li>
+<li><code>PRNx$:</code> - A printer. Write here to send data to the printer, read to get print status.</li>
+<li><code>DISCx$:</code> - An SD card or other block device (can read/write raw 512 byte blocks).</li>
+<li><code>SERx$:</code> - An RS-232 serial device (read/write).</li>
+<li><code>TONEx$:</code> - A tone generator device (write-only).</li>
+<li><code>PCMx$:</code> - A PCM device (write for playback, read for record).</li>
+<li><code>JSx$:</code> - A Joystick (read-only).</li>
+</ul>
+<p>Additional parameters may be specified after the <code>$</code>, separated by <code>;</code>. For example:</p>
+<ul>
+<li><code>SER0$bps=9600;parity=N;timeout=100:</code> - The first RS-232 serial device, at 9600 bps, with a 100 frame read/write timeout.</li>
+<li><code>PCM0$channels=2;bit=8;samplerate=8000:</code> - A PCM interface configured for stereo 8kHz 8-bit.</li>
+</ul>
+<p>Special devices do not support filenames or paths. To access something like a network volume, the volume must be mounted and given a normal volume ID. The API for this is TBD.</p>
+<h3><a class="header" href="#writing-to-con" id="writing-to-con">Writing to <code>CON$:</code></a></h3>
+<p>The Console device <code>CON$:</code>, like every other file, is a bi-direction octet pipe. Unfortunately, one octet is not enough to represent the full set of characters a modern computer needs to support. Rust handles this by insisting that text (<code>&amp;str</code> string slices and <code>String</code> owned strings) is in Unicode Translation Format 8 (UTF-8). This is a mechanism by which Unicode characters (which are around 21 bits in size) can be encoded as between one and six octets. The useful property is that the first 127 Unicode characters map to a single octet, which makes it interchangeable with standard ASCII.</p>
+<p>In text mode, most Neotron systems will only have one octet avilable per text cell to record which particular character being displayed in that cell, therefore placing a limit of 256 different glyphs in any given font. The font must therefore also provide a translation function which can convert from a 21-bit Unicode character to an octet for storage in the screen buffer. Typically the fonts will follow some standard 8-bit <em>code page</em>, such as <a href="https://en.wikipedia.org/wiki/Code_page_850">Code Page 850</a>, but this is not enforced and aside from some characters failing to render correctly on the screen, is invisible from an application point of view.</p>
+<p>Ordinarily the OS will maintain a cursor position and any text written to the Console will be added to the screen at that position. The screen has a nominal width and height, and when the cursor gets to the end of a line it moves down to the start of the next line. The console will also handle the following special characters in the usual way:</p>
+<table><thead><tr><th>ASCII Code</th><th>C Escape Sequence</th><th>Keypress</th><th>Name</th><th>Function</th></tr></thead><tbody>
+<tr><td>0x07</td><td><code>\a</code></td><td>Ctrl+H</td><td>Bell</td><td>Produces a beep from the speaker</td></tr>
+<tr><td>0x08</td><td><code>\b</code></td><td>Ctrl+H</td><td>Backspace</td><td>Move to one character to the left</td></tr>
+<tr><td>0x09</td><td><code>\t</code></td><td>Ctrl+I</td><td>Tab</td><td>Move to next column which is a multiple of 8</td></tr>
+<tr><td>0x0A</td><td><code>\n</code></td><td>Ctrl+J</td><td>Line Feed</td><td>Move to start of next line</td></tr>
+<tr><td>0x0C</td><td><code>\f</code></td><td>Ctrl+L</td><td>Form Feed</td><td>Clear the screen and move to start of first line</td></tr>
+<tr><td>0x0D</td><td><code>\r</code></td><td>Ctrl+M</td><td>Carriage Return</td><td>Move to start of current line</td></tr>
+</tbody></table>
+<p>For some text mode applications, more precise control is required over the position of the cursor, the colour of the text, and so on. This is acheived by inserting <em>ANSI Escape Sequences</em> into the octet stream. The sequences supported are a subset of those defined in <a href="https://www.ecma-international.org/publications/files/ECMA-ST/Ecma-048.pdf">ECMA-48</a>, and broadly align with those commonly used on Linux/UNIX systems, although support for the specific colours, etc, depends on the video support available in the BIOS. In the following table:</p>
+<ul>
+<li><code>ESC</code> means <em>Escape</em>. It is represented by the single Unicode character <code>U+001B</code> (<code>0x1B</code> in UTF-8).</li>
+<li><code>CSI</code> means <em>Control Sequence Introducer</em>. It is represented by the the single Unicode character <code>U+009B</code> (or <code>0xC2 0x9B</code> in UTF-8), or alternatively the two character sequence <code>ESC [</code> (<code>0x1B 0x5B</code> in UTF-8).</li>
+<li>The lowercase characters <em>n</em> and <em>m</em> represent optional integer parameters, rendered as decimal in ASCII using the characters <code>0</code> to <code>9</code>.</li>
+<li>Rows and Columns are 1 indexed, with <code>1,1</code> being the top left of the screen.</li>
+</ul>
+<table><thead><tr><th>Sequence</th><th>Function</th></tr></thead><tbody>
+<tr><td>ESC c</td><td>Reset to Intial State</td></tr>
+<tr><td>CSI <em>n</em> A</td><td>Cursor Up <em>n</em> (default 1) rows</td></tr>
+<tr><td>CSI <em>n</em> B</td><td>Cursor Down <em>n</em> (default 1) rows</td></tr>
+<tr><td>CSI <em>n</em> C</td><td>Cursor Forward <em>n</em> (default 1) columns</td></tr>
+<tr><td>CSI <em>n</em> D</td><td>Cursor Back <em>n</em> (default 1) columns</td></tr>
+<tr><td>CSI <em>n</em> ; <em>m</em> H</td><td>Cursor Position to row <em>n</em> (default 1) and column <em>m</em> (default 1)</td></tr>
+<tr><td>CSI <em>n</em> [ ; <em>m</em> ] m</td><td><em>Select Graphic Rendition</em> (see below for valid parameters)</td></tr>
+</tbody></table>
+<p>The <em>Select Graphic Rendition</em> codes are as follows. Note that multiple codes can be specified in one escape sequence, separated by semicolons. Most of the codes only affect text which is subsequently printed to the console - the only exception is the font select commands 10 to 13 which change the font for the entire screen. The loading of custom fonts is performed through a separate OS call.</p>
+<table><thead><tr><th>SGR Code</th><th>Function</th></tr></thead><tbody>
+<tr><td>0</td><td>All attributes off</td></tr>
+<tr><td>1</td><td>Subsequent text is bold</td></tr>
+<tr><td>8</td><td>Subsequent text is concealed (replaced with *)</td></tr>
+<tr><td>4</td><td>Subsequent text is underlined</td></tr>
+<tr><td>7</td><td>Swap foreground/background colours</td></tr>
+<tr><td>10</td><td>Select default font (usually VGA Code Page 850)</td></tr>
+<tr><td>11</td><td>Select alternative font 1 (usually Teletext)</td></tr>
+<tr><td>12</td><td>Select alternative font 2 (user defined)</td></tr>
+<tr><td>13</td><td>Select alternative font 3 (user defined)</td></tr>
+<tr><td>28</td><td>Turns off conceal mode</td></tr>
+<tr><td>30</td><td>Set foreground colour to Black</td></tr>
+<tr><td>31</td><td>Set foreground colour to Red</td></tr>
+<tr><td>32</td><td>Set foreground colour to Green</td></tr>
+<tr><td>33</td><td>Set foreground colour to Yellow</td></tr>
+<tr><td>34</td><td>Set foreground colour to Blue</td></tr>
+<tr><td>35</td><td>Set foreground colour to Magenta</td></tr>
+<tr><td>36</td><td>Set foreground colour to Cyan</td></tr>
+<tr><td>37</td><td>Set foreground colour to White</td></tr>
+<tr><td>40</td><td>Set background colour to Black</td></tr>
+<tr><td>41</td><td>Set background colour to Red</td></tr>
+<tr><td>42</td><td>Set background colour to Green</td></tr>
+<tr><td>43</td><td>Set background colour to Yellow</td></tr>
+<tr><td>44</td><td>Set background colour to Blue</td></tr>
+<tr><td>45</td><td>Set background colour to Magenta</td></tr>
+<tr><td>46</td><td>Set background colour to Cyan</td></tr>
+<tr><td>47</td><td>Set background colour to White</td></tr>
+</tbody></table>
+<p>The Neotron application library allows access to the console via two means:</p>
+<ul>
+<li>Implicitly, through the use of the <code>println!</code> macro.</li>
+<li>Explicitly, through the use of the Standard Output file handle, obtained with <code>neotron::io::stdout()</code> or by opening the <code>CON$:</code> device for writing.</li>
+</ul>
+<p>The Neotron OS doesn't have a concept of 'Standard Error' as distinct from 'Standard Output'. Application libraries may wish to emulate this feature by, for example, printing any text output by <code>eprintln!</code> in a different colour.</p>
+<h3><a class="header" href="#reading-from-con" id="reading-from-con">Reading from <code>CON$:</code></a></h3>
+<p>Performing a read on the console device will block the application until either the Enter key is pressed on the keyboard, or <code>Control + C</code> is pressed on the keyboard. If the Enter key is pressed, the UTF-8 encoding of the characters entered by the user are copied to the given buffer (up to as many as will fit). If too many characters are entered to fit in to the given buffer, the Console will beep and the user must use Backspace to remove some characters and free up some buffer space. Characters being entered are echoed to the console (although Conceal mode will help if the user is entering a password).</p>
+<p>In the background during this function, the OS is polling the keyboard for key events, handling special keys (like Backspace, or Shift) and when a valid key is pressed, the matching Unicode character is UTF-8 encoded and added to the buffer.</p>
+<p>On some Neotron systems, pressing the 'Up' arrow key will restore the previous command line contents (like when using the <code>readline</code> library on GNU/UNIX systems).</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use neotron::fs::File;
+let mut buffer = [0u8; 16];
+/// The standard Neotron file read functions can be used to read from the console.
+let mut console = File::open(&quot;CON$:&quot;)
+	.expect(&quot;Failed to open console for reading&quot;);
+match console.read(&amp;mut buffer) {
+	Ok(0) =&gt; {
+		println!(&quot;You entered an empty string&quot;);
+	}
+	Ok(n) =&gt; {
+		// The Neotron OS guarantees this will be valid UTF-8
+		let read_string = unsafe {
+			core::str::from_utf8_unchecked(&amp;buffer[0..n])
+		};
+		println!(&quot;You entered {:?}&quot;, read_string);
+	}
+	Err(e) =&gt; {
+		eprintln!(&quot;Oh, I got read error {:?} reading from the console&quot;, e);
+	}
+}
+/// There is also a Neotron Application Library helper function which reads to a buffer (unlike the normal Rust Standard Library function which reads to a `String`).
+let bytes_read = neotron::io::stdin()
+	.read_line(&amp;mut buffer)
+	.expect(&quot;Failed to read from console&quot;);
+<span class="boring">}
+</span></code></pre></pre>
+<h3><a class="header" href="#reading-from-kbd" id="reading-from-kbd">Reading from <code>KBD$:</code></a></h3>
+<p>For some applications, such as games, the application will need raw key up/down events rather than the Unicode characters those key events correspond to. For this, there is a device which returns raw key events. Reading from this device is non-blocking. Mapping is performed if the current keyboard layout is non-QWERTY (e.g. the top left letter key on an AZERTY keyboard is <code>Key::LetterA</code> not <code>Key::LetterQ</code>), but you must perform your own handling of shifted characters (for example how Shift + <code>.</code> gives you a <code>&gt;</code> character when using a United Kingdom keyboard layout). The easiest way to handle this is to allow users to map their own keys (e.g. &quot;Press the key you want to use for 'Jump': &quot;).</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum Key {
+	LetterA,
+	LetterB,
+	LetterC,
+	LetterD,
+	...
+	Digit0,
+	Digit1,
+	...
+	Dot,
+	Comma,
+	PrintScreen,
+	Up,
+	Down,
+	Left,
+	Right,
+	Home,
+	End,
+	Delete,
+	...
+}
+
+struct KeyEvent(u8);
+
+impl KeyEvent {
+	unsafe fn from_octet(u8) -&gt; KeyEvent;
+	fn is_keydown(&amp;self) -&gt; bool;
+	fn is_keyup(&amp;self) -&gt; bool;
+	fn get_key(&amp;self) -&gt; Key;
+}
+
+use neotron::fs::File;
+let mut kb = File::open(&quot;KBD$:&quot;).expect(&quot;Failed to open raw keyboard&quot;);
+let buffer = [0u8; 16];
+/// The standard file read function is used to read from the keyboard
+match kb.read(&amp;mut buffer) {
+	Ok(0) =&gt; {
+		println!(&quot;No raw key events available&quot;);
+	}
+	Ok(n) =&gt; {
+		for octet in buffer[0..n].iter() {
+			let ev = unsafe { KeyEvent::from_octet(octet) };
+			println!(&quot;Received event {:?}&quot;, ev);
+		}
+	}
+	Err(e) =&gt; {
+		eprintln!(&quot;Oh, I got read error {:?} reading from the keyboard&quot;, e);
+	}
+}
+
+<span class="boring">}
+</span></code></pre></pre>
+<h3><a class="header" href="#writing-to-kbd" id="writing-to-kbd">Writing to <code>KBD$:</code></a></h3>
+<p>The least significant (1) bit of any byte written to KBD$ sets the <em>Num Lock</em> light. The next (2) bit of any byte written to KBD$ sets the <em>Caps Lock</em> light. The next (4) bit of any byte sets the <em>Scroll Lock</em> light. This is useful if you are using raw keyboard mode to handle key events and want to perform your own Num Lock, Caps Lock and Scroll Lock handling.</p>
+<h3><a class="header" href="#writing-to-time" id="writing-to-time">Writing to <code>TIME$:</code></a></h3>
+<p>Write an ASCII string in ISO-8601 format (e.g. <code>2020-01-01T15:44:21.031Z</code>) to set the time.</p>
+<h3><a class="header" href="#reading-from-time" id="reading-from-time">Reading from <code>TIME$:</code></a></h3>
+<p>Reading from this device will return an ASCII/UTF-8 string in ISO-8601 format (e.g. <code>2020-01-01T15:44:21.031Z</code>).</p>
+<pre><code class="language-console"># Reading the time in the Neotron Shell with the cat command
+$ cat TIME$:
+2020-01-01T15:44:21.031Z
+$
+</code></pre>
+<h3><a class="header" href="#writing-to-gfx" id="writing-to-gfx">Writing to <code>GFX$:</code></a></h3>
+<p>Opening the <code>GFX$mode=X:</code> device puts the system into specified video mode <em>X</em> and gives access to the underlying video RAM. Optional <em>x</em>, <em>y</em>, <em>width</em> and <em>height</em> parameters allow a window to be created into video RAM, which is useful if you want to update a small region. Setting pixels on the screen is simply a case of seeking to the correct position and writing out as many bytes as required. The specific format of the bytes written to this device will depend on the current video mode. There is some other (TBD) mechanism obtain the list of supported video modes and their formats, but they will include Chunky modes (where multiple consecutive bits/bytes map to Red, Green and Blue components for each pixel) and Planar modes (where Red, Green and Blue each have their own distinct regions). This device is useful to blitting bitmaps to the screen, but drawing lines and circles is more efficiently performed through other OS APIs.</p>
+<pre><code class="language-console"># Using the copy command in the Neotron Shell to put a picture at the top of the screen in Mode 7
+$ copy 0:/EXAMPLE.GFX GFX$mode=7;height=150:
+30000 bytes copied
+$
+</code></pre>
+<h3><a class="header" href="#reading-from-gfx" id="reading-from-gfx">Reading from <code>GFX$:</code></a></h3>
+<p>Reading from this device allows an application to determine what is currently on the screen. The data is in the same format as when <a href="#writing-to-gfx">writing to the device</a>.</p>
+<h3><a class="header" href="#writing-to-prnx" id="writing-to-prnx">Writing to <code>PRNx$:</code></a></h3>
+<p>Ordinarily, every byte written to this device is sent to the Parallel Port, followed by high pulse on the <code>STROBE</code> pin and a busy-wait for the <code>BUSY</code> pin to return low. If any error signals are activated by the printer, the write is ended early.</p>
+<p>Opening this device with the option <code>raw</code>, enables raw mode. In this mode, each write must be a two byte value:</p>
+<ul>
+<li>Byte 0 is 0x00 to write to the data pins or 0x01 to write to the control pins</li>
+<li>Byte 1 is the value to write to all eight data pins, or to the control pins as per the following table.</li>
+</ul>
+<table><thead><tr><th>Bit Number</th><th>Description</th></tr></thead><tbody>
+<tr><td>0</td><td>1 to enable STROBE (active high)</td></tr>
+<tr><td>1</td><td>1 to enable LINE_FEED (active low)</td></tr>
+<tr><td>2</td><td>1 to enable RESET (active high)</td></tr>
+<tr><td>3</td><td>1 to enable SELECT_PRINTER (active low)</td></tr>
+</tbody></table>
+<p>In <code>raw</code> mode you can use the Parallel Port as a generic GPIO port with 12 output pins, and 5 <a href="#reading-from-prn">input pins</a>.</p>
+<h3><a class="header" href="#reading-from-prnx" id="reading-from-prnx">Reading from <code>PRNx$:</code></a></h3>
+<p>A read will return one byte which is a bitmask of the status bits, regardless of whether it was opened in raw mode or normal mode.</p>
+<table><thead><tr><th>Bit Number</th><th>Description</th></tr></thead><tbody>
+<tr><td>0</td><td>1 when ERROR is active (low)</td></tr>
+<tr><td>1</td><td>1 when SELECT_IN is active (high)</td></tr>
+<tr><td>2</td><td>1 when PAPER_OUT is active (high)</td></tr>
+<tr><td>3</td><td>1 when ACK is active (low)</td></tr>
+<tr><td>4</td><td>1 when BUSY is active (low)</td></tr>
+</tbody></table>
+<h3><a class="header" href="#writing-to-discx" id="writing-to-discx">Writing to <code>DISCx$:</code></a></h3>
+<p>Allows access to the raw blocks on a disk. Useful for writing out disk images. Support for creating partition tables is TBD, and may have to be done at the application level by writing to the first sector on disk. Writing to raw disk structures whilst files are open on that volume is likely to lead to filesystem corruption.</p>
+<h3><a class="header" href="#reading-from-discx" id="reading-from-discx">Reading from <code>DISCx$:</code></a></h3>
+<p>Allows access to the raw blocks on a disk. Useful for taking disk images, or inspecting raw disk structures. The option <code>partition=X</code> allows a specific partition to be selected, where <code>1</code> to <code>4</code> are the first four Primary partitions, and <code>5</code> or greater selects a Logical Partition located within the Extended Partition. Inspecting the partition metadata (start, end, filesystem type, etc) must be done at the application level by reading the first sector.</p>
+<h3><a class="header" href="#opening-serx" id="opening-serx">Opening 'SERx$:'</a></h3>
+<table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
+<tr><td>handshaking=rtscts</td><td>Enable RTS/CTS handshaking</td></tr>
+<tr><td>handshaking=xonoff</td><td>Enable XON/XOFF handshaking</td></tr>
+<tr><td>handshaking=none</td><td>Disable handshaking (default)</td></tr>
+<tr><td>bps=X</td><td>Set bitrate to X bits per second</td></tr>
+<tr><td>timeout=X</td><td>Set read/write timeout to X frames</td></tr>
+<tr><td>timeout=none</td><td>Block forever on read/write</td></tr>
+<tr><td>timeout=0</td><td>Never block on read/write</td></tr>
+</tbody></table>
+<h3><a class="header" href="#writing-to-serx" id="writing-to-serx">Writing to <code>SERx$:</code></a></h3>
+<p>A write will block until all of the octets have been transmitted to the remote device at the specified bit rate, or a timeout occurs (if specified).</p>
+<h3><a class="header" href="#reading-from-serx" id="reading-from-serx">Reading from <code>SERx$:</code></a></h3>
+<p>A read will block until the given number of octets have been received from the remote device at the specified bit rate, or a timeout occurs (if specified).</p>
+<h3><a class="header" href="#opening-tonex" id="opening-tonex">Opening 'TONEx$:'</a></h3>
+<p>No options when opening TONE devices.</p>
+<h3><a class="header" href="#writing-to-tonex" id="writing-to-tonex">Writing to <code>TONEx$:</code></a></h3>
+<p>A tone is specified with three parameters:</p>
+<ul>
+<li>A frequency, in Hertz.</li>
+<li>A waveform (e.g. Square, Sine, Triangle, White Noise, etc)</li>
+<li>A volume (between 1 and 16)</li>
+</ul>
+<p>These three parameters are packed into four bytes:</p>
+<pre><code> Byte 0        Byte 1        Byte 2        Byte 3
++-------------+-------------+-------------+-------------+
+|Frequency LSB|Frequency MSB|Waveform     |Volume       |
++-------------+-------------+-------------+-------------+
+</code></pre>
+<p>The buffer written must be a multiple of four octets in length.</p>
+<h3><a class="header" href="#reading-from-tonex" id="reading-from-tonex">Reading from <code>TONEx$:</code></a></h3>
+<p>Not supported.</p>
+<h3><a class="header" href="#opening-pcmx" id="opening-pcmx">Opening 'PCMx$:'</a></h3>
+<table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
+<tr><td>channels=N</td><td>Enable <em>N</em> channels (default is 1)</td></tr>
+<tr><td>bits=U8</td><td>Set 8-bit linear unsigned samples</td></tr>
+<tr><td>bits=S8</td><td>Set 8-bit linear signed samples</td></tr>
+<tr><td>bits=U16</td><td>Set 16-bit linear unsigned samples</td></tr>
+<tr><td>bits=S16</td><td>Set 16-bit linear signed samples</td></tr>
+<tr><td>rate=X</td><td>Configure for X samples per second</td></tr>
+</tbody></table>
+<h3><a class="header" href="#writing-to-pcmx" id="writing-to-pcmx">Writing to <code>PCMx$:</code></a></h3>
+<p>When the PCM device is opened, the number of channels (mono/stereo), sample rate (e.g. 22,050 Hz), bit depth (e.g. 8 bits) are specified. The bytes written are the samples to be played, as little-endian integers. If there are multiple channels, the samples for each channel are supplied in turn before moving on to the next sample (e.g. <em>Left Sample N</em>, <em>Right Sample N</em>, <em>Left Sample N+1</em>, <em>Right Sample N+1</em>). You should write sufficiently often to avoid underflowing the internal PCM buffer.</p>
+<h3><a class="header" href="#reading-from-pcmx" id="reading-from-pcmx">Reading from <code>PCMx$:</code></a></h3>
+<p>When the PCM device is opened, the number of channels (mono/stereo), sample rate (e.g. 22,050 Hz), bit depth (e.g. 8 bits) are specified. The bytes read are the samples which have been recorded, as little-endian integers. If there are multiple channels, the samples for each channel are supplied in turn before moving on to the next sample (e.g. <em>Left Sample N</em>, <em>Right Sample N</em>, <em>Left Sample N+1</em>, <em>Right Sample N+1</em>). You should read sufficiently often to avoid overflowing the internal PCM buffer.</p>
+<h3><a class="header" href="#writing-to-jsx" id="writing-to-jsx">Writing to <code>JSx$:</code></a></h3>
+<p>Not supported</p>
+<h3><a class="header" href="#reading-from-jsx" id="reading-from-jsx">Reading from <code>JSx$:</code></a></h3>
+<p>Returns a bitmask of inputs from that joystick:</p>
+<table><thead><tr><th>Bit Number</th><th>Description</th></tr></thead><tbody>
+<tr><td>0</td><td>Up</td></tr>
+<tr><td>1</td><td>Down</td></tr>
+<tr><td>2</td><td>Left</td></tr>
+<tr><td>3</td><td>Right</td></tr>
+<tr><td>4</td><td>Fire 1 (B)</td></tr>
+<tr><td>5</td><td>Fire 2 (C)</td></tr>
+<tr><td>6</td><td>Fire 3 (A)</td></tr>
+<tr><td>7</td><td>Fire 4 (Start)</td></tr>
+</tbody></table>
+<p>Yes, the fire buttons are in that order - mainly because on a Master System pad, you only have Fire Button 1 and Fire Button 2, but on a Mega Drive pad, those same pins on the interface correspond to Fire Buttons B and C. If you have a standard Atari/Commodore joystick, you will probably only have Fire Button 1.</p>
+<p>The OS will poll the joystick once per video frame, so attempting to read more often than that will given repeated results. A fire button is very likely to be held for multiple frames, so you will need to store the previous reading and check which bits have flipped since last time.</p>
+<h2><a class="header" href="#threads-and-processes" id="threads-and-processes">Threads and Processes</a></h2>
+<p>The Neotron OS has no support for running multiple processes, nor for multi-threading, nor for multi-core systems. It is very much like MS-DOS and CP/M in this regard. It does, however, use locks to ensure that should the use of interrupts cause a function to be 're-entered', the situation is caught gracefully rather than leading to system instability. A user is, therefore, free to implement multi-threading within their application if they so wish.</p>
+<h2><a class="header" href="#memory-allocation" id="memory-allocation">Memory Allocation</a></h2>
+<p>The Neotron BIOS initialise all of the RAM, configures a stack, reserves a further portion of RAM for its own use, and passes the OS a structure which describes the start and end address of each contiguous block of remaining memory (and there may be several if your CPU has multiple separate SRAMs). From this remainder, the Neotron OS allocates what it needs for its own purposes.</p>
+<p>The Neotron OS has a built-in heap memory allocation routine (like <code>malloc</code>) and matching deallocation routine (like <code>free</code>) and it offers these to the currently running application. This saves the application having to include its own memory allocation routines. When an application is loaded, the heap is automatically set to use all of the remaining un-used RAM (which varies depending on the size of the application). Applications are usually (but not always) given the same stack as the OS and the BIOS, and so it is very possible for a badly behaved application to corrupt and/or crash the entire system.</p>
+<p>An application can always assume its own RAM for code and global variables starts at address <code>0x2000_0000</code>. The memory allocation routines may return an address from some other range (e.g. the AXI SRAM on an STM32H7 is at 0x2400_0000).</p>
+<h2><a class="header" href="#networking" id="networking">Networking</a></h2>
+<p>The TCP/IP stack offers a Berkley Sockets style API. Supported devices will include an SPI based Ethernet MAC/PHY devices (such as the Microchip ENC28J60) using <a href="https://github.com/m-labs/smoltcp">smoltcp</a>, and UART based Ethernet/WiFi/Cellular devices with on-board TCP/IP stack (such as the ESP-01).</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="software_bios_apicalls.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="software_os_apicalls.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="software_bios_apicalls.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="software_os_apicalls.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

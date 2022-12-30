@@ -1,0 +1,321 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>What is Neotron? - Neotron - The Embedded Rust Home Computer Platform</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="index.html" class="active"><strong aria-hidden="true">1.</strong> What is Neotron?</a></li><li class="chapter-item expanded "><a href="licence.html"><strong aria-hidden="true">2.</strong> Licence</a></li><li class="chapter-item expanded "><a href="credits.html"><strong aria-hidden="true">3.</strong> Credits</a></li><li class="chapter-item expanded affix "><li class="part-title">The Software</li><li class="chapter-item expanded "><a href="software.html"><strong aria-hidden="true">4.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="software_bios.html"><strong aria-hidden="true">5.</strong> The Neotron BIOS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="software_bios_apicalls.html"><strong aria-hidden="true">5.1.</strong> API Calls</a></li></ol></li><li class="chapter-item expanded "><a href="software_os.html"><strong aria-hidden="true">6.</strong> The Neotron OS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="software_os_apicalls.html"><strong aria-hidden="true">6.1.</strong> API Calls</a></li></ol></li><li class="chapter-item expanded "><a href="software_command_shell.html"><strong aria-hidden="true">7.</strong> The Neotron Command Shell</a></li><li class="chapter-item expanded "><a href="software_menu_shell.html"><strong aria-hidden="true">8.</strong> The Neotron Command Menu</a></li><li class="chapter-item expanded "><a href="software_applications.html"><strong aria-hidden="true">9.</strong> Neotron Applications</a></li><li class="chapter-item expanded affix "><li class="part-title">The Hardware</li><li class="chapter-item expanded "><a href="hardware.html"><strong aria-hidden="true">10.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="hardware_soc.html"><strong aria-hidden="true">11.</strong> The System On Chip</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="hardware_soc_video.html"><strong aria-hidden="true">11.1.</strong> Video</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.2.</strong> Audio</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.3.</strong> GPIO</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.4.</strong> SPI Bus</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.5.</strong> I²C Bus</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.6.</strong> UART/MIDI</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.7.</strong> RTC</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.8.</strong> SD Card</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">11.9.</strong> USB</div></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.</strong> Expanding the System</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">12.1.</strong> Video</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.2.</strong> Audio</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.3.</strong> GPIO</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.4.</strong> UART/MIDI/RS-232</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.5.</strong> RTC</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.6.</strong> SD Card</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.7.</strong> Keyboard/Mouse</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.8.</strong> Ethernet</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.9.</strong> Wi-Fi</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.10.</strong> Bluetooth</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.11.</strong> USB</div></li></ol></li><li class="chapter-item expanded "><a href="hardware_baseboards.html"><strong aria-hidden="true">13.</strong> Baseboards</a></li><li class="chapter-item expanded affix "><li class="part-title">Neotron Systems</li><li class="chapter-item expanded "><a href="systems.html"><strong aria-hidden="true">14.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="neotron_32.html"><strong aria-hidden="true">15.</strong> Neotron 32</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="neotron_32_video.html"><strong aria-hidden="true">15.1.</strong> Video</a></li><li class="chapter-item expanded "><a href="neotron_32_audio.html"><strong aria-hidden="true">15.2.</strong> Audio</a></li><li class="chapter-item expanded "><a href="neotron_32_sdmmc.html"><strong aria-hidden="true">15.3.</strong> SD Card Slot</a></li><li class="chapter-item expanded "><a href="neotron_32_ps2.html"><strong aria-hidden="true">15.4.</strong> PS/2 and Joystick</a></li><li class="chapter-item expanded "><a href="neotron_32_wifi.html"><strong aria-hidden="true">15.5.</strong> WiFi</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">15.6.</strong> Expansion</div></li><li class="chapter-item expanded "><a href="neotron_32_parallel.html"><strong aria-hidden="true">15.7.</strong> Parallel Port</a></li><li class="chapter-item expanded "><a href="neotron_32_rs232.html"><strong aria-hidden="true">15.8.</strong> RS-232</a></li><li class="chapter-item expanded "><a href="neotron_32_midi.html"><strong aria-hidden="true">15.9.</strong> MIDI</a></li><li class="chapter-item expanded "><a href="neotron_32_usb.html"><strong aria-hidden="true">15.10.</strong> USB</a></li><li class="chapter-item expanded "><a href="neotron_32_rtc.html"><strong aria-hidden="true">15.11.</strong> RTC</a></li></ol></li><li class="chapter-item expanded "><a href="neotron_pico.html"><strong aria-hidden="true">16.</strong> Neotron Pico</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="neotron_pico_video.html"><strong aria-hidden="true">16.1.</strong> Video</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.2.</strong> Audio</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.3.</strong> SD Card Slot</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.4.</strong> PS/2</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.5.</strong> Expansion</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.6.</strong> USB</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">16.7.</strong> RTC</div></li></ol></li><li class="chapter-item expanded "><a href="neotron_340st.html"><strong aria-hidden="true">17.</strong> Neotron 340ST</a></li><li class="chapter-item expanded "><a href="neotron_500.html"><strong aria-hidden="true">18.</strong> Neotron 500</a></li><li class="chapter-item expanded "><a href="neotron_600.html"><strong aria-hidden="true">19.</strong> Neotron 600</a></li><li class="chapter-item expanded "><a href="neotron_1000.html"><strong aria-hidden="true">20.</strong> Neotron 1000</a></li><li class="chapter-item expanded "><a href="neotron_9x.html"><strong aria-hidden="true">21.</strong> Neotron 9X</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Neotron - The Embedded Rust Home Computer Platform</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#what-is-neotron" id="what-is-neotron">What is Neotron?</a></h1>
+<p>Neotron is an attempt to make computers simple again, whilst also taking advantage of the very latest in programming language development. We are saddened by chat clients that require multi-Gigabyte installs, and systems with hundreds of millions of lines of source code that no one person could ever hope to understand. We want to build a machine that is sized for an individual to comprehend, not a trillion-dollar corporation.</p>
+<p>If you want a pithy sound-bite, it's like CP/M for tiny ARM microcontrollers, but written in Rust.</p>
+<h2><a class="header" href="#tell-me-more" id="tell-me-more">Tell me more...</a></h2>
+<p>Neotron is based around four fundamental components.</p>
+<ul>
+<li>A standardised OS interface, for portable Applications to call. This provides APIs for reading/writing files, accessing devices, writing to the screen, playing audio, etc.</li>
+<li>A standardised BIOS interface, for the Operating System to call. The BIOS abstracts the specific hardware implementation of the Video, Audio, UART, SPI, I2C, GPIO, Disk Drive, Parallel Printer, Keyboard and Mouse interfaces. By using the BIOS, we should be able to run the <em>exact same</em> Neotron OS on a variety of different microcontrollers.</li>
+<li>Use of the Rust Programming Language to write as much of the software as possible (we avoid raw assembler as much as possible, but we're happy to port existing applications that are written in C even if we avoid that language in the system software).</li>
+<li>The ARM Thumb-v7M instruction set (as supported by ARM Cortex-M based microcontrollers from the M3 and up). This is what allow us to run the same programs on microcontrollers from different vendors.</li>
+</ul>
+<p>Looking back at classic home computers of the 1980s and early 1990s though, we see systems that were (and still are) simple enough to understand, or even - with time - to learn to master. Here's a rough comparison with just a few of the classic systems we have taken as inspiration (where not otherwise specified, these are the first version launched of a given system):</p>
+<table><thead><tr><th align="left">Feature</th><th align="left">Neotron 32</th><th align="left">Neotron Pico</th><th align="left">IBM PC</th><th align="left">BBC Micro</th><th align="left">Commodore 64</th><th align="left">Apple Macintosh</th><th align="left">Amstrad PCW</th><th align="left">Amiga</th><th align="left">Acorn Archimedes</th></tr></thead><tbody>
+<tr><td align="left">Launch Year</td><td align="left">2020</td><td align="left">2021</td><td align="left">1981</td><td align="left">1981</td><td align="left">1982</td><td align="left">1984</td><td align="left">1985</td><td align="left">1985</td><td align="left">1987</td></tr>
+<tr><td align="left">Instruction Set</td><td align="left">ARMv7E-M</td><td align="left">ARMv6-M</td><td align="left">Intel x86</td><td align="left">MOS 6502</td><td align="left">MOS 6502</td><td align="left">Motorola 68k</td><td align="left">Zilog Z80</td><td align="left">Motorola 68k</td><td align="left">ARM v2</td></tr>
+<tr><td align="left">CPU</td><td align="left">Cortex-M4</td><td align="left">2x Cortex-M0+</td><td align="left">8088</td><td align="left">6502A</td><td align="left">6510</td><td align="left">68000</td><td align="left">Z80A</td><td align="left">68000</td><td align="left">ARM2</td></tr>
+<tr><td align="left">Clock Speed</td><td align="left">80 MHz</td><td align="left">2x 133 MHz</td><td align="left">4.77 MHz</td><td align="left">2 MHz</td><td align="left">1 MHz</td><td align="left">8 MHz</td><td align="left">4 MHz</td><td align="left">8 MHz</td><td align="left">8 MHz</td></tr>
+<tr><td align="left">Low Level OS</td><td align="left">Neotron BIOS</td><td align="left">Neotron BIOS</td><td align="left">IBM BIOS</td><td align="left">Acorn MOS</td><td align="left">KERNAL</td><td align="left">Toolbox</td><td align="left">XBIOS</td><td align="left">Kickstart</td><td align="left">RISC OS</td></tr>
+<tr><td align="left">High Level OS</td><td align="left">Neotron OS</td><td align="left">Neotron OS</td><td align="left">PC-DOS 1.0</td><td align="left">Acorn MOS</td><td align="left">N/A</td><td align="left">System</td><td align="left">CP/M Plus</td><td align="left">AmigaDOS</td><td align="left">RISC OS</td></tr>
+<tr><td align="left">Shell</td><td align="left">Neotron Shell</td><td align="left">Neotron Shell</td><td align="left">COMMAND .COM</td><td align="left">BBC BASIC</td><td align="left">BASIC v2</td><td align="left">Finder</td><td align="left">CP/M CCP</td><td align="left">Workbench</td><td align="left">RISC OS Desktop</td></tr>
+<tr><td align="left">Primary Language</td><td align="left">Rust</td><td align="left">Rust</td><td align="left">Assembly / C</td><td align="left">Assembly</td><td align="left">Assembly</td><td align="left">Object Pascal</td><td align="left">Assembly</td><td align="left">BCPL / C</td><td align="left">Assembly / BBC BASIC</td></tr>
+<tr><td align="left">ROM</td><td align="left">256K</td><td align="left">2048K</td><td align="left">8K</td><td align="left">32K</td><td align="left">16K</td><td align="left">64K</td><td align="left">256 bytes</td><td align="left">256K</td><td align="left">512K</td></tr>
+<tr><td align="left">RAM</td><td align="left">32K</td><td align="left">256K</td><td align="left">16K to 256K</td><td align="left">32K</td><td align="left">64K</td><td align="left">128K</td><td align="left">64K</td><td align="left">256K</td><td align="left">512K</td></tr>
+<tr><td align="left">Self-hosting</td><td align="left">No</td><td align="left">No</td><td align="left">Yes</td><td align="left">Yes</td><td align="left">No</td><td align="left">Yes</td><td align="left">Yes</td><td align="left">Yes</td><td align="left">Yes</td></tr>
+</tbody></table>
+<p>The <a href="https://en.wikipedia.org/wiki/IBM_Personal_Computer">IBM PC</a> BIOS was stored in a ROM chip on the motherboard. It provided a certain level of hardware abstraction, with APIs for writing to the screen, setting the video mode and reading/writing from block devices such as floppy drives. The BIOS initialised the hardware, loaded the first sector of a chosen block device into RAM and then executed the code contained within. This was the Boot Sector and contained enough code to load the rest of the Operating System. PC-DOS made use of BIOS APIs, but often games would bypass both MS-DOS and the BIOS and access hardware directly. Famously, Microsoft was able to sell copies of PC-DOS (relabelled as MS-DOS) to manufacturers of 'PC compatibles', provided they had a BIOS ROM which offered the same (reverse-engineered) API as the IBM BIOS.</p>
+<p>The <a href="https://en.wikipedia.org/wiki/BBC_Micro">BBC Micro</a> had a very advanced Operating System for the time, known as the Acorn Machine Operating System (MOS). You could add extra ROMs to the system, such as the Disk Filing System (DFS). BBC BASIC was also very advanced for the time, including a built-in 6502 assembler.</p>
+<p>The <a href="https://en.wikipedia.org/wiki/Commodore_64">Commodore 64</a> contained two 8 KiB ROM chips - one contained the OS (called the KERNAL) and one contained a rebadged Microsoft 6502 BASIC. The KERNAL was very low level and Microsoft BASIC didn't include any commands to produce graphics or sound - developers were expected to interact with memory mapped hardware directly. The C64 KERNAL could be assembled using PET RESIDENT ASSEMBLER on a Commodore PET, but the <a href="https://www.pagetable.com/?p=774">Microsoft BASIC source code</a> was written on a PDP-10 using the MACRO-10 assembler.</p>
+<p>The original <a href="https://en.wikipedia.org/wiki/Macintosh_128K">Apple Macintosh</a> had a ROM on the motherboard which initialised the hardware and drew a graphical image on the screen indicating that the user should insert the System disk. The ROM then loaded the OS (known as <em>System</em> up to version 7, and <em>Mac OS</em> for versions 8 and 9) into RAM, along with a graphical desktop called Finder. Applications on the Macintosh (including the Finder) made use of a number of graphical routines stored in the ROM, known as the <em>Macintosh Toolbox</em>.</p>
+<p>The <a href="https://en.wikipedia.org/wiki/Amstrad_PCW">Amstrad PCW8256</a> was similar to the Amiga 1000 in that the main BIOS was loaded from floppy disk. Going further than the Amiga though, the PCW didn't include a ROM chip at all. Instead the 256 bytes of bootstrap code were loaded from the microcontroller responsible for managing the printer interface. The bootstrap loaded the so-called <em>XBIOS</em> from floppy disk into RAM. XBIOS then initialised the hardware and loaded CP/M Plus (also known as CP/M 3.0). The shell was the familiar CP/M Command Console Processor (CCP), and both the OS and the CCP were the same across a wide range of CP/M machines from many different vendors, with the BIOS providing the hardware abstraction layer.</p>
+<p>The <a href="https://en.wikipedia.org/wiki/Amiga_1000">Amiga 1000</a> hardware didn't include much in the way of a ROM at all. A basic bootstrap program stored in ROM was able to load most of the low-level OS (known as <em>Kickstart</em>) into a special write-only area of RAM. Kickstart could then load either the particular game being played, or AmigaDOS and a graphical shell known as Workbench. On later machines (such as the A500), the Kickstart was stored in ROM.</p>
+<p>The <a href="https://en.wikipedia.org/wiki/Acorn_Archimedes">Acorn Archimedes</a> was first shipped with an OS in ROM called Arthur, but this was soon replaced with the more familiar RISC OS 2 (and later RISC OS 3). The entire OS - bootstrap, HAL, filesystem and GUI - was one on ROM chip, meaning it booted up very quickly, without needing to read from any sort of disc.</p>
+<p>The key feature for many these systems (apart from the Commodore 64), was portability across other machines in the family (or, indeed, third-party clones). The PC, the Amiga, the Macintosh and CP/M all provided a <em>platform</em>, and if you respected certain limits when writing your software, that software was then portable across all the systems which provided that platform. For Neotron, this is a key concept - because microcontrollers vary so wildly, we have a BIOS that implements hardware abstraction, just like with the PC or CP/M machines. We then run a standard OS (indeed, the same OS image should work on every Neotron machine - more-or-less), either from ROM or loaded into RAM by the BIOS. On top of the OS is the text-mode Neotron Shell (like CP/M's CCP, or MS-DOS's COMMAND.COM). Booting to a graphical desktop would be nice, but given the Neotron 32 only has 32 KiB of RAM (barely enough for a low resolution frame-buffer), text mode is the default. Ultimately, a Neotron 32 should be able to 'compete' on a functional level with an un-expanded IBM PC 5150 or a BBC Microcomputer Model-B. The Neotron Pico meanwhile, could be more like a Macintosh, Archimedes or Amiga in terms of functionality and in time we do hope to develop a GUI for this system.</p>
+<p>As with the CP/M and MS-DOS machines, we hope that in the future there will be a wide range of machines in the Neotron family. These Neotron systems won't generally aim to be super cheap, although we will tend to target commodity microcontrollers that only cost circa $10 or less, so they shouldn't be outrageously expensive. They will, however, aim to be usable computers that can do interesting things, while being simple enough to understand in their entirety and open enough to allow you to gain that understanding.</p>
+<h2><a class="header" href="#what-can-i-do-with-it" id="what-can-i-do-with-it">What can I do with it?</a></h2>
+<p>You can do what you can do with most 1980s home computers:</p>
+<ul>
+<li>Type things on the keyboard.</li>
+<li>Use a joystick or a mouse.</li>
+<li>Manage files on internal or removable storage.</li>
+<li>Load programs from internal or removable storage.</li>
+<li>Type in your own programs.</li>
+<li>Put text and graphics on the screen.</li>
+<li>Make various beepy noises.</li>
+<li>Connect various internal expansion cards or external peripherals.</li>
+<li>Expand the system in ways the designer couldn't imagine.</li>
+</ul>
+<p>But most importantly, you can learn the fundamentals of what it takes for a computer to be a <em>computer</em>. And you can study the source code and hardware schematics required to make that happen. You can even take the designs and go off and produce your own version - maybe to add a specific interface for a particular peripheral that interests you - all with no licence fees to pay.</p>
+<h2><a class="header" href="#what-cant-i-do-with-it" id="what-cant-i-do-with-it">What can't I do with it?</a></h2>
+<p>A Neotron system will probably never:</p>
+<ul>
+<li>Support multiple processes (although Windows 3.1-style co-operative task switching is plausible).</li>
+<li>Support 3D graphics (e.g. OpenGL).</li>
+<li>Support virtual addressing (i.e. make use of an MMU).</li>
+<li>Be POSIX compatible.</li>
+<li>Have a huge software library (or probably any real library of software).</li>
+<li>Run existing MS-DOS, Windows or Linux programs.</li>
+<li>Be able to run <code>rustc</code>.</li>
+<li>Have a port of Rust's <code>libstd</code>.</li>
+<li>Be directly targetable from Rust with <code>--target=thumbv7em-unknown-neotron-eabi</code>.</li>
+<li>Be useful for day to day use.</li>
+<li>Be finished.</li>
+</ul>
+<p>If you want a decent open-source UNIX Operating System, have a look at <em>FreeBSD</em> (or <em>NetBSD</em>, or <em>OpenBSD</em>). If you want a small teaching-oriented open-source UNIX Operating System, look at <em>XV6</em>, or maybe <em>MINIX 3</em>. If you want to learn about Linux, try <em>Linux from Scratch</em>. If you want to learn an ancient Arm based Operating System which still has a flavour of the original BBC Microcomputer, look at <em>RISC OS</em> (it's open source now). If you want a proper OS written in Rust, look at <em>Redox</em>. And if you want to do any of that on a system you don't have, try qemu, or rpcemu.</p>
+<h2><a class="header" href="#is-this-a-good-idea" id="is-this-a-good-idea">Is this a good idea?</a></h2>
+<p>It's certainly not a profitable idea. It's not even likely to be an efficient use of our time and resources. But it is proving to be a fun and educational project to work on, and we hope others find it useful and/or enjoyable too.</p>
+<h2><a class="header" href="#but-what-about-existing_product" id="but-what-about-existing_product">But what about ${EXISTING_PRODUCT}?</a></h2>
+<h3><a class="header" href="#raspberry-pi" id="raspberry-pi">Raspberry Pi</a></h3>
+<p>Yes, you can buy a Raspberry Pi for a little as $5 - and it's a wonderful product that has done arguably more than anything since the BBC Microcomputer in terms of putting hardware you can actually program into the hands of young people. But, the downside is that you get a big, complicated piece of silicon, a proprietary GPU subsystem, 25 million lines of kernel source code, and even more in a user-land which has parts dating back over 30 years. No one person could hope to understand all of that! While we could probably port the Neotron OS to the Raspberry Pi, we'd have to treat the video sub-system as a black-box (like RISC OS does) and the complexity and lack of documentation of that subsystem presents a big barrier to fully understanding the system. Not to mention the the fact that only partial schematics are available, there are no PCB designs available, and there's no general availability on the main processor. It does what it needs to do for its target market quite admirably - but it's not a Neotron.</p>
+<h3><a class="header" href="#x86-based-systems-like-the-original-ibm-pc" id="x86-based-systems-like-the-original-ibm-pc">x86 based systems, like the original IBM PC</a></h3>
+<p>You could build yourself a clone of the original IBM PC (<a href="https://monotech.fwscart.com/">kits do exist</a>), but it involves a lot of components that are very difficult to obtain nearly 40 years since that design first came out. Rust is also designed around a flat memory model (rather than the segmentation:offset model used by the 16-bit 8086), and that means using at least a 32-bit <a href="https://hackaday.com/2015/11/17/a-modern-386-development-board/">Intel 80386</a>. And, of course, these are plain CPUs rather than microcontrollers, so you'll need to find a 'chipset' containing interrupt controller, DRAM memory controller and timers; as well as separate video, sound and IO sub-systems. Our System-on-Chip based design simplifies the motherboard design and reduces cost, and unlike with modern x86 SoCs, we don't have to deal with complicated legacy subsystems such as UEFI, ACPI or PCI.</p>
+<h3><a class="header" href="#6502-based-systems-like-the-pe6502-and-commander-x16" id="6502-based-systems-like-the-pe6502-and-commander-x16">6502 based systems (like the PE6502 and Commander X16)</a></h3>
+<p>You could build a 6502 based system, and many people do, but the Rust programming language doesn't (and probably never will) support an 8-bit CPU with only 256 bytes of stack.</p>
+<h3><a class="header" href="#68000-based-systems" id="68000-based-systems">68000 based systems</a></h3>
+<p>At the present time, there is no 68k backend in LLVM. If there was, a 68000 system would certainly make an interesting alternative to Neotron, although the 68000 processors available are more expensive and less powerful than a modern commodity Arm microcontroller.</p>
+<h3><a class="header" href="#powerpc-based-systems" id="powerpc-based-systems">PowerPC based systems</a></h3>
+<p>LLVM does have a PowerPC backend, but unfortunately most PowerPC based chips only come in monster 380+ pin BGA packages, with multiple power rails. This unfortunately puts them beyond the scope of a simple hobby project, much as the author would love to build a machine that harks back to the IBM RS/6000 and Power Macintosh machines of the 1990s.</p>
+<h3><a class="header" href="#risc-v-based-systems" id="risc-v-based-systems">RISC-V based systems</a></h3>
+<p>There are an increasing number of RISC-V based microcontrollers with very small SRAMs, matched by an increasing number of multi-core 64-bit SoCs designed to run Linux from a huge bank of DDR3. At the current time, however, there isn't much in the middle.</p>
+<p>A Neotron system built around an open-source RISC-V code run from an FPGA would be an interesting way to increase the openness of the system and remains a future possibility. The simplicity of the RISC-V ISA is also appealing, as compared to the, umm, <em>evolved</em> nature of ARMv6-M.</p>
+<h3><a class="header" href="#sparc-based-systems" id="sparc-based-systems">SPARC based systems</a></h3>
+<p>The Gaisler LEON3 is available in VHDL form under the GPL, along with a number of other components required to make a full SoC. The LEON3 implements the SPARC V8 ISA, support for which is available in the Rust compiler. However, this would require an FPGA based system and it's unknown whether the full GRLIB SoC would fit into any of the FPGAs supported by the various open-source FPGA synthesis tools (such as the Lattice iCE40).</p>
+<h3><a class="header" href="#atmel-avr-based-systems" id="atmel-avr-based-systems">Atmel AVR based systems</a></h3>
+<p>Many people have built Atmel AVR based systems, but those CPUs are fairly limited in terms of performance and tend to need to be programmed in raw assembler, or at least non-portable C (such as when storing strings in program memory with a 24-bit pointer instead of in data memory with an 8-bit pointer). There is a Rust AVR port, but it's only in an alpha state at the moment.</p>
+<h3><a class="header" href="#mips32-based-systems-like-the-pic32" id="mips32-based-systems-like-the-pic32">MIPS32 based systems, like the PIC32</a></h3>
+<p>The PIC32 family would make a very interesting home computer. Indeed, a PIC32 can be found in the Colour Maximite. I think it is telling though that the next revision of the Colour Maximite switched over to a Cortex-M7 based STM32H7. You could also point to the fact that  MIPS themselves have publicly switched to producing RISC-V designs that maybe this architecture doesn't have the best future ahead of it.</p>
+<h2><a class="header" href="#what-is-this-book" id="what-is-this-book">What is this book?</a></h2>
+<p>This book describes the Neotron system - from the hardware schematics, all the way up to how to write applications for the system. It is intended to be the canonical reference, although where the source code differs from what is described in this book, we reserve the right to be pragmatic and change either to match the other (or leave them in disagreement...). This book also represents our latest thoughts on a particular topic, and the source code may lag behind while we get around to the implementation. We endeavour to note where this is the case.</p>
+<h2><a class="header" href="#versioning" id="versioning">Versioning</a></h2>
+<p>Each component has a semantic version number - <code>major.minor.patch</code>. The association is:</p>
+<ul>
+<li>The BIOS will require a compatible hardware version.</li>
+<li>The OS will require a compatible BIOS version.</li>
+<li>The Shell and Applications will require a compatible OS version.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+                            <a rel="next" href="licence.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+                    <a rel="next" href="licence.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
